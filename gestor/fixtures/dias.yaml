@@ -1,0 +1,28 @@
+- model: gestor.Dia
+  pk: 0
+  fields:
+    dia: Lunes
+- model: gestor.Dia
+  pk: 1
+  fields:
+    dia: Martes
+- model: gestor.Dia
+  pk: 2
+  fields:
+    dia: Miércoles
+- model: gestor.Dia
+  pk: 3
+  fields:
+    dia: Jueves
+- model: gestor.Dia
+  pk: 4
+  fields:
+    dia: Viernes
+- model: gestor.Dia
+  pk: 5
+  fields:
+    dia: Sábado
+- model: gestor.Dia
+  pk: 6
+  fields:
+    dia: Domingo
