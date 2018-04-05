@@ -15,7 +15,6 @@ new_group, created = Group.objects.get_or_create(name='docentes')
 # Estos 'dias' son cargados usando loaddata y fixtures
 # https://docs.djangoproject.com/en/2.0/howto/initial-data/
 class Dia(models.Model):
-    
     dia = models.CharField(max_length=20)
 
     def __str__(self):
@@ -51,7 +50,54 @@ class Curso(models.Model):
         verbose_name='Días de Dictado'
     )
 
-    creacion_fecha = models.DateTimeField('Fecha de Creación')
+    inicio_fecha = models.DateField(
+        'Fecha de Inicio',
+        default=timezone.now
+    )
+
+    inicio_hora = models.TimeField(
+        verbose_name='Hora de Inicio',
+        default=timezone.now
+    )
+
+    finalizacion_hora= models.TimeField(
+        verbose_name='Hora de Finalizaición',
+        default=timezone.now
+    )
+
+    costo = models.IntegerField(
+        verbose_name='Costo',
+        default=0
+    )
+
+    requisitos = models.TextField(
+        verbose_name='Requisitos',
+        default=''
+    )
+
+    VIRTUAL = 'v'
+    PRESENCIAL = 'p'
+    MODALIDADES = (
+        ('v','Virtual'),
+        ('p','Presencial'),
+    )
+    modalidad = models.CharField(
+       max_length=1,
+       choices=MODALIDADES,
+       default=PRESENCIAL,
+       verbose_name='Modalidad',
+    )
+
+    imagen = models.ImageField(
+        verbose_name='Imagen del Curso',
+        upload_to='cursos_img',
+        default=1
+    )
+
+    inscripcion_abierta = models.BooleanField(
+        verbose_name='Inscripción Abierta',
+        default=1
+    )
 
     def __str__(self):
         return self.nombre
