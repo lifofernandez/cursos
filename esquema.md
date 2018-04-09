@@ -50,13 +50,21 @@
 * lista completa de INSCRIPTOS 
 * LIQUIDACIONES: lista de INSCRIPTOS a CURSOS VIGENTES con info de PAGO 
 
-## CONTROLES
+## ACCIONES
 * CREAR/EDITAR CURSO (editor/gestor)
 * AGREGAR INSCRIPTO (formulario publico)
 * ACTUALIZAR PAGO INSCRIPTO (liquidador)
 
+## UTILIDADEs
+* Imprimir Recibos
+* Imprimir Certificados
+* Descargar listas de inscriptos, liquidaciones
+
 # TO DO
-* Crear modelo curso
-* Crear modelo inscripto
-* Crear formulario de insrcipcion
-* Configurar roles de usuario
+- [x] Crear grupo de user "Docente"
+- [x] Crear modelo curso
+- [x] Crear modelo inscripto
+- [] Crear formulario publico de insrcipcion
+- [] recibo alumno imprimible 
+- [] certificado alumno imprimible 
+- [] Configurar roles de usuario
