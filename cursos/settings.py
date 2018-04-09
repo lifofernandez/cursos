@@ -55,7 +55,7 @@ ROOT_URLCONF = 'cursos.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': ['gestor/inscripcion',],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [

@@ -110,6 +110,11 @@ class Inscripto(models.Model):
         on_delete=models.CASCADE
     )
 
+    pago = models.IntegerField(
+        verbose_name='Pagó',
+        default=0
+    )
+
     nombre = models.CharField(
         verbose_name='Nombre',
         max_length=200
@@ -183,65 +188,14 @@ class Inscripto(models.Model):
         default=1
     )
 
-    pago = models.IntegerField(
-        verbose_name='Pagó',
-        default=0
-    )
-
     inscripcion_fecha = models.DateField(
         verbose_name='Fecha de Inscripción',
         default=timezone.now
     )
 
-#    descripcion = models.TextField(
-#        'Descripción',
-#        default=''
-#    )
-#
-#    dias = models.ManyToManyField(
-#        Dia,
-#        verbose_name='Días de Dictado'
-#    )
-#
-#    inicio_fecha = models.DateField(
-#        'Fecha de Inicio',
-#        default=timezone.now
-#    )
-#
-#    inicio_hora = models.TimeField(
-#        verbose_name='Hora de Inicio',
-#        default=timezone.now
-#    )
-#
-#    finalizacion_hora= models.TimeField(
-#        verbose_name='Hora de Finalizaición',
-#        default=timezone.now
-#    )
-#
-#    costo = models.IntegerField(
-#        verbose_name='Costo',
-#        default=0
-#    )
-#
-#    requisitos = models.TextField(
-#        verbose_name='Requisitos',
-#        default=''
-#    )
-#
-#
-#    imagen = models.ImageField(
-#        verbose_name='Imagen del Curso',
-#        upload_to='cursos_img',
-#        default=1
-#    )
-#
-#    inscripcion_abierta = models.BooleanField(
-#        verbose_name='Inscripción Abierta',
-#        default=1
-#    )
 
     def __str__(self):
-        return self.nombre
+        return self.nombre+' '+self.apellido+' - Pagó: '+str(self.pago)+' - Curso: '+str(self.curso)
 
     def fue_creado_recientemente(self):
         return self.inscripcion_fecha >= timezone.now() - datetime.timedelta(days=1)
