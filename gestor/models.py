@@ -3,6 +3,7 @@ import datetime
 from django.db import models
 from django.utils import timezone
 
+
 # Aca creamos grupos de usuarios
 # https://stackoverflow.com/questions/22250352
 from django.contrib.auth.models import Group, User
@@ -166,7 +167,7 @@ class Inscripto(models.Model):
         max_length=50,
         choices=COMOS,
         default='no',
-        verbose_name='¿Como se enteró del curso?',
+        verbose_name='¿Es alumno de La U.N.A.?',
     )
 
     REFES = ( 
@@ -199,4 +200,5 @@ class Inscripto(models.Model):
 
     def fue_creado_recientemente(self):
         return self.inscripcion_fecha >= timezone.now() - datetime.timedelta(days=1)
+
 

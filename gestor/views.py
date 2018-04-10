@@ -4,6 +4,9 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from .forms import InscriptoForm
 
+from .models import Inscripto
+from .tables import InscriptosTable
+
 
 def index(request):
     return HttpResponse('Hello, world.')
@@ -22,3 +25,7 @@ def inscripcion(request):
         return render(request, 'inscripcion.html', {'form':form})
 
 
+def inscriptos_list(request):
+    queryset = Inscripto.objects.all()
+    table = InscriptosTable(queryset)
+    return render(request, 'inscriptos_list.html', {'table': table})

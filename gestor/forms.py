@@ -5,4 +5,4 @@ class InscriptoForm(ModelForm):
     class Meta:
         model = Inscripto
         #fields = '__all__'
-        exclude = ['pago']
+        exclude = ['pago','inscripcion_fecha']

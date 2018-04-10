@@ -45,9 +45,9 @@
   - url: /inscripcion
 
 ### LISTAS
-* lista completa de CURSOS, separada vigentes y anteriores 
-* lista de INSCRIPTOS agrupados por CURSOS con INSCRIPCION ABIERTA
+* lista completa de CURSOS (separada vigentes y anteriores)
 * lista completa de INSCRIPTOS 
+* lista de INSCRIPTOS (agrupados por CURSOS con INSCRIPCION ABIERTA)
 * LIQUIDACIONES: lista de INSCRIPTOS a CURSOS VIGENTES con info de PAGO 
 
 ## ACCIONES
