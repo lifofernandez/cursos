@@ -55,7 +55,7 @@
 * AGREGAR INSCRIPTO (formulario publico)
 * ACTUALIZAR PAGO INSCRIPTO (liquidador)
 
-## UTILIDADEs
+## UTILIDADES
 * Imprimir Recibos
 * Imprimir Certificados
 * Descargar listas de inscriptos, liquidaciones
@@ -64,7 +64,9 @@
 - [x] Crear grupo de user "Docente"
 - [x] Crear modelo curso
 - [x] Crear modelo inscripto
-- [] Crear formulario publico de insrcipcion
-- [] recibo alumno imprimible 
-- [] certificado alumno imprimible 
-- [] Configurar roles de usuario
+- [x] Crear formulario publico de insrcipcion
+- [ ] Recibo alumno imprimible 
+- [ ] Certificado alumno imprimible 
+- [ ] Liquidacion docente imprimible 
+- [ ] Configurar permisos de usuario
+- [ ] Front-End 

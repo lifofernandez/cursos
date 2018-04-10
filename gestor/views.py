@@ -8,7 +8,7 @@ from .forms import InscriptoForm
 def index(request):
     return HttpResponse('Hello, world.')
 
-def agregar_inscripto(request):
+def inscripcion(request):
     if request.method == 'POST':
         form = InscriptoForm(request.POST)
         if form.is_valid():
@@ -19,6 +19,6 @@ def agregar_inscripto(request):
         form = InscriptoForm()
         # ATENCION: el carpeta contenedora el teplate debe ser declarada
         # en TEMPLATES.DIRS en el fichero gestor/settings.py 
-        return render(request, 'formulario.html', {'form':form})
+        return render(request, 'inscripcion.html', {'form':form})
 
 
