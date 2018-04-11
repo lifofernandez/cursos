@@ -25,7 +25,19 @@ def inscripcion(request):
         return render(request, 'inscripcion.html', {'form':form})
 
 
-def inscriptos_list(request):
-    queryset = Inscripto.objects.all()
-    table = InscriptosTable(queryset)
-    return render(request, 'inscriptos_list.html', {'table': table})
+def inscriptos_list(request, sort='id'):
+    if request.user.is_authenticated:
+        raw_fields = Inscripto._meta.get_fields()
+        fields = [f.name for f in raw_fields]
+        if 'sort' in request.GET: 
+            abs_sort_val = request.GET['sort'].replace("-","")
+            if abs_sort_val in fields: 
+               sort = request.GET['sort'] 
+
+        #print( '[%s]' % ', '.join( map( str, fields) ) )
+
+        queryset = Inscripto.objects.all().order_by(sort)
+        table = InscriptosTable(queryset)
+        return render(request, 'inscriptos_list.html', {'table': table})
+    else:
+        return HttpResponse('No estas registrado!')
