@@ -196,7 +196,7 @@ class Inscripto(models.Model):
 
 
     def __str__(self):
-        return self.nombre+' '+self.apellido+' - Pagó: '+str(self.pago)+' - Curso: '+str(self.curso)
+        return self.nombre+' '+self.apellido
 
     def fue_creado_recientemente(self):
         return self.inscripcion_fecha >= timezone.now() - datetime.timedelta(days=1)
