@@ -1,11 +1,12 @@
+from pprint import PrettyPrinter
 from django.shortcuts import render
 
 # Create your views here.
 from django.http import HttpResponse
 from .forms import InscriptoForm
 
-from .models import Inscripto
-from .tables import InscriptosTable
+from .models import Inscripto, Curso
+from .tables import InscriptosTable, CursosTable
 
 
 def index(request):
@@ -38,6 +39,25 @@ def inscriptos_list(request, sort='id'):
 
         queryset = Inscripto.objects.all().order_by(sort)
         table = InscriptosTable(queryset)
-        return render(request, 'inscriptos_list.html', {'table': table})
+        return render(request, 'tabla.html', {'table': table})
+    else:
+        return HttpResponse('No estas registrado!')
+
+def cursos_list(request, sort='id'):
+    if request.user.is_authenticated:
+        raw_fields = Curso._meta.get_fields()
+        fields = [f.name for f in raw_fields]
+        if 'sort' in request.GET: 
+            abs_sort_val = request.GET['sort'].replace("-","")
+            if abs_sort_val in fields: 
+               sort = request.GET['sort'] 
+
+        queryset = Curso.objects.all().order_by(sort)
+        for curso in queryset:
+            inscriptos = curso.ver_inscriptos()
+            print(inscriptos)
+
+        table = CursosTable(queryset)
+        return render(request, 'tabla.html', {'table': table})
     else:
         return HttpResponse('No estas registrado!')

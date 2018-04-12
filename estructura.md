@@ -1,4 +1,17 @@
+
 # GESTOR CURSOS
+## APPS (secciones) !TO DO
+- GESTION
+  - crear usuarios docentes
+  - creacion de cursos 
+
+- MONITOR 
+  - ver reportes de inscriptos
+  - ver reporte cursos vigentes y pasados 
+
+- LIQUIDACION
+  - actualizar pago de los incriptos
+  - generar liquidacion para docente
 
 ## USUARIOS roles/grupos 
 * DOCENTES (los crea el gestor) 

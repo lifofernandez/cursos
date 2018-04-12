@@ -32,6 +32,21 @@ class Curso(models.Model):
         max_length=200
     )
 
+
+    codigo = models.CharField(
+        verbose_name='Código del Curso',
+        max_length=20,
+        blank=True,
+        #editable=False,
+    )
+
+    # Override de la funcion "save" de Model
+    def save(self, *args, **kwargs):
+        if not self.codigo:
+            iniciales = ''.join([x[0].upper() for x in self.nombre.split(' ')])
+            self.codigo = iniciales
+        super(Curso, self).save(*args, **kwargs)
+
     # Usuarios dentro del grupo 'docentes'
     docente = models.ForeignKey(
         User,
@@ -90,7 +105,7 @@ class Curso(models.Model):
     imagen = models.ImageField(
         verbose_name='Imagen del Curso',
         upload_to='cursos_img',
-        default=1
+        blank=True,
     )
 
     inscripcion_abierta = models.BooleanField(
@@ -101,8 +116,13 @@ class Curso(models.Model):
     def __str__(self):
         return self.nombre
 
-    def fue_creado_recientemente(self):
+    def inicia_recientemente(self):
         return self.inicio_fecha >= timezone.now() - datetime.timedelta(days=1)
+
+    def ver_inscriptos(self):
+        inscriptos = Inscripto.objects.filter( curso=self.id ).values()
+        return inscriptos 
+        #devuelve inscriptos 
 
 class Inscripto(models.Model):
     curso = models.ForeignKey(
