@@ -13,9 +13,16 @@ class InscriptosTable(tables.Table):
 
 class CursosTable(tables.Table):
     id = tables.LinkColumn('curso_detalles',  args=[A('id')])
-    inscriptos = tables.Column(default='22')
+    inscripto = tables.Column()
     class Meta:
         model = Curso
-        fields = ['id','codigo','nombre','docente','modalidad','inscripcion_abierta'] 
+        fields = ['id','codigo','nombre','docente','modalidad','inscripcion_abierta','inscripto'] 
+        attrs = {'class': 'table table-striped table-bordered table-hover table-sm'}
+
+class InscriptosCursosTable(tables.Table):
+    nombre = tables.Column()
+    apellido = tables.Column()
+    pago = tables.Column()
+    class Meta:
         attrs = {'class': 'table table-striped table-bordered table-hover table-sm'}
 

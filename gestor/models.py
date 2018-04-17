@@ -120,7 +120,7 @@ class Curso(models.Model):
         return self.inicio_fecha >= timezone.now() - datetime.timedelta(days=1)
 
     def ver_inscriptos(self):
-        inscriptos = Inscripto.objects.filter( curso=self.id ).values()
+        inscriptos = Inscripto.objects.filter( curso=self.id )
         return inscriptos 
         #devuelve inscriptos 
 

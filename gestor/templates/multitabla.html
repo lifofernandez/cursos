@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% load django_tables2 %}
+{% load bootstrap4 %}
+
+{% block content %}
+    {% for curso in cursos %}
+    <div>
+	    <h2>{{ curso.nombre  }} </h2>
+	    <h3>{{ curso.docente }}</h3>
+       {% render_table curso.inscriptos %}
+    </div>
+    {% endfor %}
+{% endblock %}
+
+
+
