@@ -119,7 +119,8 @@ class Curso(models.Model):
     def inicia_recientemente(self):
         return self.inicio_fecha >= timezone.now() - datetime.timedelta(days=1)
 
-    def ver_inscriptos(self):
+    def obtener_inscriptos(self):
+        # TO DO: agregar sort, pasar value para ordenar comoa argumento
         inscriptos = Inscripto.objects.filter( curso=self.id )
         return inscriptos 
         #devuelve inscriptos 

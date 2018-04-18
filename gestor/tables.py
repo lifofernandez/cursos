@@ -19,10 +19,11 @@ class CursosTable(tables.Table):
         fields = ['id','codigo','nombre','docente','modalidad','inscripcion_abierta','inscripto'] 
         attrs = {'class': 'table table-striped table-bordered table-hover table-sm'}
 
-class InscriptosCursosTable(tables.Table):
+class InscriptosXCursosTable(tables.Table):
     nombre = tables.Column()
     apellido = tables.Column()
     pago = tables.Column()
+
     class Meta:
         attrs = {'class': 'table table-striped table-bordered table-hover table-sm'}
 

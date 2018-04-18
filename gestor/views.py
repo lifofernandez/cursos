@@ -6,7 +6,7 @@ from django.http import HttpResponse
 from .forms import InscriptoForm
 
 from .models import Inscripto, Curso
-from .tables import InscriptosTable, CursosTable, InscriptosCursosTable
+from .tables import InscriptosTable, CursosTable, InscriptosXCursosTable
 
 
 from django_tables2 import MultiTableMixin
@@ -28,7 +28,7 @@ def inscripcion(request):
         return render(request, 'inscripcion.html', {'form':form})
 
 
-def inscriptos_list(request, sort='id'):
+def inscriptos(request, sort='id'):
     if request.user.is_authenticated:
         raw_fields = Inscripto._meta.get_fields()
         fields = [f.name for f in raw_fields] 
@@ -45,7 +45,7 @@ def inscriptos_list(request, sort='id'):
     else: 
         return HttpResponse('No estas registrado!')
 
-def cursos_list(request, sort='id'):
+def cursos(request, sort='id'):
     if request.user.is_authenticated:
         raw_fields = Curso._meta.get_fields()
         fields = [f.name for f in raw_fields] 
@@ -60,7 +60,7 @@ def cursos_list(request, sort='id'):
     else:
         return HttpResponse('No estas registrado!')
 
-def inscriptos_cursos_list(request, sort='id'): 
+def inscriptosxcursos(request, sort='id'): 
     if request.user.is_authenticated:
 
         queryset = Curso.objects.all().order_by(sort)
@@ -73,14 +73,14 @@ def inscriptos_cursos_list(request, sort='id'):
 
             #queryset[index].inscriptos = inscriptos 
             INSCRIPTOS = []
-            inscriptos = curso.ver_inscriptos()
+            inscriptos = curso.obtener_inscriptos()
 
             #for index, inscripto in enumerate(inscriptos): 
             #    i = {}
             #    i['nombre'] = inscriptos.values('nombre') 
             #    INSCRIPTOS.append(i)
 
-            INSCRIPTOS = InscriptosCursosTable(inscriptos) 
+            INSCRIPTOS = InscriptosXCursosTable(inscriptos) 
             c['inscriptos'] = INSCRIPTOS
 
             cursos.append(c)
@@ -91,19 +91,6 @@ def inscriptos_cursos_list(request, sort='id'):
         #print(queryset.values('inscripto'))
         #print(queryset[1].inscriptos.values('nombre'))
 
-
-        #curso2 = [
-        #        {'nombre': 'Bradley','docente': 'Forves'},
-        #        {'nombre': 'Perro','docente': 'Ooeeo'},
-        #        {'nombre': 'Gato','docente': 'MAcri'},
-        #]
-
-        #table2 = InscriptosCursosTable(curso2)
-        #tables = [
-        #    CURSOS,
-        #    table2,
-        #]
-        
         return render(request, 'multitabla.html', {'cursos':CURSOS})
     else:
         return HttpResponse('No estas registrado!')

@@ -18,20 +18,57 @@
     <link rel="stylesheet" href="{% static 'CSS/style.css' %}">
 </head>
 <body>
-    <header>
-        <div class="container-fluid">
-            HEADER
-        </div>
-    </header>
-
     <div class="container-fluid">
-        {% block content %} {% endblock %}
-    </div>
+        <div class="row flex-xl-nowrap">
 
-    <footer>
-        <div class="container-fluid">
-            FOOTER
+            <div class="col-12 col-md-3 col-xl-2 bd-sidebar">
+		<h5>Gestión de Cursos</h5>
+                <nav class="">
+		    <ul class="nav flex-column">
+		        <li class="nav-item">
+			    <a
+		                href="/admin/"
+		     	    >
+			        LINK 1
+			    </a>
+		        </li>
+		        <li class="nav-item">
+			    <a
+		                href="/admin/"
+		     	    >
+			        LINK 2
+			    </a>
+		        </li>
+		        <li class="nav-item">
+			    <a
+		                href="/admin/"
+		     	    >
+			        LINK 3
+			    </a>
+		        </li>
+		        <li class="nav-item">
+			    <a
+		                href="/admin/"
+		     	    >
+			        LINK 4
+			    </a>
+		        </li>
+		    </ul>
+                </nav> 
+            </div> 
+
+            <main class="col-12 col-md-9 col-xl-8 bd-content" role="main">
+
+		<h5>Título de Página</h5>
+
+                <div class="contenido">
+                    {% block content %} 
+		    {% endblock %}
+                </div>
+
+            </main>
+
         </div>
-    </footer>
+     </div>
 </body>
 
