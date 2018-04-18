@@ -31,7 +31,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    'gestor.apps.GestorConfig',
+    'gestion.apps.GestorConfig',
     'bootstrap4',
     'django_tables2',
     'django.contrib.admin',
@@ -57,7 +57,7 @@ ROOT_URLCONF = 'cursos.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        #'DIRS': ['gestor/inscripcion',],
+        #'DIRS': ['gestion/inscripcion',],
         'DIRS': [],
         'APP_DIRS': True,
         'OPTIONS': {
