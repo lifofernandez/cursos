@@ -3,11 +3,13 @@
 {% load bootstrap4 %}
 
 {% block content %}
-    {% for curso in cursos %}
+    {% for tabla in tables %}
     <div>
-	    <h2>{{ curso.nombre  }} </h2>
-	    <h3>{{ curso.docente }}</h3>
-       {% render_table curso.inscriptos %}
+	    <h3>
+                {{ tabla.titulo }} - 
+	        {{ tabla.subtitulo }}
+	    </h3>
+       {% render_table tabla.items %}
     </div>
     {% endfor %}
 {% endblock %}

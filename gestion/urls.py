@@ -14,6 +14,8 @@ urlpatterns = [
 
     path('inscriptosxcursos/', views.inscriptosxcursos, name='inscriptosxcursos'),
 
+    path('pdftest/', views.pdftest, name='pdftest'),
+
 ]
 
 

@@ -26,6 +26,7 @@ class Dia(models.Model):
 
 # Modelo para los cursos
 class Curso(models.Model):
+    #TO DO: Agregar coorte o periodo del curso (ej: 2cuat-2018)
     # Nombre del curso
     nombre = models.CharField(
         verbose_name='Nombre del Curso',
@@ -128,6 +129,7 @@ class Curso(models.Model):
 class Inscripto(models.Model):
     curso = models.ForeignKey(
         Curso,
+        limit_choices_to={'inscripcion_abierta':True},
         verbose_name='Curso al que se inscribe',
         on_delete=models.CASCADE
     )

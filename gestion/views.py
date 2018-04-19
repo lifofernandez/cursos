@@ -1,4 +1,6 @@
-from pprint import PrettyPrinter
+import datetime
+from django.utils import timezone
+
 from django.shortcuts import render
 
 # Create your views here.
@@ -45,7 +47,7 @@ def inscriptos(request, sort='id'):
     else: 
         return HttpResponse('No estas registrado!')
 
-def cursos(request, sort='id'):
+def cursos(request, sort='inicio_fecha'):
     if request.user.is_authenticated:
         raw_fields = Curso._meta.get_fields()
         fields = [f.name for f in raw_fields] 
@@ -54,9 +56,31 @@ def cursos(request, sort='id'):
             if abs_sort_val in fields:
                 sort = request.GET['sort']
 
-        queryset = Curso.objects.all().order_by(sort) 
-        table = CursosTable(queryset) 
-        return render(request, 'tabla.html', {'table': table})
+        pasados = Curso.objects.all().filter(
+            inicio_fecha__lte=timezone.now()
+        ).order_by(sort) 
+        futuros = Curso.objects.all().filter(
+            inicio_fecha__gte=timezone.now()
+        ).order_by(sort) 
+
+        vigentes = {} 
+        vigentes['titulo'] = 'Cursos'
+        vigentes['subtitulo'] = 'Vigentes'
+        vigentes['items'] = CursosTable(futuros) 
+
+        anteriores =  {}
+        anteriores['titulo'] = 'Cursos'
+        anteriores['subtitulo'] = 'Anteriores'
+        anteriores['items'] = CursosTable(pasados) 
+
+        TABLAS = [
+                vigentes,
+                anteriores,
+        ]
+    #    return render(request, 'tabla.html', {'table': table})
+
+
+        return render(request, 'multitabla.html', {'tables':TABLAS})
     else:
         return HttpResponse('No estas registrado!')
 
@@ -68,8 +92,8 @@ def inscriptosxcursos(request, sort='id'):
         cursos = [] 
         for index, curso in enumerate(queryset): 
             c = {}
-            c['nombre'] = queryset[index].nombre
-            c['docente'] = queryset[index].docente
+            c['titulo'] = queryset[index].nombre
+            c['subtitulo'] = queryset[index].docente
 
             #queryset[index].inscriptos = inscriptos 
             INSCRIPTOS = []
@@ -81,7 +105,7 @@ def inscriptosxcursos(request, sort='id'):
             #    INSCRIPTOS.append(i)
 
             INSCRIPTOS = InscriptosXCursosTable(inscriptos) 
-            c['inscriptos'] = INSCRIPTOS
+            c['items'] = INSCRIPTOS
 
             cursos.append(c)
 
@@ -91,7 +115,26 @@ def inscriptosxcursos(request, sort='id'):
         #print(queryset.values('inscripto'))
         #print(queryset[1].inscriptos.values('nombre'))
 
-        return render(request, 'multitabla.html', {'cursos':CURSOS})
+        return render(request, 'multitabla.html', {'tables':CURSOS})
     else:
         return HttpResponse('No estas registrado!')
+
+from reportlab.pdfgen import canvas
+
+def pdftest(request):
+    # Create the HttpResponse object with the appropriate PDF headers.
+    response = HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] = 'attachment; filename="somefilename.pdf"'
+
+    # Create the PDF object, using the response object as its file.
+    p = canvas.Canvas(response)
+
+    # Draw things on the PDF. Here's where the PDF generation happens.
+    # See the ReportLab documentation for the full list of functionality.
+    p.drawString(100, 100, 'Hello world.')
+
+    # Close the PDF object cleanly, and we're done.
+    p.showPage()
+    p.save()
+    return response
 

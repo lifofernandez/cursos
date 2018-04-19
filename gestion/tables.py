@@ -15,7 +15,7 @@ class CursosTable(tables.Table):
     id = tables.LinkColumn('curso_detalles',  args=[A('id')])
     class Meta:
         model = Curso
-        fields = ['id','codigo','nombre','docente','modalidad','inscripcion_abierta'] 
+        fields = ['id','nombre','docente','inicio_fecha','inscripcion_abierta','codigo'] 
         attrs = {'class': 'table table-striped table-bordered table-hover table-sm'}
 
 class InscriptosXCursosTable(tables.Table):
