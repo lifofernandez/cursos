@@ -5,6 +5,7 @@ from  .models import Inscripto, Curso
 class InscriptosTable(tables.Table):
     #id = tables.LinkColumn('inscripto_detalles', text='static text', args=[A('id')])
     id = tables.LinkColumn('inscripto_detalles',  args=[A('id')])
+    recibo = tables.LinkColumn('inscripto_recibo',text='recibo',  args=[A('id')])
     class Meta:
         model = Inscripto
         exclude = ['subscripcion','enterado']

@@ -51,6 +51,7 @@ def cursos(request, sort='inicio_fecha'):
     if request.user.is_authenticated:
         raw_fields = Curso._meta.get_fields()
         fields = [f.name for f in raw_fields] 
+
         if 'sort' in request.GET:
             abs_sort_val = request.GET['sort'].replace("-","") 
             if abs_sort_val in fields:
@@ -121,20 +122,57 @@ def inscriptosxcursos(request, sort='id'):
 
 from reportlab.pdfgen import canvas
 
-def pdftest(request):
-    # Create the HttpResponse object with the appropriate PDF headers.
-    response = HttpResponse(content_type='application/pdf')
-    response['Content-Disposition'] = 'attachment; filename="somefilename.pdf"'
+def inscripto_recibo(request, id):
+    if request.user.is_authenticated:
+        
+        #id = 1
+        #if 'id' in request.GET:
+        #    id = request.GET['id']
+        #else:
+        #    return HttpResponse('Dame un ID!')
 
-    # Create the PDF object, using the response object as its file.
-    p = canvas.Canvas(response)
+        inscripto = Inscripto.objects.filter(id=id)
+        nombre = inscripto[0].nombre
+        apellido = inscripto[0].apellido 
+        pago = inscripto[0].pago
+        curso = inscripto[0].curso.codigo
+        print(curso)
 
-    # Draw things on the PDF. Here's where the PDF generation happens.
-    # See the ReportLab documentation for the full list of functionality.
-    p.drawString(100, 100, 'Hello world.')
+        # Create the HttpResponse object with the appropriate PDF headers.
+        response = HttpResponse(content_type='application/pdf')
+        response['Content-Disposition'] = 'attachment; filename="inscripcion_'+curso+'-'+apellido+'_'+nombre+'.pdf"'
 
-    # Close the PDF object cleanly, and we're done.
-    p.showPage()
-    p.save()
-    return response
+        # Create the PDF object, using the response object as its file.
+        p = canvas.Canvas(response)
 
+        # Draw things on the PDF. Here's where the PDF generation happens.
+        # See the ReportLab documentation for the full list of functionality.
+        p.drawString(
+                100, 
+                150, 
+                'El estudiante: ' +
+                nombre + 
+                ' ' + 
+                apellido
+        )
+        p.drawString(
+                100, 
+                125, 
+                'pago: $' + 
+                str(pago) 
+        )
+        p.drawString(
+                100, 
+                100, 
+                'por el curso: ' + 
+                str(curso) + 
+                '.' 
+        )
+
+        # Close the PDF object cleanly, and we're done.
+        p.showPage()
+        p.save()
+        return response
+
+    else:
+        return HttpResponse('No estas registrado!')

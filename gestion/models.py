@@ -159,7 +159,7 @@ class Inscripto(models.Model):
         max_length=200
     )
 
-    correo = models.CharField(
+    correo = models.EmailField(
         verbose_name='Correo Electrónico',
         max_length=200
     )
