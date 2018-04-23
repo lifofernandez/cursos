@@ -43,6 +43,7 @@ def inscriptos(request, sort='id'):
 
         queryset = Inscripto.objects.all().order_by(sort)
         table = InscriptosTable(queryset) 
+        #print(table.columns['curso'].header)
         return render(request, 'tabla.html', {'table': table})
     else: 
         return HttpResponse('No estas registrado!')
@@ -126,16 +127,22 @@ def inscripto_recibo(request, id):
     if request.user.is_authenticated:
         
         #id = 1
-        #if 'id' in request.GET:
-        #    id = request.GET['id']
-        #else:
-        #    return HttpResponse('Dame un ID!')
+        if not id:
+            return HttpResponse('Dame un ID!')
 
         inscripto = Inscripto.objects.filter(id=id)
         nombre = inscripto[0].nombre
         apellido = inscripto[0].apellido 
+
+        alumno_una = inscripto[0].alumno_una
+
         pago = inscripto[0].pago
+        costo = inscripto[0].curso.costo
         curso = inscripto[0].curso
+
+        descuento = inscripto[0].descuento()
+        abona = inscripto[0].abona()
+
 
         # Create the HttpResponse object with the appropriate PDF headers.
         response = HttpResponse(content_type='application/pdf')
@@ -148,7 +155,7 @@ def inscripto_recibo(request, id):
         # See the ReportLab documentation for the full list of functionality.
         p.drawString(
                 100, 
-                150, 
+                200, 
                 'El estudiante: ' +
                 nombre + 
                 ' ' + 
@@ -156,15 +163,35 @@ def inscripto_recibo(request, id):
         )
         p.drawString(
                 100, 
+                175, 
+                'abona: $' + 
+                str(abona) 
+        )
+        if alumno_una != 'no':
+            if alumno_una != 'multimedia':
+                condicion = 'Alumno de La U.N.A'
+            if alumno_una == 'multimedia':
+                condicion = 'Alumno de A.T.A.M'
+            p.drawString(
+                    100, 
+                    150, 
+                    'gracias a un descuento de %' + 
+                    str(100 * descuento) +
+                    ' por su condicion de ' + 
+                    condicion
+            )
+
+        p.drawString(
+                100, 
                 125, 
-                'pago: $' + 
-                str(pago) 
+                'En concepto de matriculacion al curso: ' + 
+                curso.nombre  
         )
         p.drawString(
                 100, 
                 100, 
-                'por el curso: ' + 
-                curso.nombre + 
+                'cuyo costo es: $' + 
+                str(costo) +
                 '.' 
         )
 

@@ -44,7 +44,7 @@ class Curso(models.Model):
     # Override de la funcion "save" de Model
     def save(self, *args, **kwargs):
         if not self.codigo:
-            iniciales = ''.join([x[0].upper() for x in self.nombre.split(' ')])
+            iniciales = ''.join( [x[0].upper() for x in self.nombre.split(' ')] )
             self.codigo = iniciales
         super(Curso, self).save(*args, **kwargs)
 
@@ -224,4 +224,20 @@ class Inscripto(models.Model):
     def fue_creado_recientemente(self):
         return self.inscripcion_fecha >= timezone.now() - datetime.timedelta(days=1)
 
+    def descuento(self):
+        condicion = self.alumno_una
+        descuento = .75
+        if condicion == 'no':
+            descuento = 1
+        if condicion == 'multimedia':
+            descuento = .5
+        return descuento
+
+    def abona(self):
+        descuento = self.descuento()
+        print(descuento)
+        costo = self.curso.costo
+        abona = costo * float(descuento)
+        return abona
+        
 
