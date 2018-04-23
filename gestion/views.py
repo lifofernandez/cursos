@@ -135,12 +135,11 @@ def inscripto_recibo(request, id):
         nombre = inscripto[0].nombre
         apellido = inscripto[0].apellido 
         pago = inscripto[0].pago
-        curso = inscripto[0].curso.codigo
-        print(curso)
+        curso = inscripto[0].curso
 
         # Create the HttpResponse object with the appropriate PDF headers.
         response = HttpResponse(content_type='application/pdf')
-        response['Content-Disposition'] = 'attachment; filename="inscripcion_'+curso+'-'+apellido+'_'+nombre+'.pdf"'
+        response['Content-Disposition'] = 'attachment; filename="inscripcion_'+curso.codigo+'-'+apellido+'_'+nombre+'.pdf"'
 
         # Create the PDF object, using the response object as its file.
         p = canvas.Canvas(response)
@@ -165,7 +164,7 @@ def inscripto_recibo(request, id):
                 100, 
                 100, 
                 'por el curso: ' + 
-                str(curso) + 
+                curso.nombre + 
                 '.' 
         )
 
