@@ -16,8 +16,8 @@ class LabelColumn(tables.Column):
 class InscriptosTable(tables.Table):
     #id = tables.LinkColumn('inscripto_detalles', text='static text', args=[A('id')])
 
-    nombre = tables.Column()
     apellido = tables.Column()
+    nombre = tables.Column()
     curso = tables.Column('Curso')
     inscripcion_fecha = tables.DateColumn(verbose_name='Fecha')
     pago = tables.Column()
@@ -42,12 +42,12 @@ class CursosTable(tables.Table):
     id = tables.LinkColumn('curso_detalles',  args=[A('id')],verbose_name='Editar')
     class Meta:
         model = Curso
-        fields = ['nombre','docente','inicio_fecha','inscripcion_abierta','codigo'] 
+        fields = ['nombre','docente','inicio_fecha','inscripcion_abierta','codigo','modalidad'] 
         attrs = {'class': 'table table-striped table-hover table-sm' }
 
 class InscriptosXCursosTable(tables.Table):
-    nombre = tables.Column()
     apellido = tables.Column()
+    nombre = tables.Column()
     #curso = tables.Column('Curso')
     inscripcion_fecha = tables.DateColumn(verbose_name='Fecha')
     pago = tables.Column()
