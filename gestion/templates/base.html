@@ -59,12 +59,15 @@
 
             <main class="col-12 col-md-9 col-xl-8 bd-content" role="main">
 
-		<h3>Título de Página</h3>
+		
 
-                <div class="contenido">
+                <section class="contenido">
+  		    <header class="encabezado">
+	                <h1> {{ titulo}} </h1>
+		    </header>
                     {% block content %} 
 		    {% endblock %}
-                </div>
+                </section >
 
             </main>
 

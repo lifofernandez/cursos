@@ -13,6 +13,7 @@ urlpatterns = [
 
     path('cursos/', views.cursos, name='cursos'),
     path('../admin/gestion/curso/<int:id>/change', views.cursos, name='curso_detalles'),
+    path('cursos/<int:id>/planilla/', views.curso_planilla, name='curso_planilla'),
 
     path('inscriptosxcursos/', views.inscriptosxcursos, name='inscriptosxcursos'),
 

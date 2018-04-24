@@ -237,14 +237,14 @@ def curso_planilla(request, id):
         for index, inscripto in enumerate(inscriptos):
             p.drawString(
                     100, 
-                    160 + ( index * 10 ), 
-                    str( len(inscriptos) - index )+
-                    ' ' +
-                    inscripto.apellido +
+                    140 + ( index * 10 ), 
+                    str( indexo + 1 )+
                     ' ' +
                     inscripto.nombre + 
+                    ' ' +
+                    inscripto.apellido
                     ' -- ' +
-                    inscripto.correo +
+                    inscripto.correo
                     ' -- ' +
                     inscripto.dni
 

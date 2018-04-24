@@ -4,13 +4,13 @@
 
 {% block content %}
     {% for tabla in tables %}
-    <div>
-	    <h4>
+    <article class="tabla">
+	    <h3>
                 {{ tabla.titulo }} - 
 	        {{ tabla.subtitulo }}
-	    </h4>
+	    </h3>
        {% render_table tabla.items %}
-    </div>
+    </article>
     {% endfor %}
 {% endblock %}
 
