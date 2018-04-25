@@ -58,11 +58,11 @@ def cursos(request, sort='inicio_fecha'):
             if abs_sort_val in fields:
                 sort = request.GET['sort']
 
-        pasados = Curso.objects.all().filter(
-            inicio_fecha__lte=timezone.now()
-        ).order_by(sort) 
         futuros = Curso.objects.all().filter(
-            inicio_fecha__gte=timezone.now()
+            inicio_fecha__gte = timezone.now()
+        ).order_by(sort) 
+        pasados = Curso.objects.all().filter(
+            inicio_fecha__lte = timezone.now() - timezone.timedelta(days=1)
         ).order_by(sort) 
 
         vigentes = {} 

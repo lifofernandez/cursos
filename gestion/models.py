@@ -41,12 +41,6 @@ class Curso(models.Model):
         #editable=False,
     )
 
-    # Override de la funcion "save" de Model
-    def save(self, *args, **kwargs):
-        if not self.codigo:
-            iniciales = ''.join( [ x[0].upper() for x in self.nombre.split(' ') ] )
-            self.codigo = iniciales
-        super(Curso, self).save(*args, **kwargs)
 
     # Usuarios dentro del grupo 'docentes'
     docente = models.ForeignKey(
@@ -62,14 +56,22 @@ class Curso(models.Model):
         default=''
     )
 
-    dias = models.ManyToManyField(
-        Dia,
-        verbose_name='Días de Dictado'
-    )
 
     inicio_fecha = models.DateField(
         'Fecha de Inicio',
         default=timezone.now
+    )
+
+    periodo = models.CharField(
+        verbose_name='Perdiodo del Curso',
+        max_length=10,
+        blank=True,
+        #editable=False,
+    )
+
+    dias = models.ManyToManyField(
+        Dia,
+        verbose_name='Días de Dictado'
     )
 
     inicio_hora = models.TimeField(
@@ -125,6 +127,42 @@ class Curso(models.Model):
         inscriptos = Inscripto.objects.filter( curso=self.id )
         return inscriptos 
         #devuelve inscriptos 
+
+    # Override de la funcion "save" de Model
+    def save(self, *args, **kwargs):
+        año = self.inicio_fecha.year
+        mes = self.inicio_fecha.month
+        semestre = 1
+        if mes > 5:
+            semestre = 2
+        periodo = str(año) + '.' + str(semestre)
+        if self.periodo != periodo:
+            self.periodo = periodo
+
+
+        # Obtener Sigla 
+        iniciales = self.nombre
+        if len( iniciales ) > 2:
+            NOMBRE = iniciales.split(' ')
+            if len( NOMBRE ) == 1:
+                iniciales = NOMBRE[0][:3]
+            if len( NOMBRE ) == 2:
+                iniciales = NOMBRE[0][:2] + NOMBRE[1][:1]
+            if len( NOMBRE ) == 3:
+                iniciales = ''.join( [ palabra[0] for palabra in NOMBRE ] )
+            if len( NOMBRE ) >= 4:
+                iniciales = ''.join( [ palabra[0] for palabra in NOMBRE if palabra[0].isupper() ] )
+                if len( iniciales ) < 3:
+                   iniciales = ''.join( [ palabra[0] for palabra in NOMBRE if len( palabra ) > 3 ] )
+                   if len( iniciales ) < 3:
+                      iniciales = ''.join( [ palabra[0] for palabra in NOMBRE ] )
+        sigla = iniciales[:3].upper()
+
+        codigo = sigla + periodo
+        if self.codigo != codigo:
+            self.codigo = codigo 
+
+        super(Curso, self).save(*args, **kwargs)
 
 class Inscripto(models.Model):
     curso = models.ForeignKey(
