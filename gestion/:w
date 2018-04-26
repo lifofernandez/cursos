@@ -131,42 +131,24 @@ class Curso(models.Model):
 
     # Devuelve inscriptos 
     def liquidacion(self):
-        inscriptos = self.obtener_inscriptos()
-        
-        pagan100 = inscriptos.filter( alumno_una='no' )
-        pagan75 = inscriptos.filter( 
-            ~Q(alumno_una='no') 
-        ).filter(
-            ~Q(alumno_una='multimedia' )
-        ) 
-        pagan50 = inscriptos.filter( alumno_una='multimedia' )
-        total100 = len(pagan100) * self.costo
-        total75  = len(pagan75) * (self.costo * .75)
-        total50  = len(pagan50) * (self.costo * .5)
-        esperado = total100 + total75 + total50
+        # TO DO: agregar sort, pasar value para ordenar comoa argumento
+        pagan100 = Inscripto.objects.filter( alumno_una='no' )
+        pagan75 = Inscripto.objects.filter( ~Q(alumno_una={'multimedia'} ))
+        pagan50 = Inscripto.objects.filter( alumno_una='multimedia' )
 
-        pagaron = sum( [inscripto.pago for inscripto in inscriptos] )
-        exclusivo_docente = self.costo * 3
-
-        monto_docente = pagaron
-        monto_atam = 0
-        if( pagaron > exclusivo_docente ):
-            resto_a_repartir = pagaron - exclusivo_docente
-            monto_docente = exclusivo_docente + ( resto_a_repartir * .5 ) 
-            monto_atam = resto_a_repartir * .5 
-
-        liquidacion = {
-            'arancel':        '$' + str( self.costo ),
-            'cant100':        len( pagan100 ),
-            'cant75':         len( pagan75 ),
-            'cant50':         len( pagan50 ),
-            'total_esperado': '$' + str( esperado ),
-            'total_pagaron':  '$' + str( pagaron ),
-            'monto_docente':  '$' + str( monto_docente ),
-            'monto_ATAM':     '$' + str( monto_atam ),
-            'descargar':      'Liquidacion'
+        print(pagan75)
+        calculo = {
+            'arancel': '$' + str( self.costo ),
+            'cant100': len(pagan100),
+            'cant75':  len(pagan75),
+            'cant50':  len(pagan50),
+            'total_esperado':1,
+            'total':1,
+            'monto_docente':'$' + str( self.costo * 0.7 ),
+            'monto_ATAM':'$' + str( self.costo * 0.3 ),
+            'descargar':1
         }
-        return liquidacion
+        return calculo
 
     # Override de la funcion "save" de Model
     def save(self, *args, **kwargs):

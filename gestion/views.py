@@ -8,7 +8,7 @@ from django.http import HttpResponse
 from .forms import InscriptoForm
 
 from .models import Inscripto, Curso
-from .tables import InscriptosTable, CursosTable, InscriptosXCursosTable
+from .tables import InscriptosTable, CursosTable, InscriptosXCursosTable, LiquidacionesTable
 
 
 from django_tables2 import MultiTableMixin
@@ -91,11 +91,12 @@ def inscriptosxcursos(request, sort='id'):
 
         queryset = Curso.objects.all().order_by(sort)
 
-        cursos = [] 
-        for index, curso in enumerate(queryset): 
+        CURSOS = [] 
+        #for index, curso in enumerate(queryset): 
+        for curso in queryset: 
             c = {}
-            c['titulo'] = queryset[index].nombre
-            c['subtitulo'] = queryset[index].docente
+            c['titulo'] = curso.nombre
+            c['subtitulo'] = curso.docente
 
             #queryset[index].inscriptos = inscriptos 
             INSCRIPTOS = []
@@ -109,9 +110,8 @@ def inscriptosxcursos(request, sort='id'):
             INSCRIPTOS = InscriptosXCursosTable(inscriptos) 
             c['items'] = INSCRIPTOS
 
-            cursos.append(c)
+            CURSOS.append(c)
 
-        CURSOS = cursos 
 
         #print(CURSOS[1].nombre)
         #print(queryset.values('inscripto'))
@@ -121,6 +121,53 @@ def inscriptosxcursos(request, sort='id'):
     else:
         return HttpResponse('No estas registrado!')
 
+def liquidaciones(request, sort='id'): 
+    if request.user.is_authenticated:
+
+        queryset = Curso.objects.all().order_by(sort)
+
+        CURSOS = [] 
+        for curso in queryset: 
+            c = {}
+            c['titulo'] = curso.nombre
+            c['subtitulo'] = curso.docente
+
+            inscriptos = curso.obtener_inscriptos()
+            INSCRIPTOS = []
+            INSCRIPTOS = InscriptosXCursosTable(inscriptos) 
+            c['items'] = INSCRIPTOS
+
+            CURSOS.append(c)
+
+            liquidacion = {}
+            liquidacion['titulo'] = 'Liquidacion' 
+            liquidacion['subtitulo'] = curso.codigo
+
+            #Arancel Cant. 100% Cant. 75% Cant. 50% Total Monto docente Monto ATAM Descargar
+            #calculo = {
+            #    'arancel': '$' + str( curso.costo ),
+            #    'cant100':1,
+            #    'cant75':1,
+            #    'cant50':1,
+            #    'total':1,
+            #    'monto_docente':'$' + str( curso.costo * 0.7 ),
+            #    'monto_ATAM':'$' + str( curso.costo * 0.3 ),
+            #    'descargar':1
+            #}
+            calculo = curso.liquidacion()
+            calculos = [calculo]
+            CALCULOS = []
+            CALCULOS = LiquidacionesTable(calculos) 
+            liquidacion['items'] = CALCULOS 
+            CURSOS.append(liquidacion)
+            
+
+
+        return render(request, 'multitabla.html', {'titulo':'Liquidaciones','tables':CURSOS})
+    else:
+        return HttpResponse('No estas registrado!')
+
+# RECIBOS Y PLANILLAS PDF
 from reportlab.pdfgen import canvas
 
 def inscripto_recibo(request, id):
@@ -176,7 +223,7 @@ def inscripto_recibo(request, id):
                     100, 
                     150, 
                     'gracias a un descuento de %' + 
-                    str( 100 * descuento ) +
+                    str( 100 - ( 100 * descuento ) ) +
                     ' por su condicion de ' + 
                     condicion
             )
@@ -184,8 +231,8 @@ def inscripto_recibo(request, id):
         p.drawString(
                 100, 
                 125, 
-                'En concepto de matriculacion al curso: ' + 
-                curso.nombre  
+                'En concepto de: matriculacion al curso "' + 
+                curso.nombre + '"' 
         )
         p.drawString(
                 100, 

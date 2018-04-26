@@ -59,4 +59,20 @@ class InscriptosXCursosTable(tables.Table):
         #attrs = {'class': 'table table-striped table-bordered table-hover table-sm'}
         attrs = {'class': 'table table-striped table-hover table-sm' }
 
+class LiquidacionesTable(tables.Table):
+
+    arancel        =tables.Column()
+    cant100        =tables.Column()
+    cant75         =tables.Column()
+    cant50         =tables.Column()
+    total_esperado =tables.Column()
+    total_pagaron  =tables.Column()
+    monto_docente  =tables.Column()
+    monto_ATAM     =tables.Column()
+    descargar      =tables.Column()
+
+    class Meta:
+        #attrs = {'class': 'table table-striped table-bordered table-hover table-sm'}
+        attrs = {'class': 'table table-striped table-hover table-sm' }
+
 
