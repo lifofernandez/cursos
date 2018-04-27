@@ -18,6 +18,7 @@ urlpatterns = [
     path('inscriptosxcursos/', views.inscriptosxcursos, name='inscriptosxcursos'),
 
     path('liquidaciones/', views.liquidaciones, name='liquidaciones'),
+    path('curso/<int:id>/liquidacion/', views.curso_liquidacion, name='curso_liquidacion'),
 
     #path('pdftest/', views.pdftest, name='pdftest'),
 

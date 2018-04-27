@@ -22,7 +22,7 @@ class InscriptosTable(tables.Table):
     inscripcion_fecha = tables.DateColumn(verbose_name='Fecha')
     pago = tables.Column()
     condicion = LabelColumn('Condición',accessor='alumno_una')
-    recibo = tables.LinkColumn('inscripto_recibo',text='recibo',  args=[A('id')])
+    recibo = tables.LinkColumn('inscripto_recibo',text='Recibo',  args=[A('id')])
     id = tables.LinkColumn('inscripto_detalles',  args=[A('id')],verbose_name='Editar')
 
     class Meta:
@@ -38,7 +38,7 @@ class CursosTable(tables.Table):
     codigo = tables.Column('Código')
     inicio_fecha = tables.DateColumn(verbose_name='Inicio')
     inscripcion_abierta = tables.BooleanColumn(verbose_name='Inscripcion')
-    planilla = tables.LinkColumn('curso_planilla',text='planilla',  args=[A('id')])
+    planilla = tables.LinkColumn('curso_planilla',text='Planilla',  args=[A('id')])
     id = tables.LinkColumn('curso_detalles',  args=[A('id')],verbose_name='Editar')
     class Meta:
         model = Curso
@@ -52,7 +52,7 @@ class InscriptosXCursosTable(tables.Table):
     inscripcion_fecha = tables.DateColumn(verbose_name='Fecha')
     pago = tables.Column()
     condicion = LabelColumn('Condición',accessor='alumno_una')
-    recibo = tables.LinkColumn('inscripto_recibo',text='recibo',  args=[A('id')])
+    recibo = tables.LinkColumn('inscripto_recibo',text='Recibo',  args=[A('id')])
     id = tables.LinkColumn('inscripto_detalles',  args=[A('id')],verbose_name='Editar')
 
     class Meta:
@@ -61,15 +61,19 @@ class InscriptosXCursosTable(tables.Table):
 
 class LiquidacionesTable(tables.Table):
 
-    arancel        =tables.Column()
-    cant100        =tables.Column()
-    cant75         =tables.Column()
-    cant50         =tables.Column()
-    total_esperado =tables.Column()
-    total_pagaron  =tables.Column()
-    monto_docente  =tables.Column()
-    monto_ATAM     =tables.Column()
-    descargar      =tables.Column()
+    arancel        = tables.Column()
+    cant100        = tables.Column()
+    cant75         = tables.Column()
+    cant50         = tables.Column()
+    total_esperado = tables.Column()
+    total_pagaron  = tables.Column()
+    monto_docente  = tables.Column()
+    monto_ATAM     = tables.Column()
+    descargar = tables.LinkColumn(
+        'curso_liquidacion',
+        text='Liquidar', 
+        args=[A('curso')]
+    )
 
     class Meta:
         #attrs = {'class': 'table table-striped table-bordered table-hover table-sm'}

@@ -156,6 +156,7 @@ class Curso(models.Model):
             monto_atam = resto_a_repartir * .5 
 
         liquidacion = {
+            'curso':             self.id,
             'arancel':        '$' + str( self.costo ),
             'cant100':        len( pagan100 ),
             'cant75':         len( pagan75 ),
@@ -164,7 +165,7 @@ class Curso(models.Model):
             'total_pagaron':  '$' + str( pagaron ),
             'monto_docente':  '$' + str( monto_docente ),
             'monto_ATAM':     '$' + str( monto_atam ),
-            'descargar':      'Liquidacion'
+            #'descargar':      'Liquidacion'
         }
         return liquidacion
 

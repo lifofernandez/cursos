@@ -143,17 +143,6 @@ def liquidaciones(request, sort='id'):
             liquidacion['titulo'] = 'Liquidacion' 
             liquidacion['subtitulo'] = curso.codigo
 
-            #Arancel Cant. 100% Cant. 75% Cant. 50% Total Monto docente Monto ATAM Descargar
-            #calculo = {
-            #    'arancel': '$' + str( curso.costo ),
-            #    'cant100':1,
-            #    'cant75':1,
-            #    'cant50':1,
-            #    'total':1,
-            #    'monto_docente':'$' + str( curso.costo * 0.7 ),
-            #    'monto_ATAM':'$' + str( curso.costo * 0.3 ),
-            #    'descargar':1
-            #}
             calculo = curso.liquidacion()
             calculos = [calculo]
             CALCULOS = []
@@ -267,10 +256,6 @@ def curso_planilla(request, id):
         INSCRIPTOS = []
         inscriptos = curso[0].obtener_inscriptos()
 
-        #INSCRIPTOS = InscriptosXCursosTable(inscriptos) 
-        #c['items'] = INSCRIPTOS
-
-
 
         # Create the HttpResponse object with the appropriate PDF headers.
         response = HttpResponse(content_type='application/pdf')
@@ -321,6 +306,138 @@ def curso_planilla(request, id):
                 'Costo: $' +
                 costo
         )
+
+        # Close the PDF object cleanly, and we're done.
+        p.showPage()
+        p.save()
+        return response
+
+    else:
+        return HttpResponse('No estas registrado!')
+
+def curso_liquidacion(request, id):
+    if request.user.is_authenticated:
+        
+        #id = 1
+        if not id:
+            return HttpResponse('Dame un ID!')
+
+        curso = Curso.objects.filter(id=id)
+        nombre = curso[0].nombre
+        codigo = curso[0].codigo 
+        docente = str( curso[0].docente )
+
+        costo = str( curso[0].costo )
+
+        liquidacion = curso[0].liquidacion()
+        INSCRIPTOS = curso[0].obtener_inscriptos()
+
+        # Create the HttpResponse object with the appropriate PDF headers.
+        response = HttpResponse(content_type='application/pdf')
+        response['Content-Disposition'] = 'attachment; filename="planilla-'+codigo+'-'+docente+'.pdf"'
+
+        # Create the PDF object, using the response object as its file.
+        p = canvas.Canvas(response)
+
+        # Draw things on the PDF. Here's where the PDF generation happens.
+        # See the ReportLab documentation for the full list of functionality.
+        for index, inscripto in enumerate(INSCRIPTOS):
+            p.drawString(
+                100, 
+                230 + ( index * 10 ), 
+                str( len(INSCRIPTOS) - index )+
+                ' ' +
+                inscripto.apellido +
+                ' ' +
+                inscripto.nombre + 
+                ' -- ' +
+                inscripto.dni + 
+                ' -- ' +
+                inscripto.alumno_una +
+                ' -- pago: $' +
+                str(inscripto.pago)
+            )
+
+        p.drawString(
+            100, 
+            210, 
+            'Curso: ' +
+            nombre 
+        )
+        p.drawString(
+            100, 
+            200, 
+            'Código: ' +
+            codigo
+        )
+        p.drawString(
+            100, 
+            190, 
+            'Docente: ' +
+            docente
+        )
+        p.drawString(
+            100, 
+            180, 
+            'Arancel del curso: ' +
+            liquidacion['arancel']
+        )
+
+        p.drawString(
+            100, 
+            170, 
+            'Pagaron %100: ' +
+            str(liquidacion['cant100']) +
+            ' x $' +
+            costo +
+            ' = $' +
+            str(liquidacion['cant100'] * costo ) 
+        )
+        p.drawString(
+            100, 
+            160, 
+            'Pagaron %75: ' +
+            str(liquidacion['cant75']) +
+            ' x $' +
+            str(float(costo) * .75) +
+            ' = $' +
+            str(liquidacion['cant75'] * (float(costo) * 0.75)) 
+        )
+        p.drawString(
+            100, 
+            150, 
+            'Pagaron %50: ' +
+            str(liquidacion['cant50']) +
+            ' x $' +
+            str(float(costo) * .5) +
+            ' = $' +
+            str(liquidacion['cant75'] * (float(costo) * .5)) 
+        )
+        p.drawString(
+            100, 
+            140, 
+            'Total Esperado: ' +
+            liquidacion['total_esperado']
+        )
+        p.drawString(
+            100, 
+            130, 
+            'Total Pagaron: ' +
+            liquidacion['total_pagaron']
+        )
+        p.drawString(
+            100, 
+            120, 
+            'Monto Docente: ' +
+            liquidacion['monto_docente']
+        )
+        p.drawString(
+            100, 
+            110, 
+            'Monto Atam: ' +
+            liquidacion['monto_ATAM']
+        )    
+        
 
         # Close the PDF object cleanly, and we're done.
         p.showPage()
