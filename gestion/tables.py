@@ -14,15 +14,18 @@ class LabelColumn(tables.Column):
         return label
 
 class InscriptosTable(tables.Table):
-    #id = tables.LinkColumn('inscripto_detalles', text='static text', args=[A('id')])
-
     apellido = tables.Column()
     nombre = tables.Column()
     curso = tables.Column('Curso')
     inscripcion_fecha = tables.DateColumn(verbose_name='Fecha')
     pago = tables.Column()
     condicion = LabelColumn('Condición',accessor='alumno_una')
-    recibo = tables.LinkColumn('inscripto_recibo',text='Recibo',  args=[A('id')])
+    recibo = tables.LinkColumn(
+        'inscripto_recibo',
+        text='Recibo',
+        args=[A('id')],
+        verbose_name='Descargar'
+    )
     id = tables.LinkColumn('inscripto_detalles',  args=[A('id')],verbose_name='Editar')
 
     class Meta:
@@ -36,10 +39,18 @@ class InscriptosTable(tables.Table):
 class CursosTable(tables.Table):
     nombre = tables.Column('Nombre')
     codigo = tables.Column('Código')
+    # to do: cantidad de inscriptos
+    # total_inscriptos = tables.Column('Inscriptos')
     inicio_fecha = tables.DateColumn(verbose_name='Inicio')
     inscripcion_abierta = tables.BooleanColumn(verbose_name='Inscripcion')
-    planilla = tables.LinkColumn('curso_planilla',text='Planilla',  args=[A('id')])
+    planilla = tables.LinkColumn(
+        'curso_planilla',
+        text='Planilla',
+        args=[A('id')],
+        verbose_name='Descargar'
+    )
     id = tables.LinkColumn('curso_detalles',  args=[A('id')],verbose_name='Editar')
+
     class Meta:
         model = Curso
         fields = ['nombre','docente','inicio_fecha','inscripcion_abierta','codigo','modalidad'] 
@@ -52,7 +63,12 @@ class InscriptosXCursosTable(tables.Table):
     inscripcion_fecha = tables.DateColumn(verbose_name='Fecha')
     pago = tables.Column()
     condicion = LabelColumn('Condición',accessor='alumno_una')
-    recibo = tables.LinkColumn('inscripto_recibo',text='Recibo',  args=[A('id')])
+    recibo = tables.LinkColumn(
+            'inscripto_recibo',
+            text='Recibo',  
+            args=[A('id')],
+            verbose_name='Descargar'
+    )
     id = tables.LinkColumn('inscripto_detalles',  args=[A('id')],verbose_name='Editar')
 
     class Meta:
@@ -65,8 +81,8 @@ class LiquidacionesTable(tables.Table):
     cant100        = tables.Column()
     cant75         = tables.Column()
     cant50         = tables.Column()
-    total_esperado = tables.Column()
-    total_pagaron  = tables.Column()
+    #total_esperado = tables.Column()
+    total_pagaron  = tables.Column('Total')
     monto_docente  = tables.Column()
     monto_ATAM     = tables.Column()
     descargar = tables.LinkColumn(

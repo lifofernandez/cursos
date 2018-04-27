@@ -3,13 +3,23 @@
 {% load bootstrap4 %}
 
 {% block content %}
-    {% for tabla in tables %}
+    {% for tabla in tablas %}
     <article class="tabla">
-	    <h3>
-                {{ tabla.titulo }} - 
-	        {{ tabla.subtitulo }}
-	    </h3>
-       {% render_table tabla.items %}
+
+        <h3>
+            {{ tabla.titulo }} - 
+	    {{ tabla.subtitulo }}
+	</h3>
+        {% render_table tabla.items %}
+
+        {% if tabla.subtabla %}
+	    <h4>
+                {{ tabla.subtabla.titulo }} - 
+	        {{ tabla.subtabla.subtitulo }}
+	    </h4>
+           {% render_table tabla.subtabla.items %}
+        {% endif %}
+
     </article>
     {% endfor %}
 {% endblock %}

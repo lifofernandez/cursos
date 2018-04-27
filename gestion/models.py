@@ -131,7 +131,7 @@ class Curso(models.Model):
 
     # Devuelve inscriptos 
     def liquidacion(self):
-        inscriptos = self.obtener_inscriptos()
+        inscriptos = self.obtener_inscriptos().filter(~Q(pago=0))
         
         pagan100 = inscriptos.filter( alumno_una='no' )
         pagan75 = inscriptos.filter( 
@@ -140,10 +140,11 @@ class Curso(models.Model):
             ~Q(alumno_una='multimedia' )
         ) 
         pagan50 = inscriptos.filter( alumno_una='multimedia' )
+
         total100 = len(pagan100) * self.costo
         total75  = len(pagan75) * (self.costo * .75)
         total50  = len(pagan50) * (self.costo * .5)
-        esperado = total100 + total75 + total50
+        #esperado = total100 + total75 + total50
 
         pagaron = sum( [inscripto.pago for inscripto in inscriptos] )
         exclusivo_docente = self.costo * 3
@@ -156,16 +157,18 @@ class Curso(models.Model):
             monto_atam = resto_a_repartir * .5 
 
         liquidacion = {
-            'curso':             self.id,
+            'curso':          self.id,
             'arancel':        '$' + str( self.costo ),
             'cant100':        len( pagan100 ),
+            'total100':       total100,
             'cant75':         len( pagan75 ),
+            'total75':        total75,
             'cant50':         len( pagan50 ),
-            'total_esperado': '$' + str( esperado ),
+            'total50':        total50,
+            #'total_esperado': '$' + str( esperado ),
             'total_pagaron':  '$' + str( pagaron ),
             'monto_docente':  '$' + str( monto_docente ),
             'monto_ATAM':     '$' + str( monto_atam ),
-            #'descargar':      'Liquidacion'
         }
         return liquidacion
 

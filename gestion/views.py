@@ -58,22 +58,24 @@ def cursos(request, sort='inicio_fecha'):
             if abs_sort_val in fields:
                 sort = request.GET['sort']
 
-        futuros = Curso.objects.all().filter(
+        CURSOS = Curso.objects.all()
+
+        futuros = CURSOS.filter(
             inicio_fecha__gte = timezone.now()
         ).order_by(sort) 
-        pasados = Curso.objects.all().filter(
+        pasados = CURSOS.filter(
             inicio_fecha__lte = timezone.now() - timezone.timedelta(days=1)
         ).order_by(sort) 
 
         vigentes = {} 
         vigentes['titulo'] = 'Cursos'
         vigentes['subtitulo'] = 'Vigentes'
-        vigentes['items'] = CursosTable(futuros) 
+        vigentes['items'] = CursosTable( futuros ) 
 
         anteriores =  {}
         anteriores['titulo'] = 'Cursos'
         anteriores['subtitulo'] = 'Anteriores'
-        anteriores['items'] = CursosTable(pasados) 
+        anteriores['items'] = CursosTable( pasados ) 
 
         TABLAS = [
                 vigentes,
@@ -82,7 +84,7 @@ def cursos(request, sort='inicio_fecha'):
     #    return render(request, 'tabla.html', {'table': table})
 
 
-        return render(request, 'multitabla.html', {'titulo':'Todos los Cursos','tables':TABLAS})
+        return render(request, 'multitabla.html', {'titulo':'Todos los Cursos','tablas':TABLAS})
     else:
         return HttpResponse('No estas registrado!')
 
@@ -117,7 +119,7 @@ def inscriptosxcursos(request, sort='id'):
         #print(queryset.values('inscripto'))
         #print(queryset[1].inscriptos.values('nombre'))
 
-        return render(request, 'multitabla.html', {'titulo':'Inscriptos a cada curso','tables':CURSOS})
+        return render(request, 'multitabla.html', {'titulo':'Inscriptos a cada curso','tablas':CURSOS})
     else:
         return HttpResponse('No estas registrado!')
 
@@ -128,31 +130,34 @@ def liquidaciones(request, sort='id'):
 
         CURSOS = [] 
         for curso in queryset: 
-            c = {}
-            c['titulo'] = curso.nombre
-            c['subtitulo'] = curso.docente
-
             inscriptos = curso.obtener_inscriptos()
-            INSCRIPTOS = []
-            INSCRIPTOS = InscriptosXCursosTable(inscriptos) 
-            c['items'] = INSCRIPTOS
+            if inscriptos:
+                c = {}
+                c['titulo'] = curso.nombre
+                c['subtitulo'] = curso.docente
 
-            CURSOS.append(c)
+                INSCRIPTOS = []
+                INSCRIPTOS = InscriptosXCursosTable(inscriptos) 
+                c['items'] = INSCRIPTOS
 
-            liquidacion = {}
-            liquidacion['titulo'] = 'Liquidacion' 
-            liquidacion['subtitulo'] = curso.codigo
 
-            calculo = curso.liquidacion()
-            calculos = [calculo]
-            CALCULOS = []
-            CALCULOS = LiquidacionesTable(calculos) 
-            liquidacion['items'] = CALCULOS 
-            CURSOS.append(liquidacion)
+                liquidacion = {}
+                liquidacion['titulo'] = 'Liquidacion' 
+                liquidacion['subtitulo'] = curso.codigo
+
+                calculo = curso.liquidacion()
+                calculos = [calculo]
+                CALCULOS = []
+                CALCULOS = LiquidacionesTable(calculos) 
+                liquidacion['items'] = CALCULOS 
+                c['subtabla'] = liquidacion
+
+                CURSOS.append(c)
+                #CURSOS.append(liquidacion)
             
 
 
-        return render(request, 'multitabla.html', {'titulo':'Liquidaciones','tables':CURSOS})
+        return render(request, 'multitabla.html', {'titulo':'Liquidaciones','tablas':CURSOS})
     else:
         return HttpResponse('No estas registrado!')
 
@@ -317,8 +322,6 @@ def curso_planilla(request, id):
 
 def curso_liquidacion(request, id):
     if request.user.is_authenticated:
-        
-        #id = 1
         if not id:
             return HttpResponse('Dame un ID!')
 
@@ -334,7 +337,7 @@ def curso_liquidacion(request, id):
 
         # Create the HttpResponse object with the appropriate PDF headers.
         response = HttpResponse(content_type='application/pdf')
-        response['Content-Disposition'] = 'attachment; filename="planilla-'+codigo+'-'+docente+'.pdf"'
+        response['Content-Disposition'] = 'attachment; filename="liquidacion-'+codigo+'-'+docente+'.pdf"'
 
         # Create the PDF object, using the response object as its file.
         p = canvas.Canvas(response)
@@ -391,7 +394,7 @@ def curso_liquidacion(request, id):
             ' x $' +
             costo +
             ' = $' +
-            str(liquidacion['cant100'] * costo ) 
+            str(liquidacion['total100']) 
         )
         p.drawString(
             100, 
@@ -401,7 +404,7 @@ def curso_liquidacion(request, id):
             ' x $' +
             str(float(costo) * .75) +
             ' = $' +
-            str(liquidacion['cant75'] * (float(costo) * 0.75)) 
+            str(liquidacion['total75']) 
         )
         p.drawString(
             100, 
@@ -411,14 +414,14 @@ def curso_liquidacion(request, id):
             ' x $' +
             str(float(costo) * .5) +
             ' = $' +
-            str(liquidacion['cant75'] * (float(costo) * .5)) 
+            str(liquidacion['total50']) 
         )
-        p.drawString(
-            100, 
-            140, 
-            'Total Esperado: ' +
-            liquidacion['total_esperado']
-        )
+        #p.drawString(
+        #    100, 
+        #    140, 
+        #    'Total Esperado: ' +
+        #    liquidacion['total_esperado']
+        #)
         p.drawString(
             100, 
             130, 
