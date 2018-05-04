@@ -77,7 +77,11 @@ def inscriptos(request, sort='id' ):
             {
                 'titulo':'Todos los inscriptos',
                 #'bajada':'eo',
-                'boton': {'texto':'Nuevo Inscripito','destino':'/inscripcion'},
+                'botones': [
+                    {'texto':'Nuevo Inscripito','destino':'/inscripcion', 'class' : 'danger'},
+                    {'texto':'descargar CSV ','destino':'.?export=csv', 'class':'warning'},
+                    {'texto':'descargar XLS ','destino':'.?export=csv', 'class':'warning'},
+                 ],
                 'tabla': tabla
             }
         )

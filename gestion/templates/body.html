@@ -48,17 +48,19 @@
                     <section class="contenido">
       		        <header class="encabezado">
     	                    <h1> {{ titulo}} </h1>
-                            {% if boton %}
-    	                        <p class="text-right">  
-                                    <a 
-		                        href="{{boton.destino}}"
-			                class="btn btn-primary btn-lg active" 
-			                role="button"
-			                aria-pressed="true"
-			            >
-			                {{boton.texto}}
-			            </a>
-    		                </p>
+                            {% if botones %}
+                                {% for boton in botones %}
+    	                            <p class="text-right">  
+                                        <a 
+		                            href="{{boton.destino}}"
+			                    class="btn btn-primary btn-lg active" 
+			                    role="button"
+			                    aria-pressed="true"
+			                >
+			                    {{boton.texto}}
+			                </a>
+    		                    </p>
+                                {% endfor %}
                             {% endif %}
 			</header>
                         {% block content %} 
