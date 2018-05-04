@@ -78,9 +78,9 @@ def inscriptos(request, sort='id' ):
                 'titulo':'Todos los inscriptos',
                 #'bajada':'eo',
                 'botones': [
-                    {'texto':'Nuevo Inscripito','destino':'/inscripcion', 'class' : 'danger'},
-                    {'texto':'descargar CSV ','destino':'.?export=csv', 'class':'warning'},
-                    {'texto':'descargar XLS ','destino':'.?export=csv', 'class':'warning'},
+                    {'texto':'Nuevo Inscripito','destino':'/inscripcion', 'clase' : 'btn-success'},
+                    {'texto':'descargar CSV ','destino':'.?export=csv', },
+                    {'texto':'descargar XLS ','destino':'.?export=csv', },
                  ],
                 'tabla': tabla
             }
@@ -129,7 +129,7 @@ def cursos(request, sort='inicio_fecha'):
             {
                 'titulo':'Todos los Cursos',
                 'bajada':'eo',
-                'boton': {'texto':'Nuevo Curso','destino':'/admin/gestion/curso/add'},
+                'botones': [{'texto':'Nuevo Curso','destino':'/admin/gestion/curso/add','clase':'btn-success'}],
                 'tablas':TABLAS
             }
         )

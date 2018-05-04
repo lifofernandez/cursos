@@ -48,12 +48,15 @@
                     <section class="contenido">
       		        <header class="encabezado">
     	                    <h1> {{ titulo}} </h1>
+			</header>
+                        {% block content %} 
+    		        {% endblock %}
                             {% if botones %}
                                 {% for boton in botones %}
     	                            <p class="text-right">  
                                         <a 
 		                            href="{{boton.destino}}"
-			                    class="btn btn-primary btn-lg active" 
+                                            class="btn btn-primary btn-lg active {{boton.clase}}" 
 			                    role="button"
 			                    aria-pressed="true"
 			                >
@@ -62,9 +65,6 @@
     		                    </p>
                                 {% endfor %}
                             {% endif %}
-			</header>
-                        {% block content %} 
-    		        {% endblock %}
                     </section >
     
                 </main>
