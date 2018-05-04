@@ -48,7 +48,7 @@ def inscripcion(request):
         )
 
 
-def inscriptos(request, sort='id'):
+def inscriptos(request, sort='id' ):
     if request.user.is_authenticated:
         raw_fields = Inscripto._meta.get_fields()
         fields = [f.name for f in raw_fields] 
@@ -64,13 +64,12 @@ def inscriptos(request, sort='id'):
 
         RequestConfig(request).configure(tabla)
 
-        #export_format = request.GET.get('_export', None)
-        export_format = 'csv'
-        print(export_format)
-
-        if TableExport.is_valid_format(export_format):
-            exporter = TableExport(export_format, tabla)
-            return exporter.response('tabla.{}'.format(export_format))
+        if request.method == 'GET' and 'export' in request.GET:
+            export_format = request.GET['export']
+            print(export_format)
+            if TableExport.is_valid_format(export_format):
+                exporter = TableExport(export_format, tabla)
+                return exporter.response('tabla.{}'.format(export_format))
 
         return render(
             request, 
