@@ -5,3 +5,9 @@ html{
 .tabla{
 	margin-bottom:50px;
 }
+th a{
+	color: #000;
+}
+.ok.jumbotron{
+	margin:50px
+}

@@ -1,0 +1,73 @@
+{% extends "head.html" %}
+{% load bootstrap4 %}
+{% block body %}
+    <body>
+        <div class="container-fluid">
+            <div class="row flex-xl-nowrap">
+    
+                <div class="col-12 col-md-3 col-xl-2 bd-sidebar">
+    		<h5>Gestión de Cursos</h5>
+                    <nav class="">
+    		    <ul class="nav flex-column">
+    		        <li class="nav-item">
+    			    <a
+    		                href="/gestion/cursos"
+    		     	    >
+    			        Todos los Cursos 
+    			    </a>
+    		        </li>
+    		        <li class="nav-item">
+    			    <a
+    		                href="/gestion/inscriptosxcursos"
+    		     	    >
+    			        Inscriptos por Cursos
+    			    </a>
+    		        </li>
+    		        <li class="nav-item">
+    			    <a
+    		                href="/gestion/inscriptos"
+    		     	    >
+    			        Todos los Inscriptos
+    			    </a>
+    		        </li>
+    		        <li class="nav-item">
+    			    <a
+    		                href="/gestion/liquidaciones"
+    		     	    >
+    			        Liquidaciones
+    			    </a>
+    		        </li>
+    		    </ul>
+                    </nav> 
+                </div> 
+    
+                <main class="col-12 col-md-9 col-xl-8 bd-content" role="main">
+    
+    		
+    
+                    <section class="contenido">
+      		        <header class="encabezado">
+    	                    <h1> {{ titulo}} </h1>
+                            {% if boton %}
+    	                        <p class="text-right">  
+                                    <a 
+		                        href="{{boton.destino}}"
+			                class="btn btn-primary btn-lg active" 
+			                role="button"
+			                aria-pressed="true"
+			            >
+			                {{boton.texto}}
+			            </a>
+    		                </p>
+                            {% endif %}
+			</header>
+                        {% block content %} 
+    		        {% endblock %}
+                    </section >
+    
+                </main>
+    
+            </div>
+         </div>
+    </body>
+{% endblock %}

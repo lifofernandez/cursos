@@ -5,7 +5,6 @@ from  .models import Inscripto, Curso
 # Columna custom, extrae el label para una opcion en un ForeingKey
 class LabelColumn(tables.Column):
     def render(self,value):
-        #pepe = Inscripto.objects.values('alumno_una')
         CHOICES = Inscripto._meta.get_field('alumno_una').choices
         opciones = {}
         for choice in CHOICES :
@@ -32,9 +31,7 @@ class InscriptosTable(tables.Table):
         model = Inscripto
         #exclude = ['subscripcion','enterado']
         fields  = [ 'apellido','nombre','curso','inscripcion_fecha','pago']
-
         attrs = {'class': 'table table-striped table-hover table-sm'}
-        #ordering = ('pago',)
 
 class CursosTable(tables.Table):
     nombre = tables.Column('Nombre')
@@ -64,10 +61,10 @@ class InscriptosXCursosTable(tables.Table):
     pago = tables.Column()
     condicion = LabelColumn('Condición',accessor='alumno_una')
     recibo = tables.LinkColumn(
-            'inscripto_recibo',
-            text='Recibo',  
-            args=[A('id')],
-            verbose_name='Descargar'
+        'inscripto_recibo',
+        text='Recibo',  
+        args=[A('id')],
+        verbose_name='Descargar'
     )
     id = tables.LinkColumn('inscripto_detalles',  args=[A('id')],verbose_name='Editar')
 
@@ -87,12 +84,11 @@ class LiquidacionesTable(tables.Table):
     monto_ATAM     = tables.Column()
     descargar = tables.LinkColumn(
         'curso_liquidacion',
-        text='Liquidar', 
+        text='Liquidación', 
         args=[A('curso')]
     )
 
     class Meta:
         #attrs = {'class': 'table table-striped table-bordered table-hover table-sm'}
         attrs = {'class': 'table table-striped table-hover table-sm' }
-
 

@@ -1,10 +1,15 @@
-{% extends "base.html" %}
+{% extends "body.html" %}
 {% load django_tables2 %}
 {% load bootstrap4 %}
 
-{% block content %}
-    {% render_table table %}
-{% endblock %}
+    {% block content %}
+        {% render_table tabla %}
+        {% for format in tabla.export_formats %}
+            <a href="{% export_url format %}">
+                download  <code>.{{ format }}</code>
+            </a>
+        {% endfor %}
+    {% endblock %}
 
 
 

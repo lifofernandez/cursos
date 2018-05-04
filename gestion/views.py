@@ -4,14 +4,19 @@ from django.utils import timezone
 from django.shortcuts import render
 
 # Create your views here.
-from django.http import HttpResponse
+from django.http import HttpResponse,HttpResponseRedirect
 from .forms import InscriptoForm
 
 from .models import Inscripto, Curso
 from .tables import InscriptosTable, CursosTable, InscriptosXCursosTable, LiquidacionesTable
 
 
-from django_tables2 import MultiTableMixin
+# Table Export
+from django_tables2.config import RequestConfig
+from django_tables2.export.export import TableExport
+
+
+#from django_tables2 import MultiTableMixin
 
 def index(request):
     return HttpResponse('Hello, world.')
@@ -22,12 +27,25 @@ def inscripcion(request):
         if form.is_valid():
             inscripto_item = form.save(commit=False)
             inscripto_item.save()
-            return HttpResponse('LISTO ISCRITO!!!.')
+            return HttpResponse(
+                render( 
+                    request,
+                    'ok.html',
+                    {
+                        'titulo':'¡Inscripcion Satisfactoria!',
+                        'bajada':'En breve nos comunicaremos a traves de los datos de contacto provistos.'
+                    }
+                )
+            )
     else:
         form = InscriptoForm()
         # ATENCION: el carpeta contenedora el teplate debe ser declarada
         # en TEMPLATES.DIRS en el fichero gestion/settings.py 
-        return render(request, 'inscripcion.html', {'form':form})
+        return render(
+                request,
+                'inscripcion.html', 
+                {'titulo':'Inscripción a Cursos','form':form}
+        )
 
 
 def inscriptos(request, sort='id'):
@@ -42,11 +60,31 @@ def inscriptos(request, sort='id'):
         #print( '[%s]' % ', '.join( map( str, fields) ) )
 
         INSCRIPTOS = Inscripto.objects.all().order_by(sort)
-        table = InscriptosTable(INSCRIPTOS) 
-        #print(table.columns['curso'].header)
-        return render(request, 'tabla.html', {'titulo':'Todos los inscriptos','table': table})
+        tabla = InscriptosTable(INSCRIPTOS) 
+
+        RequestConfig(request).configure(tabla)
+
+        #export_format = request.GET.get('_export', None)
+        export_format = 'csv'
+        print(export_format)
+
+        if TableExport.is_valid_format(export_format):
+            exporter = TableExport(export_format, tabla)
+            return exporter.response('tabla.{}'.format(export_format))
+
+        return render(
+            request, 
+            'tabla.html', 
+            {
+                'titulo':'Todos los inscriptos',
+                #'bajada':'eo',
+                'boton': {'texto':'Nuevo Inscripito','destino':'/inscripcion'},
+                'tabla': tabla
+            }
+        )
     else: 
-        return HttpResponse('No estas registrado!')
+        #return HttpResponse('No estas registrado!')
+        return HttpResponseRedirect('/admin/login/?next=%s' % request.path)
 
 def cursos(request, sort='inicio_fecha'):
     if request.user.is_authenticated:
@@ -81,12 +119,20 @@ def cursos(request, sort='inicio_fecha'):
                 vigentes,
                 anteriores,
         ]
-    #    return render(request, 'tabla.html', {'table': table})
 
-
-        return render(request, 'multitabla.html', {'titulo':'Todos los Cursos','tablas':TABLAS})
+        return render(
+            request, 
+            'multitabla.html',
+            {
+                'titulo':'Todos los Cursos',
+                'bajada':'eo',
+                'boton': {'texto':'Nuevo Curso','destino':'/admin/gestion/curso/add'},
+                'tablas':TABLAS
+            }
+        )
     else:
-        return HttpResponse('No estas registrado!')
+        #return HttpResponse('No estas registrado!')
+        return HttpResponseRedirect('/admin/login/?next=%s' % request.path)
 
 def inscriptosxcursos(request, sort='id'): 
     if request.user.is_authenticated:
@@ -94,34 +140,27 @@ def inscriptosxcursos(request, sort='id'):
         queryset = Curso.objects.all().order_by(sort)
 
         CURSOS = [] 
-        #for index, curso in enumerate(queryset): 
         for curso in queryset: 
             c = {}
             c['titulo'] = curso.nombre
             c['subtitulo'] = curso.docente
 
-            #queryset[index].inscriptos = inscriptos 
             INSCRIPTOS = []
             inscriptos = curso.obtener_inscriptos()
-
-            #for index, inscripto in enumerate(inscriptos): 
-            #    i = {}
-            #    i['nombre'] = inscriptos.values('nombre') 
-            #    INSCRIPTOS.append(i)
 
             INSCRIPTOS = InscriptosXCursosTable(inscriptos) 
             c['items'] = INSCRIPTOS
 
             CURSOS.append(c)
 
-
-        #print(CURSOS[1].nombre)
-        #print(queryset.values('inscripto'))
-        #print(queryset[1].inscriptos.values('nombre'))
-
-        return render(request, 'multitabla.html', {'titulo':'Inscriptos a cada curso','tablas':CURSOS})
+        return render(
+            request, 
+            'multitabla.html', 
+            {'titulo':'Inscriptos a cada curso','tablas':CURSOS}
+        )
     else:
-        return HttpResponse('No estas registrado!')
+        #return HttpResponse('No estas registrado!')
+        return HttpResponseRedirect('/admin/login/?next=%s' % request.path)
 
 def liquidaciones(request, sort='id'): 
     if request.user.is_authenticated:
@@ -153,13 +192,15 @@ def liquidaciones(request, sort='id'):
                 c['subtabla'] = liquidacion
 
                 CURSOS.append(c)
-                #CURSOS.append(liquidacion)
-            
 
-
-        return render(request, 'multitabla.html', {'titulo':'Liquidaciones','tablas':CURSOS})
+        return render(
+            request,
+            'multitabla.html',
+            {'titulo':'Liquidaciones','tablas':CURSOS}
+        )
     else:
-        return HttpResponse('No estas registrado!')
+        #return HttpResponse('No estas registrado!')
+        return HttpResponseRedirect('/admin/login/?next=%s' % request.path)
 
 # RECIBOS Y PLANILLAS PDF
 from reportlab.pdfgen import canvas
@@ -242,7 +283,8 @@ def inscripto_recibo(request, id):
         return response
 
     else:
-        return HttpResponse('No estas registrado!')
+        #return HttpResponse('No estas registrado!')
+        return HttpResponseRedirect('/admin/login/?next=%s' % request.path)
 
 def curso_planilla(request, id):
     if request.user.is_authenticated:
@@ -252,9 +294,9 @@ def curso_planilla(request, id):
             return HttpResponse('Dame un ID!')
 
         curso = Curso.objects.filter(id=id)
-        nombre = curso [0].nombre
-        codigo = curso [0].codigo 
-        docente = str(curso [0].docente )
+        nombre = curso[0].nombre
+        codigo = curso[0].codigo 
+        docente = str(curso[0].docente )
 
         costo = str(curso[0].costo)
 
@@ -318,7 +360,8 @@ def curso_planilla(request, id):
         return response
 
     else:
-        return HttpResponse('No estas registrado!')
+        #return HttpResponse('No estas registrado!')
+        return HttpResponseRedirect('/admin/login/?next=%s' % request.path)
 
 def curso_liquidacion(request, id):
     if request.user.is_authenticated:
@@ -382,8 +425,8 @@ def curso_liquidacion(request, id):
         p.drawString(
             100, 
             180, 
-            'Arancel del curso: ' +
-            liquidacion['arancel']
+            'Arancel del curso: $' +
+            str(liquidacion['arancel'])
         )
 
         p.drawString(
@@ -425,20 +468,20 @@ def curso_liquidacion(request, id):
         p.drawString(
             100, 
             130, 
-            'Total Pagaron: ' +
-            liquidacion['total_pagaron']
+            'Total Pagaron: $' +
+            str(liquidacion['total_pagaron'])
         )
         p.drawString(
             100, 
             120, 
-            'Monto Docente: ' +
-            liquidacion['monto_docente']
+            'Monto Docente: $' +
+            str(liquidacion['monto_docente'])
         )
         p.drawString(
             100, 
             110, 
-            'Monto Atam: ' +
-            liquidacion['monto_ATAM']
+            'Monto Atam: $' +
+            str(liquidacion['monto_ATAM'])
         )    
         
 
@@ -448,4 +491,5 @@ def curso_liquidacion(request, id):
         return response
 
     else:
-        return HttpResponse('No estas registrado!')
+        #return HttpResponse('No estas registrado!')
+        return HttpResponseRedirect('/admin/login/?next=%s' % request.path)

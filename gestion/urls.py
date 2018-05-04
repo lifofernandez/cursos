@@ -3,10 +3,10 @@ from . import views
 
 urlpatterns = [
     # argumentos(url, funcion que ejecuta, identificador de la url)
-    path('', views.index, name='index'),
+    #path('', views.index, name='index'),
+    #path('inscripcion/', views.inscripcion, name='inscripcion'),
 
-    path('inscripcion/', views.inscripcion, name='inscripcion'),
-
+    path('', views.inscriptos, name='inscriptos'),
     path('inscriptos/', views.inscriptos, name='inscriptos'),
     path('../admin/gestion/inscripto/<int:id>/change', views.inscriptos, name='inscripto_detalles'),
     path('inscripto/<int:id>/recibo/', views.inscripto_recibo, name='inscripto_recibo'),

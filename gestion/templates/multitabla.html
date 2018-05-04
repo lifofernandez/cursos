@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "body.html" %}
 {% load django_tables2 %}
 {% load bootstrap4 %}
 
@@ -13,10 +13,10 @@
         {% render_table tabla.items %}
 
         {% if tabla.subtabla %}
-	    <h4>
+	    <strong>
                 {{ tabla.subtabla.titulo }} - 
 	        {{ tabla.subtabla.subtitulo }}
-	    </h4>
+	    </strong>
            {% render_table tabla.subtabla.items %}
         {% endif %}
 

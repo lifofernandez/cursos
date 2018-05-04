@@ -1,12 +1,22 @@
-{% extends "base.html" %}
+{% extends "head.html" %}
 {% load bootstrap4 %}
 
-{% block content %}
-    <form method="POST" action="" class="form">
-    {% csrf_token %}
-    {% bootstrap_form form %}
-    {% buttons %}
-        <button type=submit class=btn btn-primary>Submit</button>
-    {% endbuttons %}
-    </form>
+{% block body %} 
+    <body>
+        <main class="container-fluid" role="main">
+            <section class="contenido">
+      	    <header class="encabezado">
+    	        <h1> {{ titulo}} </h1>
+    	        <strong> {{ subtitulo }} </strong>
+    	    </header>
+        <form method="POST" action="" class="form">
+        {% csrf_token %}
+        {% bootstrap_form form %}
+        {% buttons %}
+            <button type=submit class=btn btn-primary>Submit</button>
+        {% endbuttons %}
+        </form>
+            </section >
+        </main>
+    </body>
 {% endblock %}

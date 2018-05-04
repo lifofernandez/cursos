@@ -27,21 +27,18 @@ class Dia(models.Model):
 
 # Modelo para los cursos
 class Curso(models.Model):
-    #TO DO: Agregar coorte o periodo del curso (ej: 2cuat-2018)
     # Nombre del curso
     nombre = models.CharField(
         verbose_name='Nombre del Curso',
         max_length=200
     )
 
-
     codigo = models.CharField(
         verbose_name='Código del Curso',
         max_length=20,
         blank=True,
-        #editable=False,
+        editable=False,
     )
-
 
     # Usuarios dentro del grupo 'docentes'
     docente = models.ForeignKey(
@@ -57,7 +54,6 @@ class Curso(models.Model):
         default=''
     )
 
-
     inicio_fecha = models.DateField(
         'Fecha de Inicio',
         default=timezone.now
@@ -67,7 +63,7 @@ class Curso(models.Model):
         verbose_name='Perdiodo del Curso',
         max_length=10,
         blank=True,
-        #editable=False,
+        editable=False,
     )
 
     dias = models.ManyToManyField(
@@ -120,16 +116,14 @@ class Curso(models.Model):
     def __str__(self):
         return self.nombre
 
-    def inicia_recientemente(self):
-        return self.inicio_fecha >= timezone.now() - datetime.timedelta(days=1)
+    #def inicia_recientemente(self):
+    #    return self.inicio_fecha >= timezone.now() - datetime.timedelta(days=1)
 
-    # Devuelve inscriptos 
     def obtener_inscriptos(self):
-        # TO DO: agregar sort, pasar value para ordenar comoa argumento
+        # TO DO: sort, pasar value para ordenar comoa argumento
         inscriptos = Inscripto.objects.filter( curso=self.id )
         return inscriptos 
 
-    # Devuelve inscriptos 
     def liquidacion(self):
         inscriptos = self.obtener_inscriptos().filter(~Q(pago=0))
         
@@ -158,17 +152,17 @@ class Curso(models.Model):
 
         liquidacion = {
             'curso':          self.id,
-            'arancel':        '$' + str( self.costo ),
+            'arancel':        self.costo,
             'cant100':        len( pagan100 ),
             'total100':       total100,
             'cant75':         len( pagan75 ),
             'total75':        total75,
             'cant50':         len( pagan50 ),
             'total50':        total50,
-            #'total_esperado': '$' + str( esperado ),
-            'total_pagaron':  '$' + str( pagaron ),
-            'monto_docente':  '$' + str( monto_docente ),
-            'monto_ATAM':     '$' + str( monto_atam ),
+            #'total_esperado': esperado,
+            'total_pagaron':  pagaron ,
+            'monto_docente':  monto_docente,
+            'monto_ATAM':     monto_atam,
         }
         return liquidacion
 
@@ -202,6 +196,7 @@ class Curso(models.Model):
                       iniciales = ''.join( [ palabra[0] for palabra in NOMBRE ] )
         sigla = iniciales[:3].upper()
 
+        # armar codigo con sigla y periodo
         codigo = sigla + periodo
         if self.codigo != codigo:
             self.codigo = codigo 

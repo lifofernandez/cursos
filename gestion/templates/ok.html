@@ -1,0 +1,20 @@
+{% extends "head.html" %}
+{% load bootstrap4 %}
+
+{% block body %} 
+    <body>
+        <main class="container-fluid" role="main">
+            <section class="ok contendio jumbotron text-center">
+                <div class="container">
+                    <h1 class="jumbotron-heading">{{ titulo }} </h1>
+                    <p class="lead text-muted">
+    	                {{ bajada }} 
+	    	    </p>
+                    <p>
+                        <a href='/' class="btn btn-primary">Volver al Formulario</a>
+                    </p>
+                </div>
+          </section>
+     </main>
+    </body>
+{% endblock %}
