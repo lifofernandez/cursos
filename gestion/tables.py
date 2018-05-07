@@ -48,7 +48,14 @@ class CursosTable(tables.Table):
         verbose_name='Descargar',
         orderable=False
     )
-    id = tables.LinkColumn('curso_detalles',  args=[A('id')],verbose_name='Editar')
+    clonar = tables.LinkColumn(
+        'curso_clonar',
+        text='Clonar',
+        args=[A('id')],
+        verbose_name='Clonar',
+        orderable=False
+    )
+    id = tables.LinkColumn('curso_detalles',  args=[A('id')], verbose_name='Editar')
 
     class Meta:
         model = Curso
