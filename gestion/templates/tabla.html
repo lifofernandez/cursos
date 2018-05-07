@@ -3,12 +3,16 @@
 {% load bootstrap4 %}
 
     {% block content %}
-        {% render_table tabla %}
-        {% for format in tabla.export_formats %}
-            <a href="{% export_url format %}">
-                download  <code>.{{ format }}</code>
-            </a>
-        {% endfor %}
+        <article class="article">
+            <div class="tabla">
+                {% render_table tabla %}
+                {% for format in tabla.export_formats %}
+                    <a href="{% export_url format %}">
+                        download  <code>.{{ format }}</code>
+                    </a>
+                {% endfor %}
+	    </div>
+        </article>
     {% endblock %}
 
 

@@ -4,20 +4,24 @@
 
 {% block content %}
     {% for tabla in tablas %}
-    <article class="tabla">
+    <article class="articulo">
 
         <h3>
             {{ tabla.titulo }} - 
 	    {{ tabla.subtitulo }}
 	</h3>
-        {% render_table tabla.items %}
+        <div class="tabla">
+            {% render_table tabla.items %}
+        </div>	
 
         {% if tabla.subtabla %}
-	    <strong>
-                {{ tabla.subtabla.titulo }} - 
-	        {{ tabla.subtabla.subtitulo }}
-	    </strong>
-           {% render_table tabla.subtabla.items %}
+	   <h5>
+               {{ tabla.subtabla.titulo }} - 
+	       {{ tabla.subtabla.subtitulo }}
+	   </h5>
+           <div class="tabla">
+               {% render_table tabla.subtabla.items %}
+           </div>	
         {% endif %}
 
     </article>

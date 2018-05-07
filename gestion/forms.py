@@ -1,8 +1,12 @@
 from django.forms import ModelForm
-from .models import Inscripto
+from .models import Inscripto, Curso
 
 class InscriptoForm(ModelForm):
     class Meta:
         model = Inscripto
-        #fields = '__all__'
         exclude = ['pago','inscripcion_fecha']
+
+class CursoForm(ModelForm):
+    class Meta:
+        model = Curso
+        fields = '__all__'

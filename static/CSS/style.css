@@ -1,6 +1,19 @@
 html{
-	color:red;
+	/*color:red;*/
 	font-size:.9rem;
+}
+html,
+body,
+.container-fluid,
+.row{
+	/*height:100%;*/
+}
+.barra-lateral{
+	/*height:100%;*/
+	/*background: #dedede;*/
+}
+.bd-content{
+	border-left: 1px solid #dedede;
 }
 .tabla{
 	margin-bottom:50px;

@@ -23,7 +23,8 @@ class InscriptosTable(tables.Table):
         'inscripto_recibo',
         text='Recibo',
         args=[A('id')],
-        verbose_name='Descargar'
+        verbose_name='Descargar',
+        orderable=False
     )
     id = tables.LinkColumn('inscripto_detalles',  args=[A('id')],verbose_name='Editar')
 
@@ -44,7 +45,8 @@ class CursosTable(tables.Table):
         'curso_planilla',
         text='Planilla',
         args=[A('id')],
-        verbose_name='Descargar'
+        verbose_name='Descargar',
+        orderable=False
     )
     id = tables.LinkColumn('curso_detalles',  args=[A('id')],verbose_name='Editar')
 
@@ -64,7 +66,8 @@ class InscriptosXCursosTable(tables.Table):
         'inscripto_recibo',
         text='Recibo',  
         args=[A('id')],
-        verbose_name='Descargar'
+        verbose_name='Descargar',
+        orderable=False
     )
     id = tables.LinkColumn('inscripto_detalles',  args=[A('id')],verbose_name='Editar')
 
@@ -85,7 +88,8 @@ class LiquidacionesTable(tables.Table):
     descargar = tables.LinkColumn(
         'curso_liquidacion',
         text='Liquidación', 
-        args=[A('curso')]
+        args=[A('curso')],
+        orderable=False
     )
 
     class Meta:

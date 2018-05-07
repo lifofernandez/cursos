@@ -2,10 +2,12 @@ import datetime
 from django.utils import timezone
 
 from django.shortcuts import render
+# la carpeta de teplates debe ser declarada
+# en TEMPLATES.DIRS en el fichero gestion/settings.py 
 
 # Create your views here.
 from django.http import HttpResponse,HttpResponseRedirect
-from .forms import InscriptoForm
+from .forms import InscriptoForm, CursoForm
 
 from .models import Inscripto, Curso
 from .tables import InscriptosTable, CursosTable, InscriptosXCursosTable, LiquidacionesTable
@@ -18,8 +20,8 @@ from django_tables2.export.export import TableExport
 
 #from django_tables2 import MultiTableMixin
 
-def index(request):
-    return HttpResponse('Hello, world.')
+#def index(request):
+#    return HttpResponse('Hello, world.')
 
 def inscripcion(request):
     if request.method == 'POST':
@@ -39,23 +41,67 @@ def inscripcion(request):
             )
     else:
         form = InscriptoForm()
-        # ATENCION: el carpeta contenedora el teplate debe ser declarada
-        # en TEMPLATES.DIRS en el fichero gestion/settings.py 
         return render(
                 request,
                 'inscripcion.html', 
                 {'titulo':'Inscripción a Cursos','form':form}
         )
 
+def curso_nuevo(request):
+    if request.user.is_authenticated:
+        if request.method == 'POST':
+            form = CursoForm(request.POST)
+            if form.is_valid():
+                curso = form.save( commit=False )
+                curso.save()
+                return HttpResponseRedirect( '/gestion/cursos' )
+        else:
+            form = CursoForm()
+            return render(
+                    request,
+                    'curso_nuevo.html', 
+                    {'titulo':'Crear Curso','form':form}
+            )
+    else:        
+        return HttpResponseRedirect('/admin/login/?next=%s' % request.path)
+
+def curso_clonar(request,id):
+    if request.user.is_authenticated:
+
+        if request.method == 'POST':
+            form = CursoForm(request.POST)
+            if form.is_valid():
+                curso = form.save( commit=False )
+                curso.save()
+                return HttpResponseRedirect( '/gestion/cursos' )
+        else:
+            print(id)
+            original = Curso.objects.filter( id = id )[0]
+            form = CursoForm(
+                initial={ 
+                    'nombre': original.nombre,
+                }
+            )
+            return render(
+                    request,
+                    'curso_nuevo.html', 
+                    {'titulo':'Clonar Curso','form':form}
+            )
+
+    else:
+       return HttpResponseRedirect('/admin/login/?next=%s' % request.path)
+
 
 def inscriptos(request, sort='id' ):
     if request.user.is_authenticated:
-        raw_fields = Inscripto._meta.get_fields()
-        fields = [f.name for f in raw_fields] 
-        if 'sort' in request.GET: 
-           abs_sort_val = request.GET['sort'].replace("-","")
-           if abs_sort_val in fields: 
-               sort = request.GET['sort'] 
+        #raw_fields = Inscripto._meta.get_fields()
+        #fields = [f.name for f in raw_fields] 
+
+        #if request.method == 'GET' and 'sort' in request.GET: 
+        #    # TODO: revisar, bug con sort=recibo
+        #   abs_sort_val = request.GET['sort'].replace("-","")
+        #   if abs_sort_val in fields: 
+        #       sort = request.GET['sort'] 
 
         #print( '[%s]' % ', '.join( map( str, fields) ) )
 
@@ -78,9 +124,9 @@ def inscriptos(request, sort='id' ):
                 'titulo':'Todos los inscriptos',
                 #'bajada':'eo',
                 'botones': [
-                    {'texto':'Nuevo Inscripito','destino':'/inscripcion', 'clase' : 'btn-success'},
                     {'texto':'descargar CSV ','destino':'.?export=csv', },
                     {'texto':'descargar XLS ','destino':'.?export=csv', },
+                    {'texto':'Nuevo Inscripito','destino':'/inscripcion', 'clase' : 'btn-success'},
                  ],
                 'tabla': tabla
             }
@@ -91,13 +137,13 @@ def inscriptos(request, sort='id' ):
 
 def cursos(request, sort='inicio_fecha'):
     if request.user.is_authenticated:
-        raw_fields = Curso._meta.get_fields()
-        fields = [f.name for f in raw_fields] 
+        #raw_fields = Curso._meta.get_fields()
+        #fields = [f.name for f in raw_fields] 
 
-        if 'sort' in request.GET:
-            abs_sort_val = request.GET['sort'].replace("-","") 
-            if abs_sort_val in fields:
-                sort = request.GET['sort']
+        #if 'sort' in request.GET:
+        #    abs_sort_val = request.GET['sort'].replace("-","") 
+        #    if abs_sort_val in fields:
+        #        sort = request.GET['sort']
 
         CURSOS = Curso.objects.all()
 
@@ -129,7 +175,7 @@ def cursos(request, sort='inicio_fecha'):
             {
                 'titulo':'Todos los Cursos',
                 'bajada':'eo',
-                'botones': [{'texto':'Nuevo Curso','destino':'/admin/gestion/curso/add','clase':'btn-success'}],
+                'botones': [{'texto':'Nuevo Curso','destino':'/gestion/curso/nuevo','clase':'btn-success'}],
                 'tablas':TABLAS
             }
         )
@@ -159,7 +205,11 @@ def inscriptosxcursos(request, sort='id'):
         return render(
             request, 
             'multitabla.html', 
-            {'titulo':'Inscriptos a cada curso','tablas':CURSOS}
+            {
+                'titulo':'Inscriptos a cada curso',
+                'tablas':CURSOS,
+                #'botones': [{'texto':'PRUEBA ','destino':'/gestion/curso/nuevo','clase':'btn-success'}],
+            }
         )
     else:
         #return HttpResponse('No estas registrado!')
@@ -215,18 +265,18 @@ def inscripto_recibo(request, id):
         if not id:
             return HttpResponse('Dame un ID!')
 
-        inscripto = Inscripto.objects.filter(id=id)
-        nombre = inscripto[0].nombre
-        apellido = inscripto[0].apellido 
+        inscripto = Inscripto.objects.filter(id=id)[0]
+        nombre = inscripto.nombre
+        apellido = inscripto.apellido 
 
-        alumno_una = inscripto[0].alumno_una
+        alumno_una = inscripto.alumno_una
 
-        pago = inscripto[0].pago
-        costo = inscripto[0].curso.costo
-        curso = inscripto[0].curso
+        pago = inscripto.pago
+        costo = inscripto.curso.costo
+        curso = inscripto.curso
 
-        descuento = inscripto[0].descuento()
-        abona = inscripto[0].abona()
+        descuento = inscripto.descuento()
+        abona = inscripto.abona()
 
 
         # Create the HttpResponse object with the appropriate PDF headers.
