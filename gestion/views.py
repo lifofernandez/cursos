@@ -9,7 +9,7 @@ from django.shortcuts import render
 from django.http import HttpResponse,HttpResponseRedirect
 from .forms import InscriptoForm, CursoForm
 
-from .models import Inscripto, Curso
+from .models import Inscripto, Curso, Dia
 from .tables import InscriptosTable, CursosTable, InscriptosXCursosTable, LiquidacionesTable
 
 
@@ -75,11 +75,23 @@ def curso_clonar(request,id):
                 curso.save()
                 return HttpResponseRedirect( '/gestion/cursos' )
         else:
-            print(id)
+            if not id:
+                return HttpResponse('Dame un ID!')
             original = Curso.objects.filter( id = id )[0]
+            #print(original.dias.values('id'))
+            dias = Dia.objects.filter( id__in = original.dias.values('id') )
             form = CursoForm(
                 initial={ 
                     'nombre': original.nombre,
+                    'docente': original.docente.id,
+                    'descripcion': original.descripcion,
+                    'dias': dias,
+                    'inicio_hora': original.inicio_hora,
+                    'finalizacion_hora': original.finalizacion_hora,
+                    'costo': original.costo,
+                    'requisitos': original.requisitos,
+                    'modalidad': original.modalidad,
+                    'imagen': original.imagen,
                 }
             )
             return render(
