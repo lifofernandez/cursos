@@ -53,7 +53,7 @@ def curso_nuevo(request):
         if request.method == 'POST':
             form = CursoForm(data = request.POST)
             if form.is_valid():
-                curso = form.save( commit=False )
+                curso = form.save( commit = True )
                 curso.save()
                 return HttpResponseRedirect( '/gestion/cursos' )
         else:
