@@ -168,6 +168,7 @@ class Curso(models.Model):
 
     # Override de la funcion "save" de Model
     def save(self, *args, **kwargs):
+        #print(self.dias)
         año = self.inicio_fecha.year
         mes = self.inicio_fecha.month
         semestre = 1

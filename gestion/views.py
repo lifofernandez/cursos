@@ -48,9 +48,10 @@ def inscripcion(request):
         )
 
 def curso_nuevo(request):
+    # TODO: Revisar como pasa los dias, el multipleselect, no lo esta grabando!!!
     if request.user.is_authenticated:
         if request.method == 'POST':
-            form = CursoForm(request.POST)
+            form = CursoForm(data = request.POST)
             if form.is_valid():
                 curso = form.save( commit=False )
                 curso.save()
@@ -65,20 +66,21 @@ def curso_nuevo(request):
     else:        
         return HttpResponseRedirect('/admin/login/?next=%s' % request.path)
 
-def curso_clonar(request,id):
+def curso_clonar( request, id ):
     if request.user.is_authenticated:
 
         if request.method == 'POST':
             form = CursoForm(request.POST)
             if form.is_valid():
-                curso = form.save( commit=False )
+                curso = form.save( commit = True )
+                print( curso.dias.values() )
                 curso.save()
                 return HttpResponseRedirect( '/gestion/cursos' )
         else:
             if not id:
                 return HttpResponse('Dame un ID!')
+
             original = Curso.objects.filter( id = id )[0]
-            #print(original.dias.values('id'))
             dias = Dia.objects.filter( id__in = original.dias.values('id') )
             form = CursoForm(
                 initial={ 
@@ -86,6 +88,7 @@ def curso_clonar(request,id):
                     'docente': original.docente.id,
                     'descripcion': original.descripcion,
                     'dias': dias,
+                    'Dia': dias,
                     'inicio_hora': original.inicio_hora,
                     'finalizacion_hora': original.finalizacion_hora,
                     'costo': original.costo,
