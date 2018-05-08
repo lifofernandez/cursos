@@ -30,7 +30,7 @@ class InscriptosTable(tables.Table):
     )
     editar = tables.LinkColumn(
         'inscripto_detalles',
-        text='editar',
+        text='editar inscripto',
         args=[A('id')],
         verbose_name='Editar',
         exclude_from_export = True
@@ -52,7 +52,7 @@ class CursosTable(tables.Table):
     inscripcion_abierta = tables.BooleanColumn(verbose_name='Inscripcion')
     planilla = tables.LinkColumn(
         'curso_planilla',
-        text='Planilla',
+        text='planilla',
         args=[A('id')],
         verbose_name='Descargar',
         orderable=False,
@@ -60,7 +60,7 @@ class CursosTable(tables.Table):
     )
     clonar = tables.LinkColumn(
         'curso_clonar',
-        text='Clonar',
+        text='clonar curso',
         args=[A('id')],
         verbose_name='clonar',
         orderable=False,
@@ -68,7 +68,7 @@ class CursosTable(tables.Table):
     )
     editar = tables.LinkColumn(
         'curso_detalles',
-        text='editar',
+        text='editar curso',
         args=[A('id')],
         verbose_name='Editar',
         exclude_from_export = True
@@ -83,21 +83,22 @@ class InscriptosXCursosTable(tables.Table):
     id = tables.Column()
     apellido = tables.Column()
     nombre = tables.Column()
-    #curso = tables.Column('Curso')
+    # curso = tables.Column('Curso')
     inscripcion_fecha = tables.DateColumn(verbose_name='Fecha')
     pago = tables.Column()
     condicion = LabelColumn('Condición',accessor='alumno_una')
     recibo = tables.LinkColumn(
         'inscripto_recibo',
-        text='Recibo',  
+        text='recibo',  
         args=[A('id')],
         verbose_name='Descargar',
         orderable=False,
         exclude_from_export = True
     )
     editar = tables.LinkColumn(
-        'curso_detalles',
-        text='editar',
+        #'curso_detalles',
+        'inscripto_detalles',
+        text='editar inscripto',
         args=[A('id')],
         verbose_name='Editar',
         exclude_from_export = True
@@ -119,7 +120,7 @@ class LiquidacionesTable(tables.Table):
     monto_ATAM     = tables.Column()
     descargar = tables.LinkColumn(
         'curso_liquidacion',
-        text='Liquidación', 
+        text='liquidación', 
         args=[A('curso')],
         orderable=False,
         exclude_from_export = True

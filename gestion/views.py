@@ -320,7 +320,9 @@ def inscripto_recibo(request, id):
 
         # Create the HttpResponse object with the appropriate PDF headers.
         response = HttpResponse(content_type='application/pdf')
-        response['Content-Disposition'] = 'attachment; filename="inscripcion_'+curso.codigo+'-'+apellido+'_'+nombre+'.pdf"'
+        nombre_archivo ='"inscripcion_' + curso.codigo + '-' + apellido +'_'+ nombre +'.pdf"'
+        response['Content-Disposition'] = 'attachment; filename=' + nombre_archivo.lower()
+
 
         # Create the PDF object, using the response object as its file.
         p = canvas.Canvas(response)
@@ -398,7 +400,8 @@ def curso_planilla(request, id):
 
         # Create the HttpResponse object with the appropriate PDF headers.
         response = HttpResponse(content_type='application/pdf')
-        response['Content-Disposition'] = 'attachment; filename="planilla-'+codigo+'-'+docente+'.pdf"'
+        nombre_archivo ='"planilla-'+codigo+'-'+docente+'.pdf"'
+        response['Content-Disposition'] = 'attachment; filename='+nombre_archivo.lower()
 
         # Create the PDF object, using the response object as its file.
         p = canvas.Canvas(response)
