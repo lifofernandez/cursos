@@ -6,11 +6,20 @@
         <article class="article">
             <div class="tabla">
                 {% render_table tabla %}
-                {% for format in tabla.export_formats %}
-                    <a href="{% export_url format %}">
-                        download  <code>.{{ format }}</code>
-                    </a>
-                {% endfor %}
+                {% if botones %}
+                    <p class="text-right">  
+                        {% for boton in tabla.botones %}
+                                <a 
+                                    href="{{boton.destino}}"
+                                    class="btn btn-primary btn-sm {{boton.clase}}" 
+                                    role="button"
+                                    aria-pressed="true"
+                                >
+                                    {{boton.texto}}
+                                </a>
+                        {% endfor %}
+                    </p>
+                {% endif %}
 	    </div>
         </article>
     {% endblock %}

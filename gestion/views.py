@@ -73,7 +73,6 @@ def curso_clonar( request, id ):
             form = CursoForm(request.POST)
             if form.is_valid():
                 curso = form.save( commit = True )
-                print( curso.dias.values() )
                 curso.save()
                 return HttpResponseRedirect( '/gestion/cursos' )
         else:
@@ -87,8 +86,8 @@ def curso_clonar( request, id ):
                     'nombre': original.nombre,
                     'docente': original.docente.id,
                     'descripcion': original.descripcion,
+                    'inicio_fecha':'',
                     'dias': dias,
-                    'Dia': dias,
                     'inicio_hora': original.inicio_hora,
                     'finalizacion_hora': original.finalizacion_hora,
                     'costo': original.costo,
@@ -109,28 +108,23 @@ def curso_clonar( request, id ):
 
 def inscriptos(request, sort='id' ):
     if request.user.is_authenticated:
-        #raw_fields = Inscripto._meta.get_fields()
-        #fields = [f.name for f in raw_fields] 
-
-        #if request.method == 'GET' and 'sort' in request.GET: 
-        #    # TODO: revisar, bug con sort=recibo
-        #   abs_sort_val = request.GET['sort'].replace("-","")
-        #   if abs_sort_val in fields: 
-        #       sort = request.GET['sort'] 
-
-        #print( '[%s]' % ', '.join( map( str, fields) ) )
 
         INSCRIPTOS = Inscripto.objects.all().order_by(sort)
-        tabla = InscriptosTable(INSCRIPTOS) 
+        tabla = InscriptosTable( INSCRIPTOS ) 
 
-        RequestConfig(request).configure(tabla)
 
         if request.method == 'GET' and 'export' in request.GET:
+            RequestConfig( request ).configure( tabla )
             export_format = request.GET['export']
-            print(export_format)
-            if TableExport.is_valid_format(export_format):
-                exporter = TableExport(export_format, tabla)
-                return exporter.response('tabla.{}'.format(export_format))
+            if TableExport.is_valid_format( export_format ):
+                exporter = TableExport( export_format, tabla )
+                return exporter.response( 'tabla.{}'.format( export_format ) )
+
+        botones = [
+            {'texto':'descargar CSV ','destino':'.?export=csv', },
+            {'texto':'descargar XLS ','destino':'.?export=xls', },
+        ]
+        tabla.botones = botones 
 
         return render(
             request, 
@@ -139,8 +133,6 @@ def inscriptos(request, sort='id' ):
                 'titulo':'Todos los inscriptos',
                 #'bajada':'eo',
                 'botones': [
-                    {'texto':'descargar CSV ','destino':'.?export=csv', },
-                    {'texto':'descargar XLS ','destino':'.?export=csv', },
                     {'texto':'Nuevo Inscripito','destino':'/inscripcion', 'clase' : 'btn-success'},
                  ],
                 'tabla': tabla
@@ -152,14 +144,6 @@ def inscriptos(request, sort='id' ):
 
 def cursos(request, sort='inicio_fecha'):
     if request.user.is_authenticated:
-        #raw_fields = Curso._meta.get_fields()
-        #fields = [f.name for f in raw_fields] 
-
-        #if 'sort' in request.GET:
-        #    abs_sort_val = request.GET['sort'].replace("-","") 
-        #    if abs_sort_val in fields:
-        #        sort = request.GET['sort']
-
         CURSOS = Curso.objects.all()
 
         futuros = CURSOS.filter(
@@ -169,20 +153,39 @@ def cursos(request, sort='inicio_fecha'):
             inicio_fecha__lte = timezone.now() - timezone.timedelta(days=1)
         ).order_by(sort) 
 
+
         vigentes = {} 
         vigentes['titulo'] = 'Cursos'
         vigentes['subtitulo'] = 'Vigentes'
         vigentes['items'] = CursosTable( futuros ) 
+        vigentes['botones'] = [
+            {'texto':'descargar CSV ','destino':'.?export=csv&tabla=0', },
+            {'texto':'descargar XLS ','destino':'.?export=xls&tabla=0', },
+        ]
 
         anteriores =  {}
         anteriores['titulo'] = 'Cursos'
         anteriores['subtitulo'] = 'Anteriores'
         anteriores['items'] = CursosTable( pasados ) 
+        anteriores['botones'] = [
+            {'texto':'descargar CSV ','destino':'.?export=csv&tabla=1', },
+            {'texto':'descargar XLS ','destino':'.?export=xls&tabla=1', },
+        ]
 
         TABLAS = [
                 vigentes,
                 anteriores,
         ]
+
+        if request.method == 'GET' and 'export' in request.GET and 'tabla' in request.GET:
+            n_tabla = int(request.GET['tabla'])
+            tabla = TABLAS[n_tabla]['items']
+            titulo = TABLAS[n_tabla]['titulo'] + '_' + TABLAS[n_tabla]['subtitulo']
+            RequestConfig( request ).configure( tabla )
+            export_format = request.GET['export']
+            if TableExport.is_valid_format( export_format ):
+                exporter = TableExport( export_format, tabla)
+                return exporter.response( titulo.lower() +'.{}'.format( export_format ) )
 
         return render(
             request, 
@@ -190,7 +193,9 @@ def cursos(request, sort='inicio_fecha'):
             {
                 'titulo':'Todos los Cursos',
                 'bajada':'eo',
-                'botones': [{'texto':'Nuevo Curso','destino':'/gestion/curso/nuevo','clase':'btn-success'}],
+                'botones': [
+                    {'texto':'Nuevo Curso','destino':'/gestion/curso/nuevo','clase':'btn-success'}
+                 ],
                 'tablas':TABLAS
             }
         )
@@ -203,19 +208,38 @@ def inscriptosxcursos(request, sort='id'):
 
         queryset = Curso.objects.all().order_by(sort)
 
+        botones=[
+            {'texto':'descargar CSV ','destino':'.?export=csv' },
+            {'texto':'descargar XLS ','destino':'.?export=xls' },
+        ]
         CURSOS = [] 
-        for curso in queryset: 
+        for index, curso in enumerate(queryset): 
             c = {}
             c['titulo'] = curso.nombre
             c['subtitulo'] = curso.docente
+            c['codigo'] = curso.codigo
 
             INSCRIPTOS = []
             inscriptos = curso.obtener_inscriptos()
 
             INSCRIPTOS = InscriptosXCursosTable(inscriptos) 
             c['items'] = INSCRIPTOS
+            c['botones'] = [
+                {'texto':'descargar CSV ','destino':'.?export=csv&tabla=' + str( index ), },
+                {'texto':'descargar XLS ','destino':'.?export=xls&tabla=' + str( index ), },
+            ]
 
             CURSOS.append(c)
+
+        if request.method == 'GET' and 'export' in request.GET and 'tabla' in request.GET:
+            n_tabla = int(request.GET['tabla'])
+            tabla = CURSOS[n_tabla]['items']
+            titulo = str(CURSOS[n_tabla]['codigo']) + '_' + str(CURSOS[n_tabla]['subtitulo'])
+            RequestConfig( request ).configure( tabla )
+            export_format = request.GET['export']
+            if TableExport.is_valid_format( export_format ):
+                exporter = TableExport( export_format, tabla)
+                return exporter.response( titulo.lower() +'.{}'.format( export_format ) )
 
         return render(
             request, 

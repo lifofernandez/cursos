@@ -13,6 +13,7 @@ class LabelColumn(tables.Column):
         return label
 
 class InscriptosTable(tables.Table):
+    id = tables.Column()
     apellido = tables.Column()
     nombre = tables.Column()
     curso = tables.Column('Curso')
@@ -24,17 +25,25 @@ class InscriptosTable(tables.Table):
         text='Recibo',
         args=[A('id')],
         verbose_name='Descargar',
-        orderable=False
+        orderable=False,
+        exclude_from_export = True
     )
-    id = tables.LinkColumn('inscripto_detalles',  args=[A('id')],verbose_name='Editar')
+    editar = tables.LinkColumn(
+        'inscripto_detalles',
+        text='editar',
+        args=[A('id')],
+        verbose_name='Editar',
+        exclude_from_export = True
+    )
 
     class Meta:
         model = Inscripto
         #exclude = ['subscripcion','enterado']
-        fields  = [ 'apellido','nombre','curso','inscripcion_fecha','pago']
+        fields  = [ 'id','apellido','nombre','curso','inscripcion_fecha','pago']
         attrs = {'class': 'table table-striped table-hover table-sm'}
 
 class CursosTable(tables.Table):
+    id = tables.Column()
     nombre = tables.Column('Nombre')
     codigo = tables.Column('Código')
     # to do: cantidad de inscriptos
@@ -46,23 +55,32 @@ class CursosTable(tables.Table):
         text='Planilla',
         args=[A('id')],
         verbose_name='Descargar',
-        orderable=False
+        orderable=False,
+        exclude_from_export = True
     )
     clonar = tables.LinkColumn(
         'curso_clonar',
         text='Clonar',
         args=[A('id')],
-        verbose_name='Clonar',
-        orderable=False
+        verbose_name='clonar',
+        orderable=False,
+        exclude_from_export = True
     )
-    id = tables.LinkColumn('curso_detalles',  args=[A('id')], verbose_name='Editar')
+    editar = tables.LinkColumn(
+        'curso_detalles',
+        text='editar',
+        args=[A('id')],
+        verbose_name='Editar',
+        exclude_from_export = True
+    )
 
     class Meta:
         model = Curso
-        fields = ['nombre','docente','inicio_fecha','inscripcion_abierta','codigo','modalidad'] 
+        fields = ['id','nombre','docente','inicio_fecha','inscripcion_abierta','codigo','modalidad'] 
         attrs = {'class': 'table table-striped table-hover table-sm' }
 
 class InscriptosXCursosTable(tables.Table):
+    id = tables.Column()
     apellido = tables.Column()
     nombre = tables.Column()
     #curso = tables.Column('Curso')
@@ -74,9 +92,16 @@ class InscriptosXCursosTable(tables.Table):
         text='Recibo',  
         args=[A('id')],
         verbose_name='Descargar',
-        orderable=False
+        orderable=False,
+        exclude_from_export = True
     )
-    id = tables.LinkColumn('inscripto_detalles',  args=[A('id')],verbose_name='Editar')
+    editar = tables.LinkColumn(
+        'curso_detalles',
+        text='editar',
+        args=[A('id')],
+        verbose_name='Editar',
+        exclude_from_export = True
+    )
 
     class Meta:
         #attrs = {'class': 'table table-striped table-bordered table-hover table-sm'}
@@ -96,7 +121,8 @@ class LiquidacionesTable(tables.Table):
         'curso_liquidacion',
         text='Liquidación', 
         args=[A('curso')],
-        orderable=False
+        orderable=False,
+        exclude_from_export = True
     )
 
     class Meta:

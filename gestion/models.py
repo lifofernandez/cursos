@@ -116,12 +116,9 @@ class Curso(models.Model):
     def __str__(self):
         return self.nombre
 
-    #def inicia_recientemente(self):
-    #    return self.inicio_fecha >= timezone.now() - datetime.timedelta(days=1)
-
     def obtener_inscriptos(self):
         # TO DO: sort, pasar value para ordenar comoa argumento
-        inscriptos = Inscripto.objects.filter( curso=self.id )
+        inscriptos = Inscripto.objects.filter( curso = self.id )
         return inscriptos 
 
     def liquidacion(self):
@@ -168,7 +165,6 @@ class Curso(models.Model):
 
     # Override de la funcion "save" de Model
     def save(self, *args, **kwargs):
-        #print(self.dias)
         año = self.inicio_fecha.year
         mes = self.inicio_fecha.month
         semestre = 1
@@ -197,7 +193,7 @@ class Curso(models.Model):
                       iniciales = ''.join( [ palabra[0] for palabra in NOMBRE ] )
         sigla = iniciales[:3].upper()
 
-        # armar codigo con sigla y periodo
+        # armar codigo con sigla + periodo
         codigo = sigla + periodo
         if self.codigo != codigo:
             self.codigo = codigo 
