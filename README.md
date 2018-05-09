@@ -11,3 +11,4 @@ https://docs.djangoproject.com/en/2.0/howto/initial-data/
 ```
 $ python manage.py loaddata dias.yaml
 ```
+TODO: agregar pago a editar inscripto

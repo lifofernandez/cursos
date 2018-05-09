@@ -10,6 +10,7 @@ urlpatterns = [
     path('inscriptos/', views.inscriptos, name='inscriptos'),
     path('../admin/gestion/inscripto/<int:id>/change', views.inscriptos, name='inscripto_detalles'),
     path('inscripto/<int:id>/recibo/', views.inscripto_recibo, name='inscripto_recibo'),
+    path('inscripto/<int:id>/editar', views.inscripto_editar, name='inscripto_editar'),
 
     path('curso/nuevo', views.curso_nuevo, name='curso_nuevo'),
     path('cursos/', views.cursos, name='cursos'),
@@ -18,7 +19,7 @@ urlpatterns = [
 
     path('cursos/<int:id>/planilla/', views.curso_planilla, name='curso_planilla'),
     path('curso/<int:id>/clonar', views.curso_clonar, name='curso_clonar'),
-    path('curso/<int:id>/actualizar', views.curso_actualizar, name='curso_actualizar'),
+    path('curso/<int:id>/editar', views.curso_editar, name='curso_editar'),
 
     path('inscriptosxcursos/', views.inscriptosxcursos, name='inscriptosxcursos'),
 

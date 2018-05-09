@@ -47,3 +47,6 @@ article{
 .ok.jumbotron{
 	margin:50px
 }
+.btn-danger{
+	border-color:transparent;
+}

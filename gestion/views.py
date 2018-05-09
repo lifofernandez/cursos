@@ -59,7 +59,7 @@ def curso_nuevo(request):
             form = CursoForm()
             return render(
                     request,
-                    'curso_nuevo.html', 
+                    'curso.html', 
                     {'titulo':'Crear Curso','form':form}
             )
     else:        
@@ -97,7 +97,7 @@ def curso_clonar( request, id ):
             )
             return render(
                     request,
-                    'curso_nuevo.html', 
+                    'curso.html', 
                     {'titulo':'Clonar Curso','form':form}
             )
 
@@ -590,18 +590,33 @@ def curso_liquidacion(request, id):
         #return HttpResponse('No estas registrado!')
         return HttpResponseRedirect('/admin/login/?next=%s' % request.path)
 
-def curso_actualizar(request, id): 
-    #instance = Curso.objects.get( Curso, id = id )
+def curso_editar(request, id): 
     instance = Curso.objects.filter(id=id)[0]
     form = CursoForm(request.POST or None, instance = instance)
     if form.is_valid():
         form.save()
         #return redirect('cursos')
         return HttpResponseRedirect( '/gestion/cursos' )
-    return render(request, 'curso_nuevo.html', {'form': form}) 
-   #if request.method == 'POST':
-   #    form = CursoForm(request.POST)
-   #    if form.is_valid():
-   #        curso = form.save( commit = True )
-   #        curso.save()
-   #        return HttpResponseRedirect( '/gestion/cursos' )
+    return render(
+            request,
+            'curso.html', 
+            {
+                'titulo':'Editar Curso',
+                'form':form
+            }
+    )
+
+def inscripto_editar(request, id): 
+    instance = Inscripto.objects.filter(id=id)[0]
+    form = InscriptoForm(request.POST or None, instance = instance)
+    if form.is_valid():
+        form.save()
+        return HttpResponseRedirect( '/gestion/inscriptos' )
+    return render(
+            request,
+            'inscripcion.html', 
+            {
+                'titulo':'Editar Inscripcion',
+                'form':form
+            }
+    )

@@ -49,7 +49,7 @@ class CursosTable(tables.Table):
         exclude_from_export = True
     )
     editar = tables.LinkColumn(
-        'curso_actualizar',
+        'curso_editar',
         text='editar curso',
         args=[A('id')],
         verbose_name='Editar',
@@ -90,13 +90,21 @@ class InscriptosTable(tables.Table):
         exclude_from_export = True
     )
     editar = tables.LinkColumn(
-        'inscripto_detalles',
+        'inscripto_editar',
         text='editar inscripto',
         args=[A('id')],
         verbose_name='Editar',
-        orderable=False,
+        orderable = False,
         exclude_from_export = True
     )
+    #editar = tables.LinkColumn(
+    #    'inscripto_detalles',
+    #    text='editar inscripto',
+    #    args=[A('id')],
+    #    verbose_name='Editar',
+    #    orderable=False,
+    #    exclude_from_export = True
+    #)
 
     class Meta:
         model = Inscripto
