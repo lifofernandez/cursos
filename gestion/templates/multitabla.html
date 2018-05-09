@@ -33,7 +33,7 @@
         {% if tabla.subtabla %}
 	   <h5>
                {{ tabla.subtabla.titulo }} - 
-	       {{ tabla.subtabla.subtitulo }}
+	       <code> {{ tabla.subtabla.subtitulo }} </code>
 	   </h5>
            <div class="tabla">
                {% render_table tabla.subtabla.items %}

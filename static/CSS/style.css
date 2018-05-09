@@ -34,14 +34,14 @@ section header{
 	border-left: 1px solid #dedede;
 }
 .tabla{
-	margin-bottom:10px;
+	margin-bottom:20px;
 }
 th a{
 	color: #000;
 }
 article{
-	padding-top:30px;
-	padding-bottom:40px;
+	padding-top:50px;
+	padding-bottom:20px;
     border-top:1px solid #dedede;
     }
 .ok.jumbotron{
