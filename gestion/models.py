@@ -122,11 +122,6 @@ class Curso(models.Model):
         inscriptos = Inscripto.objects.filter( curso = self.id )
         return inscriptos 
 
-    #def obtener_inscriptos(self):
-    #    # TO DO: sort, pasar value para ordenar comoa argumento
-    #    inscriptos = Inscripto.objects.filter( curso = self.id )
-    #    return inscriptos 
-
     @property
     def liquidacion(self):
         inscriptos = self.inscriptos.filter(~Q(pago=0))
@@ -306,6 +301,7 @@ class Inscripto(models.Model):
     def fue_creado_recientemente(self):
         return self.inscripcion_fecha >= timezone.now() - datetime.timedelta(days=1)
 
+    @property
     def descuento(self):
         condicion = self.alumno_una
         descuento = .75
@@ -315,8 +311,9 @@ class Inscripto(models.Model):
             descuento = .5
         return descuento
 
+    @property
     def abona(self):
-        descuento = self.descuento()
+        descuento = self.descuento
         costo = self.curso.costo
         abona = costo * float(descuento)
         return abona

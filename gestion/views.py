@@ -301,7 +301,6 @@ from reportlab.pdfgen import canvas
 def inscripto_recibo(request, id):
     if request.user.is_authenticated:
         
-        #id = 1
         if not id:
             return HttpResponse('Dame un ID!')
 
@@ -315,8 +314,8 @@ def inscripto_recibo(request, id):
         costo = inscripto.curso.costo
         curso = inscripto.curso
 
-        descuento = inscripto.descuento()
-        abona = inscripto.abona()
+        descuento = inscripto.descuento
+        abona = inscripto.abona
 
 
         # Create the HttpResponse object with the appropriate PDF headers.
