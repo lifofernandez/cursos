@@ -47,13 +47,14 @@
     
                     <section class="contenido">
       		        <header class="encabezado">
-    	                    <h1> {{ titulo}} </h1>
+    	                    <h1 class="display-4"> {{ titulo }} </h1>
 			</header>
                         {% block content %} 
     		        {% endblock %}
                             {% if botones %}
+    	                    <div class="botones">  
                                 {% for boton in botones %}
-    	                            <p class="text-left">  
+    	                            <div class="text-left">  
                                         <a 
 		                            href="{{boton.destino}}"
                                             class="btn btn-primary btn-lg active {{boton.clase}}" 
@@ -62,8 +63,9 @@
 			                >
 			                    {{boton.texto}}
 			                </a>
-    		                    </p>
+    		                    </div>
                                 {% endfor %}
+    		            </div>
                             {% endif %}
                     </section >
     

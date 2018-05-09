@@ -116,13 +116,20 @@ class Curso(models.Model):
     def __str__(self):
         return self.nombre
 
-    def obtener_inscriptos(self):
-        # TO DO: sort, pasar value para ordenar comoa argumento
+
+    @property
+    def inscriptos(self):
         inscriptos = Inscripto.objects.filter( curso = self.id )
         return inscriptos 
 
+    #def obtener_inscriptos(self):
+    #    # TO DO: sort, pasar value para ordenar comoa argumento
+    #    inscriptos = Inscripto.objects.filter( curso = self.id )
+    #    return inscriptos 
+
+    @property
     def liquidacion(self):
-        inscriptos = self.obtener_inscriptos().filter(~Q(pago=0))
+        inscriptos = self.inscriptos.filter(~Q(pago=0))
         
         pagan100 = inscriptos.filter( alumno_una='no' )
         pagan75 = inscriptos.filter( 
@@ -161,6 +168,7 @@ class Curso(models.Model):
             'monto_docente':  monto_docente,
             'monto_ATAM':     monto_atam,
         }
+        #self.liquidacion = liquidacion
         return liquidacion
 
     # Override de la funcion "save" de Model

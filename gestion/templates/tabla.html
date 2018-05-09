@@ -7,7 +7,7 @@
             <div class="tabla">
                 {% render_table tabla %}
                 {% if botones %}
-                    <p class="text-right">  
+                    <div class="text-right">  
                         {% for boton in tabla.botones %}
                                 <a 
                                     href="{{boton.destino}}"
@@ -18,7 +18,7 @@
                                     {{boton.texto}}
                                 </a>
                         {% endfor %}
-                    </p>
+                    </div>
                 {% endif %}
 	    </div>
         </article>

@@ -12,15 +12,23 @@ body,
 	/*height:100%;*/
 	/*background: #dedede;*/
 }
+.botones{
+	margin:20px 0;
+}
 .bd-content{
 	border-left: 1px solid #dedede;
 }
 .tabla{
-	margin-bottom:50px;
+	margin-bottom:20px;
 }
 th a{
 	color: #000;
 }
+article{
+	padding-top:60px;
+	padding-bottom:20px;
+    border-bottom:1px solid #dedede;
+    }
 .ok.jumbotron{
 	margin:50px
 }

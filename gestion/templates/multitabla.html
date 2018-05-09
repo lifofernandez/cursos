@@ -8,12 +8,16 @@
 
         <h3>
             {{ tabla.titulo }} - 
-	    {{ tabla.subtitulo }}
+	    {{ tabla.subtitulo }} 
 	</h3>
+        <h5>
+	    <code>{{ tabla.codigo}}</code> 
+	    <small>{{ tabla.fecha | date:"d/m/Y"}}</small> 
+	</h5>
         <div class="tabla">
             {% render_table tabla.items %}
         </div>	
-           <p class="text-right">  
+           <div class="text-right">  
                {% for boton in tabla.botones %}
                        <a 
                            href="{{boton.destino}}"
@@ -24,7 +28,7 @@
                            {{boton.texto}}
                        </a>
                {% endfor %}
-           </p>
+           </div>
 
         {% if tabla.subtabla %}
 	   <h5>

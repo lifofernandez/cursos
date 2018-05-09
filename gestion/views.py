@@ -203,7 +203,7 @@ def cursos(request, sort='inicio_fecha'):
         #return HttpResponse('No estas registrado!')
         return HttpResponseRedirect('/admin/login/?next=%s' % request.path)
 
-def inscriptosxcursos(request, sort='id'): 
+def inscriptosxcursos(request, sort='inicio_fecha'): 
     if request.user.is_authenticated:
 
         queryset = Curso.objects.all().order_by(sort)
@@ -218,9 +218,10 @@ def inscriptosxcursos(request, sort='id'):
             c['titulo'] = curso.nombre
             c['subtitulo'] = curso.docente
             c['codigo'] = curso.codigo
+            c['fecha'] = curso.inicio_fecha
 
             INSCRIPTOS = []
-            inscriptos = curso.obtener_inscriptos()
+            inscriptos = curso.inscriptos
 
             INSCRIPTOS = InscriptosXCursosTable(inscriptos) 
             c['items'] = INSCRIPTOS
@@ -261,7 +262,7 @@ def liquidaciones(request, sort='id'):
 
         CURSOS = [] 
         for curso in queryset: 
-            inscriptos = curso.obtener_inscriptos()
+            inscriptos = curso.inscriptos
             if inscriptos:
                 c = {}
                 c['titulo'] = curso.nombre
@@ -276,7 +277,7 @@ def liquidaciones(request, sort='id'):
                 liquidacion['titulo'] = 'Liquidacion' 
                 liquidacion['subtitulo'] = curso.codigo
 
-                calculo = curso.liquidacion()
+                calculo = curso.liquidacion
                 calculos = [calculo]
                 CALCULOS = []
                 CALCULOS = LiquidacionesTable(calculos) 
@@ -395,7 +396,7 @@ def curso_planilla(request, id):
         costo = str(curso[0].costo)
 
         INSCRIPTOS = []
-        inscriptos = curso[0].obtener_inscriptos()
+        inscriptos = curso[0].inscriptos
 
 
         # Create the HttpResponse object with the appropriate PDF headers.
@@ -463,15 +464,15 @@ def curso_liquidacion(request, id):
         if not id:
             return HttpResponse('Dame un ID!')
 
-        curso = Curso.objects.filter(id=id)
-        nombre = curso[0].nombre
-        codigo = curso[0].codigo 
-        docente = str( curso[0].docente )
+        curso = Curso.objects.filter(id=id)[0]
+        nombre = curso.nombre
+        codigo = curso.codigo 
+        docente = str( curso.docente )
 
-        costo = str( curso[0].costo )
+        costo = str( curso.costo )
 
-        liquidacion = curso[0].liquidacion()
-        INSCRIPTOS = curso[0].obtener_inscriptos()
+        liquidacion = curso.liquidacion
+        INSCRIPTOS = curso.inscriptos
 
         # Create the HttpResponse object with the appropriate PDF headers.
         response = HttpResponse(content_type='application/pdf')
