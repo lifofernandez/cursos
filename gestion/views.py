@@ -48,7 +48,6 @@ def inscripcion(request):
         )
 
 def curso_nuevo(request):
-    # TODO: Revisar como pasa los dias, el multipleselect, no lo esta grabando!!!
     if request.user.is_authenticated:
         if request.method == 'POST':
             form = CursoForm(data = request.POST)
@@ -106,9 +105,11 @@ def curso_clonar( request, id ):
        return HttpResponseRedirect('/admin/login/?next=%s' % request.path)
 
 
-def inscriptos(request, sort='id' ):
+def inscriptos(request, sort = 'id' ):
     if request.user.is_authenticated:
 
+        if request.method == 'GET' and 'sort' in request.GET:
+            sort = request.GET['sort']
         INSCRIPTOS = Inscripto.objects.all().order_by(sort)
         tabla = InscriptosTable( INSCRIPTOS ) 
 
@@ -588,3 +589,19 @@ def curso_liquidacion(request, id):
     else:
         #return HttpResponse('No estas registrado!')
         return HttpResponseRedirect('/admin/login/?next=%s' % request.path)
+
+def curso_actualizar(request, id): 
+    #instance = Curso.objects.get( Curso, id = id )
+    instance = Curso.objects.filter(id=id)[0]
+    form = CursoForm(request.POST or None, instance = instance)
+    if form.is_valid():
+        form.save()
+        #return redirect('cursos')
+        return HttpResponseRedirect( '/gestion/cursos' )
+    return render(request, 'curso_nuevo.html', {'form': form}) 
+   #if request.method == 'POST':
+   #    form = CursoForm(request.POST)
+   #    if form.is_valid():
+   #        curso = form.save( commit = True )
+   #        curso.save()
+   #        return HttpResponseRedirect( '/gestion/cursos' )

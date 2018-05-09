@@ -45,16 +45,24 @@ class CursosTable(tables.Table):
         text='clonar curso',
         args=[A('id')],
         verbose_name='Clonar',
-        orderable=False,
+        orderable = False,
         exclude_from_export = True
     )
     editar = tables.LinkColumn(
-        'curso_detalles',
+        'curso_actualizar',
         text='editar curso',
         args=[A('id')],
         verbose_name='Editar',
+        orderable = False,
         exclude_from_export = True
     )
+    #editar = tables.LinkColumn(
+    #    'curso_detalles',
+    #    text='editar curso',
+    #    args=[A('id')],
+    #    verbose_name='Editar',
+    #    exclude_from_export = True
+    #)
 
     class Meta:
         model = Curso
@@ -68,7 +76,11 @@ class InscriptosTable(tables.Table):
     curso = tables.Column('Curso')
     inscripcion_fecha = tables.DateColumn(verbose_name='Fecha')
     pago = tables.Column()
-    condicion = LabelColumn('Condición',accessor='alumno_una')
+    alumno_una = LabelColumn(
+        'Condición',
+        accessor='alumno_una',
+        #orderable=False,
+    )
     recibo = tables.LinkColumn(
         'inscripto_recibo',
         text='recibo',
@@ -82,6 +94,7 @@ class InscriptosTable(tables.Table):
         text='editar inscripto',
         args=[A('id')],
         verbose_name='Editar',
+        orderable=False,
         exclude_from_export = True
     )
 

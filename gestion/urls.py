@@ -13,9 +13,12 @@ urlpatterns = [
 
     path('curso/nuevo', views.curso_nuevo, name='curso_nuevo'),
     path('cursos/', views.cursos, name='cursos'),
-    path('../admin/gestion/curso/<int:id>/change', views.cursos, name='curso_detalles'),
+
+    #path('../admin/gestion/curso/<int:id>/change', views.cursos, name='curso_detalles'),
+
     path('cursos/<int:id>/planilla/', views.curso_planilla, name='curso_planilla'),
     path('curso/<int:id>/clonar', views.curso_clonar, name='curso_clonar'),
+    path('curso/<int:id>/actualizar', views.curso_actualizar, name='curso_actualizar'),
 
     path('inscriptosxcursos/', views.inscriptosxcursos, name='inscriptosxcursos'),
 
