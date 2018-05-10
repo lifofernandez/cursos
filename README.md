@@ -14,3 +14,5 @@ $ python manage.py loaddata dias.yaml
 agregar:
 - ficha de curso txt: toda info para para publicar, prensa y promocion
 - vista de curso individual con inscriptos 
+- vista semanal de cursos
+

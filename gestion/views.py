@@ -241,7 +241,7 @@ def cursos(request, sort='inicio_fecha'):
             export_format = request.GET['export']
             if TableExport.is_valid_format( export_format ):
                 exporter = TableExport( export_format, tabla)
-                return exporter.response( titulo.lower().repalce(" ","_") +'.{}'.format( export_format ) )
+                return exporter.response( titulo.lower().replace(" ","_") +'.{}'.format( export_format ) )
 
         return render(
             request, 
@@ -295,7 +295,7 @@ def inscriptosxcursos(request, sort='inicio_fecha'):
             export_format = request.GET['export']
             if TableExport.is_valid_format( export_format ):
                 exporter = TableExport( export_format, tabla)
-                return exporter.response( titulo.lower().repalce(" ","_") +'.{}'.format( export_format ) )
+                return exporter.response( titulo.lower().replace(" ","_") +'.{}'.format( export_format ) )
 
         return render(
             request, 
@@ -375,7 +375,7 @@ def inscripto_recibo(request, id):
         # Create the HttpResponse object with the appropriate PDF headers.
         response = HttpResponse(content_type='application/pdf')
         nombre_archivo ='"inscripcion_' + curso.codigo + '-' + apellido +'_'+ nombre +'.pdf"'
-        response['Content-Disposition'] = 'attachment; filename=' + nombre_archivo.lower()
+        response['Content-Disposition'] = 'attachment; filename=' + nombre_archivo.lower().replace(" ","_")
 
 
         # Create the PDF object, using the response object as its file.
@@ -453,8 +453,8 @@ def curso_planilla(request, id):
 
         # Create the HttpResponse object with the appropriate PDF headers.
         response = HttpResponse(content_type='application/pdf')
-        nombre_archivo ='"planilla-'+codigo+'-'+docente+'.pdf"'
-        response['Content-Disposition'] = 'attachment; filename='+nombre_archivo.lower()
+        nombre_archivo ='"planilla-' + codigo + '-' + docente+'.pdf"'
+        response['Content-Disposition'] = 'attachment; filename='+nombre_archivo.lower().replace(" ","_")
 
         # Create the PDF object, using the response object as its file.
         p = canvas.Canvas(response)
@@ -526,7 +526,9 @@ def curso_liquidacion(request, id):
         INSCRIPTOS = curso.inscriptos
 
         response = HttpResponse(content_type='application/pdf')
-        response['Content-Disposition'] = 'attachment; filename="liquidacion-'+codigo+'-'+docente+'.pdf"'
+        nombre_archivo ='"liquidacion-' + codigo + '-' + docente + '.pdf"'
+        response['Content-Disposition'] = 'attachment; filename='+nombre_archivo.lower().replace(" ","_")
+
 
         p = canvas.Canvas(response)
 
