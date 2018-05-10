@@ -16,3 +16,19 @@ agregar:
 - vista de curso individual con inscriptos 
 - vista semanal de cursos
 
+
+# Blanqueo previo a instalar
+```
+$ python manage.py flush
+$ rm -rf gestion/migrations/*
+```
+
+# Instalar
+```
+$ pip install -r requirements.txt
+$ python manage.py makemigrations gestion 
+$ python manage.py migrate 
+$ python manage.py createsuperuser
+$ python manage.py loaddata dias.yaml
+$ python manage.py runserver
+```
