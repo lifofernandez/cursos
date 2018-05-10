@@ -73,7 +73,7 @@
 * Imprimir Certificados
 * Descargar listas de inscriptos, liquidaciones
 
-# TO DO
+## TO DO
 - [x] Crear grupo de user "Docente"
 - [x] Crear modelo curso
 - [x] Crear modelo inscripto
@@ -84,7 +84,19 @@
 - [x] Configurar permisos de usuario
 - [x] Front-End 
 
-# IDEAS:
+## IDEAS:
 - [ ] ficha de curso txt: toda info para para publicar, prensa y promocion
 - [ ] vista de curso individual con inscriptos 
 - [ ] vista semanal de cursos
+## Al hacer migraciones, aplicarlas y ejecutar server
+```
+$ python manage.py makemigrations gestion && python manage.py migrate && python manage.py runserver
+```
+
+## Cargar data inicial usando "fixtures"
+
+https://docs.djangoproject.com/en/2.0/howto/initial-data/
+
+```
+$ python manage.py loaddata dias.yaml
+```
