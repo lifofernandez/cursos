@@ -7,7 +7,7 @@ from django.shortcuts import render
 
 # Create your views here.
 from django.http import HttpResponse,HttpResponseRedirect
-from .forms import InscriptoForm, CursoForm
+from .forms import InscriptoForm, CursoForm, InscriptoEditForm, InscriptoAcreditarForm
 
 from .models import Inscripto, Curso, Dia
 from .tables import InscriptosTable, CursosTable, InscriptosXCursosTable, LiquidacionesTable
@@ -23,6 +23,7 @@ from django_tables2.export.export import TableExport
 #def index(request):
 #    return HttpResponse('Hello, world.')
 
+# FORMULARIOS
 def inscripcion(request):
     if request.method == 'POST':
         form = InscriptoForm(request.POST)
@@ -105,21 +106,76 @@ def curso_clonar( request, id ):
        return HttpResponseRedirect('/admin/login/?next=%s' % request.path)
 
 
-def inscriptos(request, sort = 'id' ):
+def curso_editar(request, id): 
+    if request.user.is_authenticated:
+        instance = Curso.objects.filter( id = id )[0]
+        form = CursoForm(request.POST or None, instance = instance)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect( '/gestion/cursos' )
+        return render(
+                request,
+                'curso.html', 
+                {
+                    'titulo':'Editar Curso',
+                    'form' : form
+                }
+        )
+    else:
+        return HttpResponseRedirect('/admin/login/?next=%s' % request.path)
+
+def inscripto_editar(request, id): 
+    if request.user.is_authenticated:
+        instance = Inscripto.objects.filter( id = id )[0]
+        form = InscriptoEditForm( request.POST or None, instance = instance )
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect( '/gestion/inscriptos' )
+        return render(
+                request,
+                'inscripto.html', 
+                {
+                    'titulo':'Editar Inscripto: ' + instance.nombre + ' ' + instance.apellido,
+                    'form':form
+                }
+        )
+    else:
+        return HttpResponseRedirect( '/admin/login/?next=%s' % request.path )
+
+def inscripto_acreditar(request, id): 
+    if request.user.is_authenticated:
+        instance = Inscripto.objects.filter( id = id )[0]
+        form = InscriptoAcreditarForm( request.POST or None, instance = instance )
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect( '/gestion/liquidaciones' )
+        return render(
+                request,
+                'inscripto.html', 
+                {
+                    'titulo':'Acreditar Inscripto: ' + instance.nombre + ' ' + instance.apellido,
+                    'form':form
+                }
+        )
+    else:
+        return HttpResponseRedirect( '/admin/login/?next=%s' % request.path )
+
+# TABLAS CON INFO
+def inscriptos( request, sort = 'id' ):
     if request.user.is_authenticated:
 
         if request.method == 'GET' and 'sort' in request.GET:
             sort = request.GET['sort']
         INSCRIPTOS = Inscripto.objects.all().order_by(sort)
         tabla = InscriptosTable( INSCRIPTOS ) 
-
+        titulo = 'inscriptos-' + str(timezone.now())
 
         if request.method == 'GET' and 'export' in request.GET:
             RequestConfig( request ).configure( tabla )
             export_format = request.GET['export']
             if TableExport.is_valid_format( export_format ):
                 exporter = TableExport( export_format, tabla )
-                return exporter.response( 'tabla.{}'.format( export_format ) )
+                return exporter.response( titulo + '.{}'.format( export_format ) )
 
         botones = [
             {'texto':'descargar CSV ','destino':'.?export=csv', },
@@ -140,7 +196,6 @@ def inscriptos(request, sort = 'id' ):
             }
         )
     else: 
-        #return HttpResponse('No estas registrado!')
         return HttpResponseRedirect('/admin/login/?next=%s' % request.path)
 
 def cursos(request, sort='inicio_fecha'):
@@ -186,7 +241,7 @@ def cursos(request, sort='inicio_fecha'):
             export_format = request.GET['export']
             if TableExport.is_valid_format( export_format ):
                 exporter = TableExport( export_format, tabla)
-                return exporter.response( titulo.lower() +'.{}'.format( export_format ) )
+                return exporter.response( titulo.lower().repalce(" ","_") +'.{}'.format( export_format ) )
 
         return render(
             request, 
@@ -201,7 +256,6 @@ def cursos(request, sort='inicio_fecha'):
             }
         )
     else:
-        #return HttpResponse('No estas registrado!')
         return HttpResponseRedirect('/admin/login/?next=%s' % request.path)
 
 def inscriptosxcursos(request, sort='inicio_fecha'): 
@@ -241,7 +295,7 @@ def inscriptosxcursos(request, sort='inicio_fecha'):
             export_format = request.GET['export']
             if TableExport.is_valid_format( export_format ):
                 exporter = TableExport( export_format, tabla)
-                return exporter.response( titulo.lower() +'.{}'.format( export_format ) )
+                return exporter.response( titulo.lower().repalce(" ","_") +'.{}'.format( export_format ) )
 
         return render(
             request, 
@@ -253,7 +307,6 @@ def inscriptosxcursos(request, sort='inicio_fecha'):
             }
         )
     else:
-        #return HttpResponse('No estas registrado!')
         return HttpResponseRedirect('/admin/login/?next=%s' % request.path)
 
 def liquidaciones(request, sort='id'): 
@@ -293,8 +346,8 @@ def liquidaciones(request, sort='id'):
             {'titulo':'Liquidaciones','tablas':CURSOS}
         )
     else:
-        #return HttpResponse('No estas registrado!')
         return HttpResponseRedirect('/admin/login/?next=%s' % request.path)
+
 
 # RECIBOS Y PLANILLAS PDF
 from reportlab.pdfgen import canvas
@@ -378,7 +431,6 @@ def inscripto_recibo(request, id):
         return response
 
     else:
-        #return HttpResponse('No estas registrado!')
         return HttpResponseRedirect('/admin/login/?next=%s' % request.path)
 
 def curso_planilla(request, id):
@@ -456,7 +508,6 @@ def curso_planilla(request, id):
         return response
 
     else:
-        #return HttpResponse('No estas registrado!')
         return HttpResponseRedirect('/admin/login/?next=%s' % request.path)
 
 def curso_liquidacion(request, id):
@@ -474,20 +525,16 @@ def curso_liquidacion(request, id):
         liquidacion = curso.liquidacion
         INSCRIPTOS = curso.inscriptos
 
-        # Create the HttpResponse object with the appropriate PDF headers.
         response = HttpResponse(content_type='application/pdf')
         response['Content-Disposition'] = 'attachment; filename="liquidacion-'+codigo+'-'+docente+'.pdf"'
 
-        # Create the PDF object, using the response object as its file.
         p = canvas.Canvas(response)
 
-        # Draw things on the PDF. Here's where the PDF generation happens.
-        # See the ReportLab documentation for the full list of functionality.
         for index, inscripto in enumerate(INSCRIPTOS):
             p.drawString(
                 100, 
                 230 + ( index * 10 ), 
-                str( len(INSCRIPTOS) - index )+
+                str( len(INSCRIPTOS) - index ) +
                 ' ' +
                 inscripto.apellido +
                 ' ' +
@@ -555,12 +602,6 @@ def curso_liquidacion(request, id):
             ' = $' +
             str(liquidacion['total50']) 
         )
-        #p.drawString(
-        #    100, 
-        #    140, 
-        #    'Total Esperado: ' +
-        #    liquidacion['total_esperado']
-        #)
         p.drawString(
             100, 
             130, 
@@ -581,42 +622,10 @@ def curso_liquidacion(request, id):
         )    
         
 
-        # Close the PDF object cleanly, and we're done.
         p.showPage()
         p.save()
         return response
 
     else:
-        #return HttpResponse('No estas registrado!')
         return HttpResponseRedirect('/admin/login/?next=%s' % request.path)
 
-def curso_editar(request, id): 
-    instance = Curso.objects.filter(id=id)[0]
-    form = CursoForm(request.POST or None, instance = instance)
-    if form.is_valid():
-        form.save()
-        #return redirect('cursos')
-        return HttpResponseRedirect( '/gestion/cursos' )
-    return render(
-            request,
-            'curso.html', 
-            {
-                'titulo':'Editar Curso',
-                'form':form
-            }
-    )
-
-def inscripto_editar(request, id): 
-    instance = Inscripto.objects.filter(id=id)[0]
-    form = InscriptoForm(request.POST or None, instance = instance)
-    if form.is_valid():
-        form.save()
-        return HttpResponseRedirect( '/gestion/inscriptos' )
-    return render(
-            request,
-            'inscripcion.html', 
-            {
-                'titulo':'Editar Inscripcion',
-                'form':form
-            }
-    )

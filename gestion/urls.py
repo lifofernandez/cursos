@@ -8,13 +8,17 @@ urlpatterns = [
 
     path('', views.inscriptos, name='inscriptos'),
     path('inscriptos/', views.inscriptos, name='inscriptos'),
-    path('../admin/gestion/inscripto/<int:id>/change', views.inscriptos, name='inscripto_detalles'),
+
+    # FORMULARIO ORIGINAL DEL ADMIN DE DJANGO
+    #path('../admin/gestion/inscripto/<int:id>/change', views.inscriptos, name='inscripto_detalles'),
     path('inscripto/<int:id>/recibo/', views.inscripto_recibo, name='inscripto_recibo'),
     path('inscripto/<int:id>/editar', views.inscripto_editar, name='inscripto_editar'),
+    path('inscripto/<int:id>/acreditar', views.inscripto_acreditar, name='inscripto_acreditar'),
 
     path('curso/nuevo', views.curso_nuevo, name='curso_nuevo'),
     path('cursos/', views.cursos, name='cursos'),
 
+    # FORMULARIO ORIGINAL DEL ADMIN DE DJANGO
     #path('../admin/gestion/curso/<int:id>/change', views.cursos, name='curso_detalles'),
 
     path('cursos/<int:id>/planilla/', views.curso_planilla, name='curso_planilla'),

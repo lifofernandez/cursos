@@ -56,6 +56,7 @@ class CursosTable(tables.Table):
         orderable = False,
         exclude_from_export = True
     )
+    # FORMULARIO ORIGINAL DEL ADMIN DE DJANGO
     #editar = tables.LinkColumn(
     #    'curso_detalles',
     #    text='editar curso',
@@ -130,13 +131,22 @@ class InscriptosXCursosTable(tables.Table):
         exclude_from_export = True
     )
     editar = tables.LinkColumn(
-        #'curso_detalles',
-        'inscripto_detalles',
+        'inscripto_editar',
         text='editar inscripto',
         args=[A('id')],
         verbose_name='Editar',
+        orderable = False,
         exclude_from_export = True
     )
+    acreditar = tables.LinkColumn(
+        'inscripto_acreditar',
+        text='acreditar pago',
+        args=[A('id')],
+        verbose_name='Acreditar',
+        orderable = False,
+        exclude_from_export = True
+    )
+
 
     class Meta:
         #attrs = {'class': 'table table-striped table-bordered table-hover table-sm'}

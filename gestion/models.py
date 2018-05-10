@@ -26,7 +26,7 @@ class Dia(models.Model):
        ordering = ('pk',)
 
 # Modelo para los cursos
-class Curso(models.Model):
+class Curso( models.Model ):
     # Nombre del curso
     nombre = models.CharField(
         verbose_name='Nombre del Curso',
@@ -213,7 +213,7 @@ class Inscripto(models.Model):
 
     pago = models.IntegerField(
         verbose_name='Pagó',
-        default=0
+        default=0,
     )
 
     nombre = models.CharField(

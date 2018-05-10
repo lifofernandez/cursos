@@ -11,4 +11,6 @@ https://docs.djangoproject.com/en/2.0/howto/initial-data/
 ```
 $ python manage.py loaddata dias.yaml
 ```
-TODO: agregar pago a editar inscripto
+agregar:
+- ficha de curso txt: toda info para para publicar, prensa y promocion
+- vista de curso individual con inscriptos 
