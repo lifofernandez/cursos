@@ -78,8 +78,13 @@
 - [x] Crear modelo curso
 - [x] Crear modelo inscripto
 - [x] Crear formulario publico de insrcipcion
-- [ ] Recibo alumno imprimible 
-- [ ] Certificado alumno imprimible 
-- [ ] Liquidacion docente imprimible 
-- [ ] Configurar permisos de usuario
-- [ ] Front-End 
+- [x] Recibo alumno imprimible 
+- [x] Certificado alumno imprimible 
+- [x] Liquidacion docente imprimible 
+- [x] Configurar permisos de usuario
+- [x] Front-End 
+
+# IDEAS:
+- [ ] ficha de curso txt: toda info para para publicar, prensa y promocion
+- [ ] vista de curso individual con inscriptos 
+- [ ] vista semanal de cursos
