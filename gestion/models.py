@@ -104,7 +104,7 @@ class Curso( models.Model ):
 
     imagen = models.ImageField(
         verbose_name='Imagen del Curso',
-        upload_to='cursos_img',
+        upload_to='cursos_imgs',
         blank=True,
     )
 
