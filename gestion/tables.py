@@ -12,6 +12,13 @@ class LabelColumn(tables.Column):
         label = opciones[value]
         return label
 
+# Columna custom, para tener el full name del docente
+class DocenteColumn(tables.Column):
+    def render(self, value):
+        docente = value.get_full_name()
+
+        return docente
+
 class CantidadInscriptosColumn(tables.Column):
     def render(self, value):
         curso = Curso.objects.filter(id=value)[0]
@@ -21,6 +28,11 @@ class CantidadInscriptosColumn(tables.Column):
 class CursosTable(tables.Table):
     id = tables.Column('#')
     nombre = tables.Column('Nombre')
+    docente = DocenteColumn(
+        'Docente',
+        accessor='docente',
+        #orderable=False,
+    )
     codigo = tables.Column('Código')
     # to do: cantidad de inscriptos
     # total_inscriptos = tables.Column('Inscriptos')

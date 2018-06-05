@@ -271,7 +271,7 @@ def inscriptosxcursos(request, sort='inicio_fecha'):
         for index, curso in enumerate(queryset): 
             c = {}
             c['titulo'] = curso.nombre
-            c['subtitulo'] = curso.docente
+            c['subtitulo'] = curso.docente.get_full_name()
             c['codigo'] = curso.codigo
             c['fecha'] = curso.inicio_fecha
 
@@ -320,7 +320,7 @@ def liquidaciones(request, sort='id'):
             if inscriptos:
                 c = {}
                 c['titulo'] = curso.nombre
-                c['subtitulo'] = curso.docente
+                c['subtitulo'] = curso.docente.get_full_name()
 
                 INSCRIPTOS = []
                 INSCRIPTOS = InscriptosXCursosTable(inscriptos) 
@@ -443,7 +443,7 @@ def curso_planilla(request, id):
         curso = Curso.objects.filter(id=id)
         nombre = curso[0].nombre
         codigo = curso[0].codigo 
-        docente = str(curso[0].docente )
+        docente = curso[0].docente.get_full_name()
 
         costo = str(curso[0].costo)
 
@@ -518,7 +518,7 @@ def curso_liquidacion(request, id):
         curso = Curso.objects.filter(id=id)[0]
         nombre = curso.nombre
         codigo = curso.codigo 
-        docente = str( curso.docente )
+        docente = curso.docente.get_full_name()
 
         costo = str( curso.costo )
 

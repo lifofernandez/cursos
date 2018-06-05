@@ -5,6 +5,9 @@ from django.db.models import Q
 from django.utils import timezone
 
 
+
+# AbstracUser for Model __str__ override
+from django.contrib.auth.models import AbstractUser
 # Aca creamos grupos de usuarios
 # https://stackoverflow.com/questions/22250352
 from django.contrib.auth.models import Group, User
@@ -319,3 +322,11 @@ class Inscripto(models.Model):
         return abona
         
 
+
+#class User(AbstractUser):
+#    #bio = models.TextField(max_length=500, blank=True)
+#    #location = models.CharField(max_length=30, blank=True)
+#    #birth_date = models.DateField(null=True, blank=True)
+#
+#    def __str__(self):
+#        return self.nombre+' '+self.apellido
