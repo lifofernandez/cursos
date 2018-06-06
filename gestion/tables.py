@@ -43,7 +43,9 @@ class CursosTable(tables.Table):
         accessor='id'
     )
 
-    inscripcion_abierta = tables.BooleanColumn(verbose_name='Inscripcion')
+    inscripcion_abierta = tables.BooleanColumn(
+        verbose_name='Inscripcion'
+    )
     planilla = tables.LinkColumn(
         'curso_planilla',
         text='planilla',
@@ -65,6 +67,14 @@ class CursosTable(tables.Table):
         text='editar curso',
         args=[A('id')],
         verbose_name='Editar',
+        orderable = False,
+        exclude_from_export = True
+    )
+    ver = tables.LinkColumn(
+        'curso',
+        text='ver curso',
+        args=[A('id')],
+        verbose_name='Ver',
         orderable = False,
         exclude_from_export = True
     )
@@ -165,7 +175,6 @@ class InscriptosXCursosTable(tables.Table):
         attrs = {'class': 'table table-striped table-hover table-sm' }
 
 class LiquidacionesTable(tables.Table):
-
     arancel        = tables.Column()
     cant100        = tables.Column()
     cant75         = tables.Column()

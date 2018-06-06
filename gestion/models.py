@@ -117,10 +117,15 @@ class Curso( models.Model ):
     def __str__(self):
         return self.nombre
 
-    @property
-    def dia_str(self):
-        dias_str = self.dias
-        return dias_str
+    #@property
+    #def dia_str(self):
+    #    o = ', '.join( [ str(dia) for dia in self.dias.all() ] )
+    #    return o
+
+    #@property
+    #def inscriptos_str(self):
+    #    o = ' - '.join( [ str(i) for i in self.inscriptos ] )
+    #    return o
 
     @property
     def inscriptos(self):
