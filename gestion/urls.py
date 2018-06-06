@@ -22,6 +22,7 @@ urlpatterns = [
     #path('../admin/gestion/curso/<int:id>/change', views.cursos, name='curso_detalles'),
 
     path('cursos/<int:id>/planilla/', views.curso_planilla, name='curso_planilla'),
+    path('curso/<int:id>/ver', views.curso, name='curso'),
     path('curso/<int:id>/clonar', views.curso_clonar, name='curso_clonar'),
     path('curso/<int:id>/editar', views.curso_editar, name='curso_editar'),
 

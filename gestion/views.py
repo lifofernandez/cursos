@@ -48,6 +48,25 @@ def inscripcion(request):
                 {'titulo':'Inscripción a Cursos','form':form}
         )
 
+def curso( request, id ):
+  if request.user.is_authenticated:
+    curso = Curso.objects.filter(id=id)[0]
+    
+    #list_display = [field.name+ ' ' + curso.field +'</br>' for field in curso._meta.get_fields()]
+    o = ''
+    print(curso.dia_str)
+    for field in curso._meta.get_fields():
+      nombre = field.name
+      if nombre != 'inscripto':
+        o += nombre
+        valor = getattr(curso,nombre)
+        #e = curso._meta.get_field(nombre)
+        print(valor)
+        o += ' : '+ str(valor) + '<br>'
+    return HttpResponse(o)
+  else:
+    return HttpResponseRedirect('/admin/login/?next=%s' % request.path)
+
 def curso_nuevo(request):
     if request.user.is_authenticated:
         if request.method == 'POST':
@@ -197,6 +216,7 @@ def inscriptos( request, sort = 'id' ):
         )
     else: 
         return HttpResponseRedirect('/admin/login/?next=%s' % request.path)
+
 
 def cursos(request, sort='inicio_fecha'):
     if request.user.is_authenticated:
