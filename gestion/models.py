@@ -55,6 +55,16 @@ class Curso( models.Model ):
         default=''
     )
 
+    MODALIDADES = (
+        ('v','Virtual'),
+        ('p','Presencial'),
+    )
+    modalidad = models.CharField(
+       max_length=1,
+       choices=MODALIDADES,
+       default='p',
+       verbose_name='Modalidad',
+    )
     inicio_fecha = models.DateField(
         'Fecha de Inicio',
         default=timezone.now
@@ -92,16 +102,6 @@ class Curso( models.Model ):
         default=''
     )
 
-    MODALIDADES = (
-        ('v','Virtual'),
-        ('p','Presencial'),
-    )
-    modalidad = models.CharField(
-       max_length=1,
-       choices=MODALIDADES,
-       default='p',
-       verbose_name='Modalidad',
-    )
 
     imagen = models.ImageField(
         verbose_name='Imagen del Curso',

@@ -54,19 +54,17 @@ def curso( request, id ):
     o = ''
     for field in curso._meta.get_fields():
       nombre = field.name
-      o += nombre
       valor = '' 
       if nombre == 'inscripto':
-        #valor = curso.inscriptos_str
+        nombre = 'inscriptos'
         valor = ', '.join( [ str(i) for i in curso.inscriptos ] )
       elif nombre == 'dias':
-        #valor = curso.dia_str
         valor = ', '.join( [ str(dia) for dia in curso.dias.all() ] )
       elif nombre == 'docente':
         valor = curso.docente.get_full_name()
       else:
         valor = getattr(curso,nombre)
-      o += ': '+ str(valor) + '<br>'
+      o += nombre+': '+ str(valor) + '<br>'
     return HttpResponse(o)
   else:
     return HttpResponseRedirect('/admin/login/?next=%s' % request.path)

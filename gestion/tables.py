@@ -78,6 +78,7 @@ class CursosTable(tables.Table):
         orderable = False,
         exclude_from_export = True
     )
+
     # FORMULARIO ORIGINAL DEL ADMIN DE DJANGO
     #editar = tables.LinkColumn(
     #    'curso_detalles',
