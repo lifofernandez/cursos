@@ -4,6 +4,9 @@
 
 ```
 $ python manage.py flush
+$ rm db.sqlite3
+$ rm cursos/__pycache__ -r
+$ rm gestion/__pycache__ -r
 $ rm -rf gestion/migrations/*
 ```
 

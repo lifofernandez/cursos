@@ -6,10 +6,26 @@ from django.utils import timezone
 
 
 
-# Aca creamos grupos de usuarios
+from django.conf import settings
+from django.contrib.auth.models import AbstractUser
+
+class User(AbstractUser):
+    bio = models.TextField(
+        max_length=500, 
+        blank=True
+    )
+    docente = models.BooleanField(
+        verbose_name='Es Docente?',
+        default=1
+    )
+    #location = models.CharField(max_length=30, blank=True)
+    #birth_date = models.DateField(null=True, blank=True)
+
+# Grupos de usuarios 'docentes'
 # https://stackoverflow.com/questions/22250352
-from django.contrib.auth.models import Group, User
-new_group, created = Group.objects.get_or_create(name='docentes')
+#from django.contrib.auth.models import Group, User
+#new_group, created = Group.objects.get_or_create(name='docentes')
+
 
 # MODELOS
 
@@ -43,9 +59,10 @@ class Curso( models.Model ):
 
     # Usuarios dentro del grupo 'docentes'
     docente = models.ForeignKey(
-        User,
+        #User,
+        settings.AUTH_USER_MODEL,
         verbose_name='Docente',
-        limit_choices_to={'groups__name':'docentes'},
+        limit_choices_to={'docente': True},
         on_delete=models.CASCADE
     )
 

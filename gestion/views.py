@@ -272,7 +272,8 @@ def cursos(request, sort='inicio_fecha'):
                 'titulo':'Todos los Cursos',
                 'bajada':'eo',
                 'botones': [
-                    {'texto':'Nuevo Curso','destino':'/gestion/curso/nuevo','clase':'btn-success'}
+                    {'texto':'Nuevo Curso','destino':'/gestion/curso/nuevo','clase':'btn-success'},
+                    {'texto':'Nuevo Docente','destino':'/admin/gestion/user/add/ ','clase':'btn-success boton'}
                  ],
                 'tablas':TABLAS
             }
