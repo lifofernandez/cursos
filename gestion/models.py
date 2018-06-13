@@ -4,8 +4,6 @@ from django.db import models
 from django.db.models import Q
 from django.utils import timezone
 
-
-
 from django.conf import settings
 from django.contrib.auth.models import AbstractUser
 
@@ -18,13 +16,10 @@ class User(AbstractUser):
         verbose_name='Es Docente?',
         default=1
     )
-    #location = models.CharField(max_length=30, blank=True)
-    #birth_date = models.DateField(null=True, blank=True)
+    def __str__(self):
+       return self.get_full_name()
 
-# Grupos de usuarios 'docentes'
-# https://stackoverflow.com/questions/22250352
-#from django.contrib.auth.models import Group, User
-#new_group, created = Group.objects.get_or_create(name='docentes')
+
 
 
 # MODELOS
@@ -42,11 +37,32 @@ class Dia(models.Model):
     class Meta:
        ordering = ('pk',)
 
+class Categoria(models.Model):
+    categoria= models.CharField(max_length=20)
+
+    def __str__(self):
+       return self.categoria
+
+    class Meta:
+       ordering = ('categoria',)
+
 # Modelo para los cursos
 class Curso( models.Model ):
-    # Nombre del curso
+
     nombre = models.CharField(
         verbose_name='Nombre del Curso',
+        max_length=200
+    )
+
+    subtitulo = models.CharField(
+        verbose_name='Subtítulo',
+        max_length=200,
+        default='',
+    )
+
+    bajada = models.CharField(
+        verbose_name='Bajada ',
+        default='',
         max_length=200
     )
 
@@ -57,19 +73,58 @@ class Curso( models.Model ):
         editable=False,
     )
 
-    # Usuarios dentro del grupo 'docentes'
-    docente = models.ForeignKey(
+    #docente = models.ForeignKey(
+    docentes = models.ManyToManyField(
         #User,
         settings.AUTH_USER_MODEL,
-        verbose_name='Docente',
+        verbose_name='Docente/s',
         limit_choices_to={'docente': True},
-        on_delete=models.CASCADE
+        related_name = 'docentes'
     )
 
-    # Texto acerca de los contenidos del curso
-    descripcion = models.TextField(
-        'Descripción',
+    ayudantes = models.ManyToManyField(
+        settings.AUTH_USER_MODEL,
+        verbose_name='Ayudante/s',
+        limit_choices_to={'docente': True},
+        related_name = 'ayudantes'
+    )
+
+    resumen = models.TextField(
+        'Resumen',
         default=''
+    )
+
+    objetivos = models.TextField(
+        'Objetivos',
+        default=''
+    )
+
+    destinatarios = models.TextField(
+        'Destinatarios',
+        default=''
+    )
+
+    TIPOS = (
+        ('e','Extensión'),
+        ('p','Posgrado'),
+    )
+    tipo = models.CharField(
+       max_length = 1,
+       choices = TIPOS,
+       default = 'e',
+       verbose_name = 'Tipo',
+    )
+
+    NIVELES= (
+        ('1','Inicial'),
+        ('2','Intermedio'),
+        ('3','Avanzado'),
+    )
+    nivel = models.CharField(
+       max_length = 1,
+       choices = NIVELES,
+       default = '1',
+       verbose_name = 'Nivel',
     )
 
     MODALIDADES = (
@@ -82,6 +137,14 @@ class Curso( models.Model ):
        default='p',
        verbose_name='Modalidad',
     )
+
+    categorias = models.ManyToManyField(
+        Categoria,
+        verbose_name='Categorias'
+    )
+
+
+    # Dictado
     inicio_fecha = models.DateField(
         'Fecha de Inicio',
         default=timezone.now
@@ -109,8 +172,10 @@ class Curso( models.Model ):
         default=timezone.now
     )
 
-    costo = models.IntegerField(
-        verbose_name='Costo',
+    arancel = models.DecimalField(
+        verbose_name='Arancel',
+        max_digits=7,
+        decimal_places=2,
         default=0
     )
 
@@ -161,13 +226,13 @@ class Curso( models.Model ):
         ) 
         pagan50 = inscriptos.filter( alumno_una='multimedia' )
 
-        total100 = len(pagan100) * self.costo
-        total75  = len(pagan75) * (self.costo * .75)
-        total50  = len(pagan50) * (self.costo * .5)
+        total100 = len(pagan100) * self.arancel
+        total75  = len(pagan75) * (self.arancel* .75)
+        total50  = len(pagan50) * (self.arancel* .5)
         #esperado = total100 + total75 + total50
 
         pagaron = sum( [inscripto.pago for inscripto in inscriptos] )
-        exclusivo_docente = self.costo * 3
+        exclusivo_docente = self.arancel* 3
 
         monto_docente = pagaron
         monto_atam = 0
@@ -178,7 +243,7 @@ class Curso( models.Model ):
 
         liquidacion = {
             'curso':          self.id,
-            'arancel':        self.costo,
+            'arancel':        self.arancel,
             'cant100':        len( pagan100 ),
             'total100':       total100,
             'cant75':         len( pagan75 ),
@@ -341,8 +406,8 @@ class Inscripto(models.Model):
     @property
     def abona(self):
         descuento = self.descuento
-        costo = self.curso.costo
-        abona = costo * float(descuento)
+        arancel = self.curso.arancel
+        abona = arancel * float(descuento)
         return abona
         
 

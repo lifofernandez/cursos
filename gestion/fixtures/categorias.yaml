@@ -1,0 +1,84 @@
+- model: gestion.Categoria
+  pk: 0
+  fields:
+    categoria: 'Arte Textil'
+- model: gestion.Categoria
+  pk: 1
+  fields:
+    categoria: 'Artes Escénica'
+- model: gestion.Categoria
+  pk: 2
+  fields:
+    categoria: 'Artes Visuales en Escénicas'
+- model: gestion.Categoria
+  pk: 3
+  fields:
+    categoria: 'Cerámica y Artes del Fuego'
+- model: gestion.Categoria
+  pk: 4
+  fields:
+    categoria: 'Clínica de Obra'
+- model: gestion.Categoria
+  pk: 5
+  fields:
+    categoria: 'Dibujo'
+- model: gestion.Categoria
+  pk: 6
+  fields:
+    categoria: 'Dibujo y Pintura'
+- model: gestion.Categoria
+  pk: 7
+  fields:
+    categoria: 'Digital'
+- model: gestion.Categoria
+  pk: 8
+  fields:
+    categoria: 'Escultura'
+- model: gestion.Categoria
+  pk: 9
+  fields:
+    categoria: 'VJing'
+- model: gestion.Categoria
+  pk: 10
+  fields:
+    categoria: 'Multimedia'
+- model: gestion.Categoria
+  pk: 11
+  fields:
+    categoria: 'Fotografía'
+- model: gestion.Categoria
+  pk: 12
+  fields:
+    categoria: 'Grabado'
+- model: gestion.Categoria
+  pk: 13
+  fields:
+    categoria: 'Grabado y Arte Impreso'
+- model: gestion.Categoria
+  pk: 14
+  fields:
+    categoria: 'Historieta '
+- model: gestion.Categoria
+  pk: 15
+  fields:
+    categoria: 'Ilustración'
+- model: gestion.Categoria
+  pk: 16
+  fields:
+    categoria: 'Informática Visuales'
+- model: gestion.Categoria
+  pk: 17
+  fields:
+    categoria: 'Otros'
+- model: gestion.Categoria
+  pk: 18
+  fields:
+    categoria: 'Teórico'
+- model: gestion.Categoria
+  pk: 19
+  fields:
+    categoria: 'Pintura'
+- model: gestion.Categoria
+  pk: 20
+  fields:
+    categoria: 'Restauración / Conservación'

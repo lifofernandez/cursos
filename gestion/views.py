@@ -111,7 +111,7 @@ def curso_clonar( request, id ):
                     'dias': dias,
                     'inicio_hora': original.inicio_hora,
                     'finalizacion_hora': original.finalizacion_hora,
-                    'costo': original.costo,
+                    'arancel': original.arancel ,
                     'requisitos': original.requisitos,
                     'modalidad': original.modalidad,
                     'imagen': original.imagen,
@@ -388,7 +388,7 @@ def inscripto_recibo(request, id):
         alumno_una = inscripto.alumno_una
 
         pago = inscripto.pago
-        costo = inscripto.curso.costo
+        arancel = inscripto.curso.arancel 
         curso = inscripto.curso
 
         descuento = inscripto.descuento
@@ -443,8 +443,8 @@ def inscripto_recibo(request, id):
         p.drawString(
                 100, 
                 100, 
-                'cuyo costo es: $' + 
-                str(costo) +
+                'cuyo arancel es: $' + 
+                str(arancel ) +
                 '.' 
         )
 
@@ -468,7 +468,7 @@ def curso_planilla(request, id):
         codigo = curso[0].codigo 
         docente = curso[0].docente.get_full_name()
 
-        costo = str(curso[0].costo)
+        arancel = str(curso[0].arancel )
 
         INSCRIPTOS = []
         inscriptos = curso[0].inscriptos
@@ -522,7 +522,7 @@ def curso_planilla(request, id):
                 100, 
                 100, 
                 'Costo: $' +
-                costo
+                arancel 
         )
 
         # Close the PDF object cleanly, and we're done.
@@ -543,7 +543,7 @@ def curso_liquidacion(request, id):
         codigo = curso.codigo 
         docente = curso.docente.get_full_name()
 
-        costo = str( curso.costo )
+        arancel = str( curso.arancel )
 
         liquidacion = curso.liquidacion
         INSCRIPTOS = curso.inscriptos
@@ -603,7 +603,7 @@ def curso_liquidacion(request, id):
             'Pagaron %100: ' +
             str(liquidacion['cant100']) +
             ' x $' +
-            costo +
+            arancel +
             ' = $' +
             str(liquidacion['total100']) 
         )
@@ -613,7 +613,7 @@ def curso_liquidacion(request, id):
             'Pagaron %75: ' +
             str(liquidacion['cant75']) +
             ' x $' +
-            str(float(costo) * .75) +
+            str(float(arancel ) * .75) +
             ' = $' +
             str(liquidacion['total75']) 
         )
@@ -623,7 +623,7 @@ def curso_liquidacion(request, id):
             'Pagaron %50: ' +
             str(liquidacion['cant50']) +
             ' x $' +
-            str(float(costo) * .5) +
+            str(float(arancel ) * .5) +
             ' = $' +
             str(liquidacion['total50']) 
         )
