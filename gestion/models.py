@@ -1,4 +1,5 @@
 import datetime
+import tagging
 
 from django.db import models
 from django.db.models import Q
@@ -7,6 +8,9 @@ from django.utils import timezone
 from django.conf import settings
 from django.contrib.auth.models import AbstractUser
 
+from taggit.managers import TaggableManager
+
+# User Override
 class User(AbstractUser):
     bio = models.TextField(
         max_length=500, 
@@ -18,6 +22,8 @@ class User(AbstractUser):
     )
     def __str__(self):
        return self.get_full_name()
+
+
 
 
 
@@ -45,6 +51,28 @@ class Categoria(models.Model):
 
     class Meta:
        ordering = ('categoria',)
+
+class Lugar(models.Model):
+    nombre = models.CharField(
+        verbose_name='Nombre del lugar',
+        max_length=200
+    )
+    direccion = models.TextField(
+        'Dirección',
+        default=''
+    )
+    telefono = models.CharField(
+        verbose_name='Teléfono',
+        max_length=200,
+        default=''
+    )
+
+    def __str__(self):
+       return self.nombre
+
+    class Meta:
+       verbose_name_plural='Lugares'
+       ordering = ('nombre',)
 
 # Modelo para los cursos
 class Curso( models.Model ):
@@ -143,6 +171,62 @@ class Curso( models.Model ):
         verbose_name='Categorias'
     )
 
+    etiquetas = TaggableManager()
+   
+    programa = models.TextField(
+        'Programa ',
+        default=''
+    )
+
+    bibliografia = models.TextField(
+        'Bibliografía',
+        default=''
+    )
+
+    links = models.TextField(
+        'Links externos / internos',
+        default=''
+    )
+
+    descargable = models.FileField(
+        verbose_name='Material Descargable',
+        upload_to='cursos_descargables',
+        blank=True,
+    )
+
+    imagen = models.ImageField(
+        verbose_name='Imagen Principal',
+        upload_to='cursos_imgs',
+        blank=True,
+    )
+
+    imagen_listado = models.ImageField(
+        verbose_name='Imagen de listado',
+        upload_to='cursos_imgs_listado',
+        blank=True,
+    )
+
+    imagenes_listado = models.FileField(
+        verbose_name='Imágenes para Galería',
+        upload_to='cursos_imgs_galeria',
+        blank=True,
+    )
+
+    videos = models.TextField(
+        'Videos (links)',
+        default=''
+    )
+
+    unidad_academica = models.CharField(
+        verbose_name='Unidad Académica',
+        default='Area Transdepartamental de Artes Multimediales',
+        max_length=200
+    )
+
+    contacto = models.TextField(
+        'Datos de Contacto',
+        default= 'Área Transdepartamental Artes Multimediales\nDirección de Extensión y Bienestar Estudiantil\nViamonte 1832. Ciudad Autónoma de Buenos Aires\n(54.11) 4811-4695\nmultimedia.cursos@una.edu.ar\n'
+    )
 
     # Dictado
     inicio_fecha = models.DateField(
@@ -172,6 +256,19 @@ class Curso( models.Model ):
         default=timezone.now
     )
 
+    duracion = models.TextField(
+        verbose_name='Duración',
+        default=''
+    )
+
+    lugar = models.ForeignKey(
+        Lugar,
+        verbose_name='Lugar de Dictado',
+        default='0',
+        on_delete=models.CASCADE
+    )
+
+    # Inscripcion
     arancel = models.DecimalField(
         verbose_name='Arancel',
         max_digits=7,
@@ -179,22 +276,41 @@ class Curso( models.Model ):
         default=0
     )
 
-    requisitos = models.TextField(
-        verbose_name='Requisitos',
-        default=''
-    )
-
-
-    imagen = models.ImageField(
-        verbose_name='Imagen del Curso',
-        upload_to='cursos_imgs',
-        blank=True,
-    )
-
     inscripcion_abierta = models.BooleanField(
         verbose_name='Inscripción Abierta',
         default=1
     )
+
+    requisitos = models.TextField(
+        verbose_name='Requisitos de Inscripción',
+        default=''
+    )
+
+    inicio_inscripcion = models.DateField(
+        'Inicio de Inscripción',
+        default=timezone.now
+    )
+    fin_inscripcion = models.DateField(
+        'Fin de Inscripción',
+        default=timezone.now
+    )
+
+    requerimientos = models.TextField(
+        verbose_name='Requerimientos para cursar',
+        default=''
+    )
+
+    datos_inscripcion = models.TextField(
+        verbose_name='Datos para la inscripción',
+        default=''
+    )
+
+    info_inscripcion = models.TextField(
+        verbose_name='Información para la inscripción',
+        default=''
+    )
+
+
 
     def __str__(self):
         return self.nombre

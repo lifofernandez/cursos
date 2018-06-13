@@ -18,7 +18,7 @@ $ rm -rf gestion/migrations/*
 $ pip install -r requirements.txt
 $ python manage.py makemigrations gestion 
 $ python manage.py migrate 
-$ python manage.py loaddata dias.yaml categorias.yaml
+$ python manage.py loaddata dias.yaml categorias.yaml lugares.yaml
 $ python manage.py createsuperuser
 ```
 

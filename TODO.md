@@ -16,54 +16,50 @@ ser breve, clara y atractiva.)
   marco de una carrera de posgrado y cuál, cátedra, workshop, etc):
 - [x] Modalidad
 
-- [ ] Categoría (artes escénicas, dibujo, textil, etc):
-- [ ] Tags o Palabras clave
+- [x] Categoría (artes escénicas, dibujo, textil, etc):
+- [x] Tags o Palabras clave
 
-- [ ] Programa (si es muy extenso, puede ir en formato pdf con encabezado de la
+- [x] Programa (si es muy extenso, puede ir en formato pdf con encabezado de la
   UUAA.  Utilizar hoja membretada o el modelo correspondiente provisto por el
 equipo de Diseño de Rectorado)
-- [ ] Bibliografía (si es muy extenso, puede ir en formato pdf con encabezado
+- [x] Bibliografía (si es muy extenso, puede ir en formato pdf con encabezado
   de la UUAA.  Utilizar hoja membretada o el modelo correspondiente provisto
 por el equipo de Diseño de Rectorado)
-- [ ] Links externos / internos (para agregar más información)
-- [ ] Material descargable
-- [ ] Imagen principal (tamaño min. 1920x440) (ver especificaciones en
+- [x] Links externos / internos (para agregar más información)
+- [x] Material descargable
+- [x] Imagen principal (tamaño min. 1920x440) (ver especificaciones en
   documento aparte)
-- [ ] Imagen de listado (tamaño min. 960x720) (ver especificaciones en
+- [x] Imagen de listado (tamaño min. 960x720) (ver especificaciones en
   documento aparte)
-- [ ] Imágenes para galería (la cantidad que consideren relevante. Tamaño min.
+- [x] Imágenes para galería (la cantidad que consideren relevante. Tamaño min.
   960 x720.) (ver especificaciones en documento aparte)
-- [ ] Videos (link)(ver especificaciones en documento aparte):
+- [x] Videos (link)(ver especificaciones en documento aparte):
 
-- [ ] Unidad Académica
-- [ ] Datos de contacto: (secretaría emisora, mail, horarios, dirección y
-  teléfono)
-
-- [ ] Requisitos de ingreso
-- [ ] Periodo de inscripcion (tambien con calendar) inicio de inscripción, fin
-  de inscripción.
-- [ ] Requerimientos para cursar (por ejemplo, materiales para llevar a clase,
-  i ropa cómoda, zapatos de tap, tener un nivel de conocimiento determinado
-para la cursada, etc.):
-
+- [x] Días 
 - [x] Fecha de inicio
 - [x] Fecha de finalización
-- [ ] Duración: (1 clase , n clases, cuatrimestral, anual)
-- [ ] Lugar de cursada: (por ejemplo, Sede Huergo del Departamento de Artes
-  Visuales, Huergo xxx. Ciudad Autónoma de Buenos Aires.) 
-- [ ] Días y horarios de cursada:
-- [ ] Lugar de cursada (lo ideal seria que sea un combo y se puedan cargar
-  lugares en otro formulario) nombre, direccion, telefono.
+- [x] Duración: (1 clase , n clases, cuatrimestral, anual)
+- [x] Lugar de cursada (lo ideal seria que sea un combo y se puedan cargar
+  lugares en otro formulario) 
+  nombre, direccion, telefono.
 
+- [x] Unidad Académica
+- [x] Datos de contacto: (secretaría emisora, mail, horarios, dirección y
+  teléfono)
 
-- [X] Arancel
-- [ ] Período de inscripción (Desde xx/xx hasta xx/xx):
-- [ ] Datos para la inscripción (formulario online / personalmente en xxxx)
-- [ ] Información para la inscripción: (si es necesario acercar documentación,
+- [x] Requisitos de ingreso
+- [x] Periodo de inscripcion (tambien con calendar) inicio de inscripción, fin
+  de inscripción.
+- [x] Requerimientos para cursar (por ejemplo, materiales para llevar a clase,
+  i ropa cómoda, zapatos de tap, tener un nivel de conocimiento determinado
+para la cursada, etc.):
+- [x] Arancel
+- [x] Datos para la inscripción (formulario online / personalmente en xxxx)
+- [x] Información para la inscripción: (si es necesario acercar documentación,
   u otra información relevante)
 
 - [x] Docente: (nombre y apellido)
-- [ ] Ayudante:(nombre y apellido)
+- [x] Ayudante:(nombre y apellido)
 - [x] Bio de los docentes (en este caso completar proforma docentes) (Breve – 2
   o 3 párrafos + imagen)
 

@@ -1,3 +1,4 @@
 django-bootstrap4
 django-tables2
 tablib
+django-taggit

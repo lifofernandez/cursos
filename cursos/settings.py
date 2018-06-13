@@ -34,6 +34,7 @@ INSTALLED_APPS = [
     'gestion.apps.GestorConfig',
     'bootstrap4',
     'django_tables2',
+    'taggit',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',

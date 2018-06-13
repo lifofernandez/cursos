@@ -1,0 +1,6 @@
+- model: gestion.Lugar
+  pk: 0
+  fields:
+    nombre: 'Área Transdepartamental Artes Multimediales'
+    direccion: 'Viamonte 1832. C.A.B.A'
+    telefono: '(54.11) 48 11 46 95'
