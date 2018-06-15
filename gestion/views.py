@@ -102,75 +102,6 @@ def curso_nuevo(request):
     else:        
         return HttpResponseRedirect('/admin/login/?next=%s' % request.path)
 
-def curso_clonarBK( request, id ):
-    if request.user.is_authenticated:
-
-        if request.method == 'POST':
-            form = CursoForm(request.POST)
-            if form.is_valid():
-                curso = form.save( commit = True )
-                curso.save()
-                return HttpResponseRedirect( '/gestion/cursos' )
-        else:
-            if not id:
-                return HttpResponse('Dame un ID!')
-
-            original = Curso.objects.filter( id = id )[0]
-            dias = Dia.objects.filter( id__in = original.dias.values('id') )
-            docentes = User.objects.filter( id__in = original.docentes.values('id') )
-            ayudantes = User.objects.filter( id__in = original.ayudantes.values('id') )
-            #print(original.tagged_items)
-            form = CursoForm(
-                initial={ 
-                    'nombre': original.nombre,
-                    'subtitulo': original.subtitulo,
-                    'bajada': original.bajada,
-                    'docentes': docentes,
-                    'ayudantes': ayudantes,
-                    'resumen': original.resumen,
-                    'objetivos': original.objetivos,
-                    'destinatarios': original.destinatarios,
-                    'tipo': original.tipo,
-                    'categorias': original.categorias,
-                    #'etiquetas': original.etiquetas,
-                    #'tagged_items': original.tagged_items,
-                    'programa': original.programa,
-                    'bibliografia': original.bibliografia,
-                    'links': original.links,
-                    'descargable': original.descargable,
-                    # Dictado
-                    'inicio_fecha':'',
-                    'dias': dias,
-                    'inicio_hora': original.inicio_hora,
-                    'finalizacion_hora': original.finalizacion_hora,
-                    'duracion': original.duracion,
-                    'lugar': original.lugar,
-                    # Inscripcion
-                    'contacto': original.contacto,
-                    'requisitos': original.requisitos,
-                    'inicio_inscripcion': original.inicio_inscripcion,
-                    'fin_inscripcion': original.fin_inscripcion,
-                    'requerimientos': original.requerimientos,
-                    'datos_inscripcion': original.datos_inscripcion,
-                    'info_inscripcion': original.info_inscripcion,
-                    'arancel': original.arancel ,
-                    'requisitos': original.requisitos,
-                    'modalidad': original.modalidad,
-                    'imagen': original.imagen,
-                    'imagen_listado': original.imagen_listado,
-                    'imagenes_galeria': original.imagenes_galeria,
-                    'videos': original.videos,
-                    'unidad_academica': original.unidad_academica,
-                }
-            )
-            return render(
-                    request,
-                    'curso.html', 
-                    {'titulo':'Clonar Curso','form': form}
-            )
-
-    else:
-       return HttpResponseRedirect('/admin/login/?next=%s' % request.path)
 
 
 
@@ -195,10 +126,12 @@ def curso_editar(request, id):
 def curso_clonar(request, id): 
     if request.user.is_authenticated:
         original = Curso.objects.filter( id = id )[0]
-        original.pk = None
         original.inicio_fecha = ''
         form = CursoForm(request.POST or None, instance = original )
+        form.instance.pk = None
         if form.is_valid():
+            #form.pk = None
+            #form.id = None
             curso = form.save( commit = True )
             curso.save()
             return HttpResponseRedirect( '/gestion/cursos' )
@@ -206,7 +139,7 @@ def curso_clonar(request, id):
                 request,
                 'curso.html', 
                 {
-                    'titulo':'Clonar Curso',
+                    'titulo':'Editar Curso',
                     'form' : form
                 }
         )

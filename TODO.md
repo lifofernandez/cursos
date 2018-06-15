@@ -64,8 +64,8 @@ para la cursada, etc.):
   o 3 párrafos + imagen)
 
 ## 
-- [ ] Arreglar clonar curso
-- [X] Arreglar ver curso
+- [x] Arreglar clonar curso
+- [x] Arreglar ver curso
 
 ## Modificar 
 - [x] Nombre de docente que no aparezca nombre de usuario en el select sino
