@@ -67,6 +67,7 @@ para la cursada, etc.):
 - [x] Arreglar clonar curso
 - [x] Arreglar ver curso
 - [ ] Planillas imprimibles
+- [ ] chquear matematica liquidaciones
 
 ## Modificar 
 - [x] Nombre de docente que no aparezca nombre de usuario en el select sino

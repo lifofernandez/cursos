@@ -527,7 +527,7 @@ class Inscripto(models.Model):
     def abona(self):
         descuento = self.descuento
         arancel = self.curso.arancel
-        abona = arancel * float(descuento)
+        abona = arancel * Decimal(descuento)
         return abona
         
 

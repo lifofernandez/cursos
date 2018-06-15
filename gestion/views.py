@@ -465,16 +465,16 @@ def curso_planilla(request, id):
         if not id:
             return HttpResponse('Dame un ID!')
 
-        curso = Curso.objects.filter(id=id)
-        nombre = curso[0].nombre
-        codigo = curso[0].codigo 
+        curso = Curso.objects.filter(id=id)[0]
+        nombre = curso.nombre
+        codigo = curso.codigo 
        # docente = curso[0].docente.get_full_name()
         docentes = ', '.join( [ d.get_full_name() for d in curso.docentes.all() ] )
 
-        arancel = str(curso[0].arancel )
+        arancel = str(curso.arancel )
 
         INSCRIPTOS = []
-        inscriptos = curso[0].inscriptos
+        inscriptos = curso.inscriptos
 
 
         # Create the HttpResponse object with the appropriate PDF headers.
