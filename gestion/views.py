@@ -12,7 +12,7 @@ from .forms import InscriptoForm, CursoForm, InscriptoEditForm, InscriptoAcredit
 
 from .models import Inscripto, Curso, Dia, User
 from .tables import InscriptosTable, CursosTable, InscriptosXCursosTable, LiquidacionesTable
-from taggit.managers import TaggableManager
+#from taggit.managers import TaggableManager
 
 
 # Table Export
@@ -102,7 +102,7 @@ def curso_nuevo(request):
     else:        
         return HttpResponseRedirect('/admin/login/?next=%s' % request.path)
 
-def curso_clonar( request, id ):
+def curso_clonarBK( request, id ):
     if request.user.is_authenticated:
 
         if request.method == 'POST':
@@ -117,10 +117,9 @@ def curso_clonar( request, id ):
 
             original = Curso.objects.filter( id = id )[0]
             dias = Dia.objects.filter( id__in = original.dias.values('id') )
-        #
             docentes = User.objects.filter( id__in = original.docentes.values('id') )
             ayudantes = User.objects.filter( id__in = original.ayudantes.values('id') )
-            print(original.etiquetas)
+            #print(original.tagged_items)
             form = CursoForm(
                 initial={ 
                     'nombre': original.nombre,
@@ -134,7 +133,7 @@ def curso_clonar( request, id ):
                     'tipo': original.tipo,
                     'categorias': original.categorias,
                     #'etiquetas': original.etiquetas,
-                    'tagged_items': original.tagged_items,
+                    #'tagged_items': original.tagged_items,
                     'programa': original.programa,
                     'bibliografia': original.bibliografia,
                     'links': original.links,
@@ -167,11 +166,12 @@ def curso_clonar( request, id ):
             return render(
                     request,
                     'curso.html', 
-                    {'titulo':'Clonar Curso','form':form}
+                    {'titulo':'Clonar Curso','form': form}
             )
 
     else:
        return HttpResponseRedirect('/admin/login/?next=%s' % request.path)
+
 
 
 def curso_editar(request, id): 
@@ -186,6 +186,27 @@ def curso_editar(request, id):
                 'curso.html', 
                 {
                     'titulo':'Editar Curso',
+                    'form' : form
+                }
+        )
+    else:
+        return HttpResponseRedirect('/admin/login/?next=%s' % request.path)
+
+def curso_clonar(request, id): 
+    if request.user.is_authenticated:
+        original = Curso.objects.filter( id = id )[0]
+        original.pk = None
+        original.inicio_fecha = ''
+        form = CursoForm(request.POST or None, instance = original )
+        if form.is_valid():
+            curso = form.save( commit = True )
+            curso.save()
+            return HttpResponseRedirect( '/gestion/cursos' )
+        return render(
+                request,
+                'curso.html', 
+                {
+                    'titulo':'Clonar Curso',
                     'form' : form
                 }
         )
