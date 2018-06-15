@@ -101,7 +101,6 @@ class Curso( models.Model ):
         editable=False,
     )
 
-    #docente = models.ForeignKey(
     docentes = models.ManyToManyField(
         #User,
         settings.AUTH_USER_MODEL,
@@ -171,10 +170,12 @@ class Curso( models.Model ):
         verbose_name='Categorias'
     )
 
-    etiquetas = TaggableManager()
+    etiquetas = TaggableManager(
+        'Etiquetas',
+    )
    
     programa = models.TextField(
-        'Programa ',
+        'Programa',
         default=''
     )
 
@@ -206,7 +207,7 @@ class Curso( models.Model ):
         blank=True,
     )
 
-    imagenes_listado = models.FileField(
+    imagenes_galeria = models.FileField(
         verbose_name='Imágenes para Galería',
         upload_to='cursos_imgs_galeria',
         blank=True,
@@ -221,11 +222,6 @@ class Curso( models.Model ):
         verbose_name='Unidad Académica',
         default='Area Transdepartamental de Artes Multimediales',
         max_length=200
-    )
-
-    contacto = models.TextField(
-        'Datos de Contacto',
-        default= 'Área Transdepartamental Artes Multimediales\nDirección de Extensión y Bienestar Estudiantil\nViamonte 1832. Ciudad Autónoma de Buenos Aires\n(54.11) 4811-4695\nmultimedia.cursos@una.edu.ar\n'
     )
 
     # Dictado
@@ -256,9 +252,10 @@ class Curso( models.Model ):
         default=timezone.now
     )
 
-    duracion = models.TextField(
+    duracion = models.CharField(
         verbose_name='Duración',
-        default=''
+        default='',
+        max_length=200
     )
 
     lugar = models.ForeignKey(
@@ -281,6 +278,11 @@ class Curso( models.Model ):
         default=1
     )
 
+    contacto = models.TextField(
+        'Datos de Contacto',
+        default= 'Área Transdepartamental Artes Multimediales\nDirección de Extensión y Bienestar Estudiantil\nViamonte 1832. Ciudad Autónoma de Buenos Aires\n(54.11) 4811-4695\nmultimedia.cursos@una.edu.ar\n'
+    )
+
     requisitos = models.TextField(
         verbose_name='Requisitos de Inscripción',
         default=''
@@ -290,6 +292,7 @@ class Curso( models.Model ):
         'Inicio de Inscripción',
         default=timezone.now
     )
+
     fin_inscripcion = models.DateField(
         'Fin de Inscripción',
         default=timezone.now

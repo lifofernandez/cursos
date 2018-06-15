@@ -63,8 +63,12 @@ para la cursada, etc.):
 - [x] Bio de los docentes (en este caso completar proforma docentes) (Breve – 2
   o 3 párrafos + imagen)
 
+## 
+- [ ] Arreglar clonar curso
+- [X] Arreglar ver curso
+
 ## Modificar 
-- [ ] Nombre de docente que no aparezca nombre de usuario en el select sino
+- [x] Nombre de docente que no aparezca nombre de usuario en el select sino
   nombre y apellido
 - [ ] Fecha, poner un calendar para evitar que se cargue mal el formato
 - [ ] Cuando se marca virtual ocultar los campos de días de dictado, Hora de

@@ -1,5 +1,6 @@
 import datetime
 from django.utils import timezone
+from django.conf import settings
 
 from django.shortcuts import render
 # la carpeta de teplates debe ser declarada
@@ -9,8 +10,9 @@ from django.shortcuts import render
 from django.http import HttpResponse,HttpResponseRedirect
 from .forms import InscriptoForm, CursoForm, InscriptoEditForm, InscriptoAcreditarForm
 
-from .models import Inscripto, Curso, Dia
+from .models import Inscripto, Curso, Dia, User
 from .tables import InscriptosTable, CursosTable, InscriptosXCursosTable, LiquidacionesTable
+from taggit.managers import TaggableManager
 
 
 # Table Export
@@ -58,13 +60,26 @@ def curso( request, id ):
       if nombre == 'inscripto':
         nombre = 'inscriptos'
         valor = ', '.join( [ str(i) for i in curso.inscriptos ] )
+      elif nombre == 'categorias':
+        valor = ', '.join( [ str(c) for c in curso.categorias.all() ] )
       elif nombre == 'dias':
         valor = ', '.join( [ str(dia) for dia in curso.dias.all() ] )
-      elif nombre == 'docente':
-        valor = curso.docente.get_full_name()
+      elif nombre == 'docentes':
+        #valor = curso.docente.get_full_name()
+        valor = ', '.join( [ d.get_full_name() for d in curso.docentes.all() ] )
+      elif nombre == 'ayudantes':
+        valor = ', '.join( [ a.get_full_name() for a in curso.ayudantes.all() ] )
+      elif nombre == 'etiquetas':
+        etiquetas = curso.etiquetas.all() 
+        #valor = ', '.join( [ str(e) for e in etiquetas ] )
+        valor = ''
+        for e in etiquetas:
+           valor += str(e)+','
+      elif nombre == 'tagged_items':
+          continue
       else:
         valor = getattr(curso,nombre)
-      o += nombre+': '+ str(valor) + '<br>'
+      o += '<b>'+nombre+'</b>: '+ str(valor) + '<br>'
     return HttpResponse(o)
   else:
     return HttpResponseRedirect('/admin/login/?next=%s' % request.path)
@@ -102,19 +117,51 @@ def curso_clonar( request, id ):
 
             original = Curso.objects.filter( id = id )[0]
             dias = Dia.objects.filter( id__in = original.dias.values('id') )
+        #
+            docentes = User.objects.filter( id__in = original.docentes.values('id') )
+            ayudantes = User.objects.filter( id__in = original.ayudantes.values('id') )
+            print(original.etiquetas)
             form = CursoForm(
                 initial={ 
                     'nombre': original.nombre,
-                    'docente': original.docente.id,
-                    'descripcion': original.descripcion,
+                    'subtitulo': original.subtitulo,
+                    'bajada': original.bajada,
+                    'docentes': docentes,
+                    'ayudantes': ayudantes,
+                    'resumen': original.resumen,
+                    'objetivos': original.objetivos,
+                    'destinatarios': original.destinatarios,
+                    'tipo': original.tipo,
+                    'categorias': original.categorias,
+                    #'etiquetas': original.etiquetas,
+                    'tagged_items': original.tagged_items,
+                    'programa': original.programa,
+                    'bibliografia': original.bibliografia,
+                    'links': original.links,
+                    'descargable': original.descargable,
+                    # Dictado
                     'inicio_fecha':'',
                     'dias': dias,
                     'inicio_hora': original.inicio_hora,
                     'finalizacion_hora': original.finalizacion_hora,
+                    'duracion': original.duracion,
+                    'lugar': original.lugar,
+                    # Inscripcion
+                    'contacto': original.contacto,
+                    'requisitos': original.requisitos,
+                    'inicio_inscripcion': original.inicio_inscripcion,
+                    'fin_inscripcion': original.fin_inscripcion,
+                    'requerimientos': original.requerimientos,
+                    'datos_inscripcion': original.datos_inscripcion,
+                    'info_inscripcion': original.info_inscripcion,
                     'arancel': original.arancel ,
                     'requisitos': original.requisitos,
                     'modalidad': original.modalidad,
                     'imagen': original.imagen,
+                    'imagen_listado': original.imagen_listado,
+                    'imagenes_galeria': original.imagenes_galeria,
+                    'videos': original.videos,
+                    'unidad_academica': original.unidad_academica,
                 }
             )
             return render(
