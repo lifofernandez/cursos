@@ -65,7 +65,6 @@ def curso( request, id ):
       elif nombre == 'dias':
         valor = ', '.join( [ str(dia) for dia in curso.dias.all() ] )
       elif nombre == 'docentes':
-        #valor = curso.docente.get_full_name()
         valor = ', '.join( [ d.get_full_name() for d in curso.docentes.all() ] )
       elif nombre == 'ayudantes':
         valor = ', '.join( [ a.get_full_name() for a in curso.ayudantes.all() ] )
@@ -295,7 +294,8 @@ def inscriptosxcursos(request, sort='inicio_fecha'):
         for index, curso in enumerate(queryset): 
             c = {}
             c['titulo'] = curso.nombre
-            c['subtitulo'] = curso.docente.get_full_name()
+            docentes = ', '.join( [ d.get_full_name() for d in curso.docentes.all() ] )
+            c['subtitulo'] = docentes 
             c['codigo'] = curso.codigo
             c['fecha'] = curso.inicio_fecha
 
@@ -344,7 +344,8 @@ def liquidaciones(request, sort='id'):
             if inscriptos:
                 c = {}
                 c['titulo'] = curso.nombre
-                c['subtitulo'] = curso.docente.get_full_name()
+                docentes = ', '.join( [ d.get_full_name() for d in curso.docentes.all() ] )
+                c['subtitulo'] = docentes 
 
                 INSCRIPTOS = []
                 INSCRIPTOS = InscriptosXCursosTable(inscriptos) 
@@ -467,7 +468,8 @@ def curso_planilla(request, id):
         curso = Curso.objects.filter(id=id)
         nombre = curso[0].nombre
         codigo = curso[0].codigo 
-        docente = curso[0].docente.get_full_name()
+       # docente = curso[0].docente.get_full_name()
+        docentes = ', '.join( [ d.get_full_name() for d in curso.docentes.all() ] )
 
         arancel = str(curso[0].arancel )
 
@@ -477,7 +479,7 @@ def curso_planilla(request, id):
 
         # Create the HttpResponse object with the appropriate PDF headers.
         response = HttpResponse(content_type='application/pdf')
-        nombre_archivo ='"planilla-' + codigo + '-' + docente+'.pdf"'
+        nombre_archivo ='"planilla-' + codigo + '-' + docentes+'.pdf"'
         response['Content-Disposition'] = 'attachment; filename='+nombre_archivo.lower().replace(" ","_")
 
         # Create the PDF object, using the response object as its file.
@@ -517,7 +519,7 @@ def curso_planilla(request, id):
                 100, 
                 110, 
                 'Docente: ' +
-                docente
+                docentes
         )
         p.drawString(
                 100, 
@@ -542,7 +544,8 @@ def curso_liquidacion(request, id):
         curso = Curso.objects.filter(id=id)[0]
         nombre = curso.nombre
         codigo = curso.codigo 
-        docente = curso.docente.get_full_name()
+        #docente = curso.docente.get_full_name()
+        docentes = ', '.join( [ d.get_full_name() for d in curso.docentes.all() ] )
 
         arancel = str( curso.arancel )
 
@@ -550,7 +553,7 @@ def curso_liquidacion(request, id):
         INSCRIPTOS = curso.inscriptos
 
         response = HttpResponse(content_type='application/pdf')
-        nombre_archivo ='"liquidacion-' + codigo + '-' + docente + '.pdf"'
+        nombre_archivo ='"liquidacion-' + codigo + '-' + docentes + '.pdf"'
         response['Content-Disposition'] = 'attachment; filename='+nombre_archivo.lower().replace(" ","_")
 
 
@@ -589,7 +592,7 @@ def curso_liquidacion(request, id):
             100, 
             190, 
             'Docente: ' +
-            docente
+            docentes
         )
         p.drawString(
             100, 

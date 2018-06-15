@@ -63,9 +63,10 @@ para la cursada, etc.):
 - [x] Bio de los docentes (en este caso completar proforma docentes) (Breve – 2
   o 3 párrafos + imagen)
 
-## 
+## Revisar 
 - [x] Arreglar clonar curso
 - [x] Arreglar ver curso
+- [ ] Planillas imprimibles
 
 ## Modificar 
 - [x] Nombre de docente que no aparezca nombre de usuario en el select sino

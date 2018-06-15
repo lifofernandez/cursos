@@ -4,6 +4,7 @@ import tagging
 from django.db import models
 from django.db.models import Q
 from django.utils import timezone
+from decimal import Decimal
 
 from django.conf import settings
 from django.contrib.auth.models import AbstractUser
@@ -346,8 +347,8 @@ class Curso( models.Model ):
         pagan50 = inscriptos.filter( alumno_una='multimedia' )
 
         total100 = len(pagan100) * self.arancel
-        total75  = len(pagan75) * (self.arancel* .75)
-        total50  = len(pagan50) * (self.arancel* .5)
+        total75  = len(pagan75) * (self.arancel * Decimal(.75))
+        total50  = len(pagan50) * (self.arancel * Decimal(.5) ) 
         #esperado = total100 + total75 + total50
 
         pagaron = sum( [inscripto.pago for inscripto in inscriptos] )

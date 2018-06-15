@@ -13,11 +13,10 @@ class LabelColumn(tables.Column):
         return label
 
 # Columna custom, para tener el full name del docente
-class DocenteColumn(tables.Column):
+class DocentesColumn(tables.Column):
     def render(self, value):
-        docente = value.get_full_name()
-
-        return docente
+        docentes = ', '.join( [ d.get_full_name() for d in value.all()] )
+        return docentes
 
 class CantidadInscriptosColumn(tables.Column):
     def render(self, value):
@@ -28,9 +27,9 @@ class CantidadInscriptosColumn(tables.Column):
 class CursosTable(tables.Table):
     id = tables.Column('#')
     nombre = tables.Column('Nombre')
-    docente = DocenteColumn(
-        'Docente',
-        accessor='docente',
+    docentes = DocentesColumn(
+        'Docente/s',
+        accessor='docentes',
         #orderable=False,
     )
     codigo = tables.Column('Código')
@@ -90,7 +89,7 @@ class CursosTable(tables.Table):
 
     class Meta:
         model = Curso
-        fields = ['id','nombre','docente','inicio_fecha','inscripcion_abierta','codigo','modalidad'] 
+        fields = ['id','nombre','docentes','inicio_fecha','inscripcion_abierta','codigo','modalidad'] 
         attrs = {'class': 'table table-striped table-hover table-sm' }
 
 class InscriptosTable(tables.Table):
