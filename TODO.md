@@ -73,7 +73,7 @@ para la cursada, etc.):
 - [x] Nombre de docente que no aparezca nombre de usuario en el select sino
   nombre y apellido
 - [ ] Fecha, poner un calendar para evitar que se cargue mal el formato
-- [ ] Cuando se marca virtual ocultar los campos de días de dictado, Hora de
+- [x] Cuando se marca virtual ocultar los campos de días de dictado, Hora de
   inicio y hora de fin
 
 ## Gestion cursos
