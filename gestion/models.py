@@ -358,8 +358,8 @@ class Curso( models.Model ):
         monto_atam = 0
         if( pagaron > exclusivo_docente ):
             resto_a_repartir = pagaron - exclusivo_docente
-            monto_docente = exclusivo_docente + ( resto_a_repartir * .5 ) 
-            monto_atam = resto_a_repartir * .5 
+            monto_docente = exclusivo_docente + ( resto_a_repartir * Decimal(.5) ) 
+            monto_atam = resto_a_repartir * Decimal(.5) 
 
         liquidacion = {
             'curso':          self.id,
