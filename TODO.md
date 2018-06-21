@@ -67,12 +67,13 @@ para la cursada, etc.):
 - [x] Arreglar clonar curso
 - [x] Arreglar ver curso
 - [ ] Planillas imprimibles
-- [ ] chquear matematica liquidaciones
+- [ ] Chquear matematica liquidaciones
 
 ## Modificar 
 - [x] Nombre de docente que no aparezca nombre de usuario en el select sino
   nombre y apellido
-- [ ] Fecha, poner un calendar para evitar que se cargue mal el formato
+- [-] Fecha, poner un calendar para evitar que se cargue mal el formato
+  paleativo JS, ver reder date field de Django.
 - [x] Cuando se marca virtual ocultar los campos de días de dictado, Hora de
   inicio y hora de fin
 
@@ -85,5 +86,5 @@ para la cursada, etc.):
 
 ## Todos los inscriptos
 - [ ] Agregar ahi tambien el boton de acreditar pago 
-- [ ] El recibo tiene que estar formateado como en el otro sistema (en otro
-  mail adjuntamos fromato)
+- [ ] El recibo tiene que estar formateado como en el otro sistema 
+  (en otro mail adjuntamos fromato)

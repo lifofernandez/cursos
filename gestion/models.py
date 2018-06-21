@@ -86,12 +86,14 @@ class Curso( models.Model ):
         verbose_name='Subtítulo',
         max_length=200,
         default='',
+        blank=True,
     )
 
     bajada = models.CharField(
         verbose_name='Bajada ',
         default='',
-        max_length=200
+        max_length=200,
+        blank=True,
     )
 
     codigo = models.CharField(
@@ -128,7 +130,8 @@ class Curso( models.Model ):
 
     destinatarios = models.TextField(
         'Destinatarios',
-        default=''
+        default='',
+        blank=True,
     )
 
     TIPOS = (
@@ -140,6 +143,7 @@ class Curso( models.Model ):
        choices = TIPOS,
        default = 'e',
        verbose_name = 'Tipo',
+       blank=True,
     )
 
     NIVELES= (
@@ -152,6 +156,7 @@ class Curso( models.Model ):
        choices = NIVELES,
        default = '1',
        verbose_name = 'Nivel',
+       blank=True,
     )
 
     MODALIDADES = (
@@ -167,26 +172,30 @@ class Curso( models.Model ):
 
     categorias = models.ManyToManyField(
         Categoria,
-        verbose_name='Categorias'
+        verbose_name='Categorias',
+        blank=True,
     )
 
     etiquetas = TaggableManager(
         'Etiquetas',
+        blank=True,
     )
    
     programa = models.TextField(
         'Programa',
-        default=''
+        default='',
     )
 
     bibliografia = models.TextField(
         'Bibliografía',
-        default=''
+        default='',
+        blank=True,
     )
 
     links = models.TextField(
         'Links externos / internos',
-        default=''
+        default='',
+        blank=True,
     )
 
     descargable = models.FileField(
@@ -215,13 +224,15 @@ class Curso( models.Model ):
 
     videos = models.TextField(
         'Videos (links)',
-        default=''
+        default='',
+        blank=True,
     )
 
     unidad_academica = models.CharField(
         verbose_name='Unidad Académica',
         default='Area Transdepartamental de Artes Multimediales',
-        max_length=200
+        max_length=200,
+        blank=True,
     )
 
     # Dictado
@@ -244,12 +255,12 @@ class Curso( models.Model ):
 
     inicio_hora = models.TimeField(
         verbose_name='Hora de Inicio',
-        default=timezone.now
+        default=timezone.now,
     )
 
-    finalizacion_hora= models.TimeField(
+    finalizacion_hora = models.TimeField(
         verbose_name='Hora de Finalizaición',
-        default=timezone.now
+        default=timezone.now,
     )
 
     duracion = models.CharField(
@@ -262,7 +273,8 @@ class Curso( models.Model ):
         Lugar,
         verbose_name='Lugar de Dictado',
         default='0',
-        on_delete=models.CASCADE
+        on_delete=models.CASCADE,
+        blank=True,
     )
 
     # Inscripcion
@@ -280,17 +292,19 @@ class Curso( models.Model ):
 
     contacto = models.TextField(
         'Datos de Contacto',
-        default= 'Área Transdepartamental Artes Multimediales\nDirección de Extensión y Bienestar Estudiantil\nViamonte 1832. Ciudad Autónoma de Buenos Aires\n(54.11) 4811-4695\nmultimedia.cursos@una.edu.ar\n'
+        default= 'Área Transdepartamental Artes Multimediales\nDirección de Extensión y Bienestar Estudiantil\nViamonte 1832. Ciudad Autónoma de Buenos Aires\n(54.11) 4811-4695\nmultimedia.cursos@una.edu.ar\n',
+        blank=True,
     )
 
     requisitos = models.TextField(
         verbose_name='Requisitos de Inscripción',
-        default=''
+        default='',
+        blank=True,
     )
 
     inicio_inscripcion = models.DateField(
         'Inicio de Inscripción',
-        default=timezone.now
+        default=timezone.now,
     )
 
     fin_inscripcion = models.DateField(
@@ -300,17 +314,20 @@ class Curso( models.Model ):
 
     requerimientos = models.TextField(
         verbose_name='Requerimientos para cursar',
-        default=''
+        default='',
+        blank=True,
     )
 
     datos_inscripcion = models.TextField(
         verbose_name='Datos para la inscripción',
-        default=''
+        default='',
+        blank=True,
     )
 
     info_inscripcion = models.TextField(
         verbose_name='Información para la inscripción',
-        default=''
+        default='',
+        blank=True,
     )
 
 

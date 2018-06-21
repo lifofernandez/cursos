@@ -1,4 +1,21 @@
-console.log('Hola Enfermera');
+//console.log('Hola Enfermera');
+
+var inicio = document.getElementById("id_inicio_fecha");
+var inicio_inscripcion = document.getElementById("id_inicio_inscripcion");
+var fin_inscripcion = document.getElementById("id_fin_inscripcion");
+
+var type = document.createAttribute("type");
+var type2 = document.createAttribute("type");
+var type3 = document.createAttribute("type");
+type.value = "date"
+type2.value = "date"
+type3.value = "date"
+
+inicio.setAttributeNode(type);
+inicio_inscripcion.setAttributeNode(type2);
+fin_inscripcion.setAttributeNode(type3);
+
+// document.getElementById("id_finalizacion_hora").attr("type","date");
 
 var ddl = document.getElementById("id_modalidad");
 ddl.addEventListener("change",validate); 
@@ -18,3 +35,4 @@ function selectAllOptions(obj) {
     obj.options[i].selected = true;
   }
 }
+// Get the first <h1> element in the document

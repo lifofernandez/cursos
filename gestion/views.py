@@ -129,8 +129,6 @@ def curso_clonar(request, id):
         form = CursoForm(request.POST or None, instance = original )
         form.instance.pk = None
         if form.is_valid():
-            #form.pk = None
-            #form.id = None
             curso = form.save( commit = True )
             curso.save()
             return HttpResponseRedirect( '/gestion/cursos' )
