@@ -31,7 +31,7 @@ urlpatterns = [
     path('liquidaciones/', views.liquidaciones, name='liquidaciones'),
     path('curso/<int:id>/liquidacion/', views.curso_liquidacion, name='curso_liquidacion'),
 
-    #path('pdftest/', views.pdftest, name='pdftest'),
+    path('mail/', views.mail, name='mail'),
 
 ]
 

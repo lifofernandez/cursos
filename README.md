@@ -20,9 +20,10 @@ $ python manage.py makemigrations gestion
 $ python manage.py migrate 
 $ python manage.py loaddata dias.yaml categorias.yaml lugares.yaml
 $ python manage.py createsuperuser
+$ python manage.py collectstatic
 ```
 
-## Ejecutar servidor
+## Ejecutar devel server
 ```
 $ python manage.py runserver
 ```

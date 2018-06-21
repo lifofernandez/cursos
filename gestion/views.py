@@ -656,3 +656,14 @@ def curso_liquidacion(request, id):
     else:
         return HttpResponseRedirect('/admin/login/?next=%s' % request.path)
 
+##
+from django.core.mail import send_mail
+
+def mail(request):
+    send_mail(
+        'Subject here',
+        'Here is the message.',
+        't@example.com',
+        ['lifofernandez@gmail.com'],
+        fail_silently=False, 
+    )
