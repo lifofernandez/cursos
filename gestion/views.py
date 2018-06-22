@@ -1,6 +1,7 @@
 import datetime
 from django.utils import timezone
 from django.conf import settings
+from django.core.mail import send_mail
 
 from django.shortcuts import render
 # la carpeta de teplates debe ser declarada
@@ -30,8 +31,45 @@ def inscripcion(request):
     if request.method == 'POST':
         form = InscriptoForm(request.POST)
         if form.is_valid():
-            inscripto_item = form.save(commit=False)
-            inscripto_item.save()
+            inscripto = form.save(commit=False)
+            inscripto.save()
+
+            asunto  = 'INSCRIPCIÓN #' + str(inscripto.id) + ' [' 
+            asunto += 'CURSO: ' + str(inscripto.curso.nombre) + ', ' 
+            asunto += 'ESTUDIANTE: '+ inscripto.nombre + ' ' + inscripto.apellido
+            asunto += ']'
+
+            mensaje  = 'Inscripción satisfactoria al curso: ' + inscripto.curso.nombre + '.\n'
+            mensaje += 'Fecha: '+ str(inscripto.inscripcion_fecha) + '\n'
+            mensaje += 'ID: #'+ str(inscripto.id) + '\n'
+
+            mensaje += '\nDatos del Inscripto:\n'
+            mensaje += 'Nombre y Apellido: '+ inscripto.nombre + ' ' + inscripto.apellido + '\n'
+            mensaje += 'DNI: '+ inscripto.dni + '\n'
+            mensaje += 'Correo Electrónico: '+ inscripto.correo + '\n'
+            mensaje += 'Teléfono: '+ inscripto.telefono+ '\n'
+            mensaje += 'Abona: $'+ str(inscripto.abona)  
+            descuento = 100 - (inscripto.descuento * 100)
+            if(descuento):
+                mensaje += ' gracias a un descuento del ' + str(descuento) + '% ' 
+                mensaje += 'sobre el costo total del curso ($'+ str(inscripto.curso.arancel) +')'
+            mensaje += '.\n'
+
+            mensaje += '\nAnte cualquier duda contactrse a:\n'
+            mensaje += inscripto.curso.contacto
+
+
+            send_mail(
+                asunto,
+                mensaje, 
+                'multimedia.cursos@una.edu.ar',
+                [
+                    inscripto.correo,
+                    'multimedia.cursos@una.edu.ar',
+                ],
+                fail_silently = False, 
+            )
+
             return HttpResponse(
                 render( 
                     request,
@@ -657,13 +695,16 @@ def curso_liquidacion(request, id):
         return HttpResponseRedirect('/admin/login/?next=%s' % request.path)
 
 ##
-from django.core.mail import send_mail
 
 def mail(request):
     send_mail(
-        'Subject here',
-        'Here is the message.',
-        't@example.com',
-        ['lifofernandez@gmail.com'],
-        fail_silently=False, 
+        asunto,
+        mensaje, 
+        'multimedia.cursos@una.edu.ar',
+        [
+            form.email,
+            'multimedia.cursos@una.edu.ar',
+        ],
+        fail_silently = False, 
     )
+    return HttpResponse('Hello, mail.')
