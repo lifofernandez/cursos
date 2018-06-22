@@ -115,7 +115,8 @@ class Curso( models.Model ):
         settings.AUTH_USER_MODEL,
         verbose_name='Ayudante/s',
         limit_choices_to={'docente': True},
-        related_name = 'ayudantes'
+        related_name = 'ayudantes',
+        blank=True,
     )
 
     resumen = models.TextField(
