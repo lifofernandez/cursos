@@ -58,7 +58,6 @@ def inscripcion(request):
             mensaje += '\nAnte cualquier duda contactrse a:\n'
             mensaje += inscripto.curso.contacto
 
-
             send_mail(
                 asunto,
                 mensaje, 
@@ -76,7 +75,7 @@ def inscripcion(request):
                     'ok.html',
                     {
                         'titulo':'¡Inscripcion Satisfactoria!',
-                        'bajada':'En breve nos comunicaremos a traves de los datos de contacto provistos.'
+                        'bajada':'En breve nos comunicaremos a través de los datos de contacto provistos.'
                     }
                 )
             )
