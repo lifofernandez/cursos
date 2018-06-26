@@ -23,16 +23,8 @@ class User(AbstractUser):
     def __str__(self):
        return self.get_full_name()
 
-
-
-
-
-
-# MODELOS
-
-# Este es un modelo (una especie de 'term')
-# para usar en campo 'dias' en el modelo Curso.
-# Estos 'dias' son cargados usando loaddata y fixtures
+# El contenido al que refieren estos modelos i
+# se carga usando loaddata y fixtures
 # https://docs.djangoproject.com/en/2.0/howto/initial-data/
 class Dia(models.Model):
     dia = models.CharField(max_length=20)
@@ -73,6 +65,8 @@ class Lugar(models.Model):
     class Meta:
        verbose_name_plural='Lugares'
        ordering = ('nombre',)
+
+# MODELOS
 
 # Modelo para los cursos
 class Curso( models.Model ):
@@ -293,7 +287,13 @@ class Curso( models.Model ):
 
     contacto = models.TextField(
         'Datos de Contacto',
-        default= 'Área Transdepartamental Artes Multimediales\nDirección de Extensión y Bienestar Estudiantil\nViamonte 1832. Ciudad Autónoma de Buenos Aires\n(54.11) 4811-4695\nmultimedia.cursos@una.edu.ar\n',
+        default = (
+            'Área Transdepartamental Artes Multimediales\n' +
+            'Dirección de Extensión y Bienestar Estudiantil\n' +
+            'Viamonte 1832. Ciudad Autónoma de Buenos Aires\n' +
+            '(54.11) 4811-4695\n' +
+            'multimedia.cursos@una.edu.ar\n'
+        ),
         blank=True,
     )
 
@@ -331,21 +331,6 @@ class Curso( models.Model ):
         blank=True,
     )
 
-
-
-    def __str__(self):
-        return self.nombre
-
-    #@property
-    #def dia_str(self):
-    #    o = ', '.join( [ str(dia) for dia in self.dias.all() ] )
-    #    return o
-
-    #@property
-    #def inscriptos_str(self):
-    #    o = ' - '.join( [ str(i) for i in self.inscriptos ] )
-    #    return o
-
     @property
     def inscriptos(self):
         inscriptos = Inscripto.objects.filter( curso = self.id )
@@ -366,7 +351,6 @@ class Curso( models.Model ):
         total100 = len(pagan100) * self.arancel
         total75  = len(pagan75) * (self.arancel * Decimal(.75))
         total50  = len(pagan50) * (self.arancel * Decimal(.5) ) 
-        #esperado = total100 + total75 + total50
 
         pagaron = sum( [inscripto.pago for inscripto in inscriptos] )
         exclusivo_docente = self.arancel* 3
@@ -387,15 +371,16 @@ class Curso( models.Model ):
             'total75':        total75,
             'cant50':         len( pagan50 ),
             'total50':        total50,
-            #'total_esperado': esperado,
             'total_pagaron':  pagaron ,
             'monto_docente':  monto_docente,
             'monto_ATAM':     monto_atam,
         }
-        #self.liquidacion = liquidacion
         return liquidacion
 
-    # Override de la funcion "save" de Model
+    def __str__(self):
+        return self.nombre
+
+    # Override de la funcion "save"
     def save(self, *args, **kwargs):
         año = self.inicio_fecha.year
         mes = self.inicio_fecha.month
@@ -523,12 +508,11 @@ class Inscripto(models.Model):
         default=timezone.now
     )
 
-
     def __str__(self):
         return self.nombre+' '+self.apellido
 
-    def fue_creado_recientemente(self):
-        return self.inscripcion_fecha >= timezone.now() - datetime.timedelta(days=1)
+    #def fue_creado_recientemente(self):
+    #    return self.inscripcion_fecha >= timezone.now() - datetime.timedelta(days=1)
 
     @property
     def descuento(self):
@@ -546,6 +530,3 @@ class Inscripto(models.Model):
         arancel = self.curso.arancel
         abona = arancel * Decimal(descuento)
         return abona
-        
-
-
