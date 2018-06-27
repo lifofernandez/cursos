@@ -2,11 +2,18 @@
 {% load bootstrap4 %}
 
 {% block content %} 
-        <form method="POST" action="" class="form">
-            {% csrf_token %}
-            {% bootstrap_form form %}
-            {% buttons %}
-                <button type="submit" class="btn-lg  btn-danger">Guardar</button>
-            {% endbuttons %}
-        </form>
+   {% if form %}
+       <form method="POST" action="" class="form">
+           {% csrf_token %}
+           {% bootstrap_form form %}
+           {% buttons %}
+               <button type="submit" class="btn-lg  btn-danger">Guardar</button>
+           {% endbuttons %}
+       </form>
+    {% else %}
+       {% for campo in campos %}
+           <strong>{{ campo.nombre }}:</strong>
+	   <p>{{ campo.valor }}</p>
+       {% endfor %}
+    {% endif %}
 {% endblock %}

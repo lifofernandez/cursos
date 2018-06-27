@@ -13,18 +13,14 @@ from .forms import InscriptoForm, CursoForm, InscriptoEditForm, InscriptoAcredit
 
 from .models import Inscripto, Curso, Dia, User
 from .tables import InscriptosTable, CursosTable, InscriptosXCursosTable, LiquidacionesTable
-#from taggit.managers import TaggableManager
 
+from reportlab.pdfgen import canvas
 
 # Table Export
 from django_tables2.config import RequestConfig
 from django_tables2.export.export import TableExport
 
 
-#from django_tables2 import MultiTableMixin
-
-#def index(request):
-#    return HttpResponse('Hello, world.')
 
 # FORMULARIOS
 def inscripcion(request):
@@ -90,7 +86,8 @@ def inscripcion(request):
 def curso( request, id ):
   if request.user.is_authenticated:
     curso = Curso.objects.filter(id=id)[0]
-    o = ''
+    #o = ''
+    CAMPOS = []
     for field in curso._meta.get_fields():
       nombre = field.name
       valor = '' 
@@ -115,8 +112,22 @@ def curso( request, id ):
           continue
       else:
         valor = getattr(curso,nombre)
-      o += '<b>'+nombre+'</b>: '+ str(valor) + '<br>'
-    return HttpResponse(o)
+      #o += '<b>'+nombre+'</b>: <p>'+ str(valor) + '</p>'
+
+      campo = { 'nombre' : str(nombre), 'valor': str(valor) }
+      CAMPOS.append(campo)
+
+    #return HttpResponse(o)
+    return HttpResponse(
+        render( 
+            request,
+            'curso.html',
+            {
+                'titulo':'Ver curso: ',
+                'campos': CAMPOS
+            }
+        )
+    )
   else:
     return HttpResponseRedirect('/admin/login/?next=%s' % request.path)
 
@@ -410,7 +421,6 @@ def liquidaciones(request, sort='id'):
 
 
 # RECIBOS Y PLANILLAS PDF
-from reportlab.pdfgen import canvas
 
 def inscripto_recibo(request, id):
     if request.user.is_authenticated:
