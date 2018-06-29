@@ -1,4 +1,5 @@
 from django.forms import ModelForm
+
 from django import forms
 from django.utils import timezone
 from .models import Inscripto, Curso
@@ -19,12 +20,32 @@ class InscriptoAcreditarForm( ModelForm ):
         fields = ['pago']
 
 class CursoForm( ModelForm ):
+    inicio_fecha = forms.DateField(
+        #widget = forms.DateInput( 
+        #    #format='%d/%m/%Y',
+        #    ##input_type='date',
+        #    #attrs={
+        #    #    'type':'date',
+        #    #},
+        #),
+        widget=forms.SelectDateWidget(
+            empty_label=(
+                "Elegí un día",
+                "Elegí un mes",
+                "Elegí un año",
+
+            ),
+        ),
+    )
+    inicio_inscripcion = inicio_fecha
+    fin_inscripcion = inicio_fecha
+
     inicio_hora = forms.TimeField(
         widget = forms.TimeInput( 
-            #format='%H:%M',
+            format='%H:%M',
             attrs={
                 'type':'time',
-                'value' : '20:20',
+                #'value' : '20:20',
             },
         ),
     )
