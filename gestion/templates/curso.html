@@ -2,6 +2,7 @@
 {% load bootstrap4 %}
 
 {% block content %} 
+<article class="{{clase}}">
    {% if form %}
        <form method="POST" action="" class="form">
            {% csrf_token %}
@@ -16,4 +17,5 @@
 	   <p>{{ campo.valor }}</p>
        {% endfor %}
     {% endif %}
+</article>
 {% endblock %}

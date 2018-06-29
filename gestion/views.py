@@ -144,7 +144,11 @@ def curso_nuevo(request):
             return render(
                     request,
                     'curso.html', 
-                    {'titulo':'Crear Curso','form':form}
+                    {
+                        'titulo':'Crear Curso',
+                        'form':form,
+                        'clase' : 'crear'
+                    }
             )
     else:        
         return HttpResponseRedirect('/admin/login/?next=%s' % request.path)
@@ -164,7 +168,8 @@ def curso_editar(request, id):
                 'curso.html', 
                 {
                     'titulo':'Editar Curso',
-                    'form' : form
+                    'form' : form,
+                    'clase' : 'editar'
                 }
         )
     else:
@@ -173,9 +178,9 @@ def curso_editar(request, id):
 def curso_clonar(request, id): 
     if request.user.is_authenticated:
         original = Curso.objects.filter( id = id )[0]
-        original.inicio_fecha = ''
+        #original.inicio_fecha = ''
         form = CursoForm(request.POST or None, instance = original )
-        form.instance.pk = None
+        #form.instance.pk = None
         if form.is_valid():
             curso = form.save( commit = True )
             curso.save()
@@ -185,7 +190,8 @@ def curso_clonar(request, id):
                 'curso.html', 
                 {
                     'titulo':'Editar Curso',
-                    'form' : form
+                    'form' : form,
+                    'clase' : 'clonar'
                 }
         )
     else:

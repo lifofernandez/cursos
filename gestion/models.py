@@ -1,4 +1,4 @@
-import datetime
+#import datetime
 
 from django.db import models
 from django.db.models import Q
@@ -9,6 +9,7 @@ from django.conf import settings
 from django.contrib.auth.models import AbstractUser
 
 from taggit.managers import TaggableManager
+from django import forms
 
 # User Override
 class User(AbstractUser):
@@ -247,6 +248,8 @@ class Curso( models.Model ):
         Dia,
         verbose_name='Días de Dictado'
     )
+
+    #w=forms.TimeInput(format='%H:%M')
 
     inicio_hora = models.TimeField(
         verbose_name='Hora de Inicio',
