@@ -1,5 +1,5 @@
 //var clonar = document.getElementsByTagName(UL)[0];
-var clonar = document.getElementsByClassName('editar');
+//var clonar = document.getElementsByClassName('editar');
 if( clonar.length == 0 ){
     //console.log(clonar);
 
@@ -20,11 +20,11 @@ if( clonar.length == 0 ){
 }
 
 
-var ddl = document.getElementById("id_modalidad");
-ddl.addEventListener("change",validate); 
+var modalidad = document.getElementById("id_modalidad");
+modalidad.addEventListener("change",validate); 
 
 function validate(){
-  var selectedValue = this.options[ ddl.selectedIndex ].value;
+  var selectedValue = this.options[ modalidad.selectedIndex ].value;
   if (selectedValue == "v"){
     var dias = document.getElementById("id_dias");
     selectAllOptions(dias) 
