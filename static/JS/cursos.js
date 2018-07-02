@@ -1,26 +1,27 @@
 //var clonar = document.getElementsByTagName(UL)[0];
 //var clonar = document.getElementsByClassName('editar');
-if( clonar.length == 0 ){
-    //console.log(clonar);
-
-    //var inicio = document.getElementById("id_inicio_fecha");
-    //var inicio_inscripcion = document.getElementById("id_inicio_inscripcion");
-    //var fin_inscripcion = document.getElementById("id_fin_inscripcion");
-    //
-    //var type = document.createAttribute("type");
-    //var type2 = document.createAttribute("type");
-    //var type3 = document.createAttribute("type");
-    //type.value = "date"
-    //type2.value = "date"
-    //type3.value = "date"
-    //
-    //inicio.setAttributeNode(type);
-    //inicio_inscripcion.setAttributeNode(type2);
-    //fin_inscripcion.setAttributeNode(type3);
-}
+//if( clonar.length == 0 ){
+//    //console.log(clonar);
+//
+//    //var inicio = document.getElementById("id_inicio_fecha");
+//    //var inicio_inscripcion = document.getElementById("id_inicio_inscripcion");
+//    //var fin_inscripcion = document.getElementById("id_fin_inscripcion");
+//    //
+//    //var type = document.createAttribute("type");
+//    //var type2 = document.createAttribute("type");
+//    //var type3 = document.createAttribute("type");
+//    //type.value = "date"
+//    //type2.value = "date"
+//    //type3.value = "date"
+//    //
+//    //inicio.setAttributeNode(type);
+//    //inicio_inscripcion.setAttributeNode(type2);
+//    //fin_inscripcion.setAttributeNode(type3);
+//}
 
 
 var modalidad = document.getElementById("id_modalidad");
+// agregar condicional si modalidad no existe
 modalidad.addEventListener("change",validate); 
 
 function validate(){

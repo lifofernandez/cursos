@@ -1,4 +1,34 @@
-# TODO ## Agregar a Modelo Curso
+# TODO 
+
+## Revisar 
+- [ ] REVISAR JS MODALIDAD Y FORM FILE UPLOAD
+- [x] Arreglar clonar curso
+- [x] Arreglar ver curso
+- [ ] Planillas imprimibles
+- [ ] Chquear matematica liquidaciones
+
+## Todos los inscriptos
+- [ ] Agregar ahi tambien el boton de acreditar pago 
+- [ ] El recibo tiene que estar formateado como en el otro sistema 
+  (en otro mail adjuntamos fromato)
+
+## Modificar 
+- [x] Nombre de docente que no aparezca nombre de usuario en el select sino
+  nombre y apellido
+- [-] Fecha, poner un calendar para evitar que se cargue mal el formato
+  paleativo JS, ver reder date field de Django.
+- [x] Cuando se marca virtual ocultar los campos de días de dictado, Hora de
+  inicio y hora de fin
+
+## Gestion cursos
+- [-] Boton planilla tiene que tener todos los datos de la ficha del curso. Se
+  pueden agregar los inscriptos tambien. (en otro mail adjuntamos fromato)
+  planilla para prensa y difusión. 
+- [-] Faltaria un boton ver para poder visualizar los datos cargados (puede ser
+  el mismo que planilla) pantalla individual de cada curso.
+
+
+## Agregar a Modelo Curso
 - [x] Título: (en lo posible un título breve.  Se verá tanto en el desarrollo
   del curso como en los listados.)
 - [x] Subtítulo: (opcional. Sólo aparecerá en el desarrollo del contenido del
@@ -62,29 +92,3 @@ para la cursada, etc.):
 - [x] Ayudante:(nombre y apellido)
 - [x] Bio de los docentes (en este caso completar proforma docentes) (Breve – 2
   o 3 párrafos + imagen)
-
-## Revisar 
-- [x] Arreglar clonar curso
-- [x] Arreglar ver curso
-- [ ] Planillas imprimibles
-- [ ] Chquear matematica liquidaciones
-
-## Modificar 
-- [x] Nombre de docente que no aparezca nombre de usuario en el select sino
-  nombre y apellido
-- [-] Fecha, poner un calendar para evitar que se cargue mal el formato
-  paleativo JS, ver reder date field de Django.
-- [x] Cuando se marca virtual ocultar los campos de días de dictado, Hora de
-  inicio y hora de fin
-
-## Gestion cursos
-- [-] Boton planilla tiene que tener todos los datos de la ficha del curso. Se
-  pueden agregar los inscriptos tambien. (en otro mail adjuntamos fromato)
-  planilla para prensa y difusión. 
-- [-] Faltaria un boton ver para poder visualizar los datos cargados (puede ser
-  el mismo que planilla) pantalla individual de cada curso.
-
-## Todos los inscriptos
-- [ ] Agregar ahi tambien el boton de acreditar pago 
-- [ ] El recibo tiene que estar formateado como en el otro sistema 
-  (en otro mail adjuntamos fromato)
