@@ -90,6 +90,7 @@ def curso( request, id ):
     CAMPOS = []
     for field in curso._meta.get_fields():
       nombre = field.name
+      tipo = field.get_internal_type()
       valor = '' 
       if nombre == 'inscripto':
         nombre = 'inscriptos'
@@ -110,6 +111,17 @@ def curso( request, id ):
            valor += str(e)+','
       elif nombre == 'tagged_items':
           continue
+      elif tipo == 'FileField':
+          hostname = 'http://www.cursos.atamvirtual.com.ar/'
+          archivo  = getattr( curso, nombre )
+          url = hostname + str(archivo)
+          valor =  (
+                  '<a href="' +
+                  url  +
+                  '">' +
+                  url +
+                  '</a>'
+           )
       else:
         valor = getattr(curso,nombre)
       #o += '<b>'+nombre+'</b>: <p>'+ str(valor) + '</p>'

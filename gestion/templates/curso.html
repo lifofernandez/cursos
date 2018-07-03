@@ -14,7 +14,9 @@
     {% else %}
        {% for campo in campos %}
            <strong>{{ campo.nombre }}:</strong>
-	   <p>{{ campo.valor }}</p>
+	   <p>
+	       {{ campo.valor | safe }}
+	   </p>
        {% endfor %}
     {% endif %}
 </article>
