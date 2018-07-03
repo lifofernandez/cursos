@@ -134,9 +134,16 @@ def curso( request, id ):
 def curso_nuevo(request):
     if request.user.is_authenticated:
         if request.method == 'POST':
-            form = CursoForm(data = request.POST)
+            form = CursoForm(
+                data = request.POST,
+                files = request.FILES,
+            )
             if form.is_valid():
                 curso = form.save( commit = True )
+                curso.descargable = form.cleaned_data['descargable']
+                curso.imagen = form.cleaned_data['imagen']
+                curso.imagen_listado = form.cleaned_data['imagen_listado']
+                curso.imagenes_galeria = form.cleaned_data['imagenes_galeria']
                 curso.save()
                 return HttpResponseRedirect( '/gestion/cursos' )
         else:
@@ -146,7 +153,7 @@ def curso_nuevo(request):
                     'curso.html', 
                     {
                         'titulo':'Crear Curso',
-                        'form':form,
+                        'form'  : form,
                         'clase' : 'crear'
                     }
             )
@@ -159,9 +166,18 @@ def curso_nuevo(request):
 def curso_editar(request, id): 
     if request.user.is_authenticated:
         instance = Curso.objects.filter( id = id )[0]
-        form = CursoForm(request.POST or None, instance = instance)
+        form = CursoForm(
+                request.POST or None, 
+                request.FILES or None,
+                instance = instance
+        )
         if form.is_valid():
-            form.save()
+            form.instance.descargable = form.cleaned_data['descargable']
+            form.instance.imagen = form.cleaned_data['imagen']
+            form.instance.imagen_listado = form.cleaned_data['imagen_listado']
+            form.instance.imagenes_galeria = form.cleaned_data['imagenes_galeria']
+            curso = form.save( commit = True )
+            curso.save()
             return HttpResponseRedirect( '/gestion/cursos' )
         return render(
                 request,
@@ -182,6 +198,10 @@ def curso_clonar(request, id):
         form = CursoForm(request.POST or None, instance = original )
         form.instance.pk = None
         if form.is_valid():
+            form.instance.descargable = form.cleaned_data['descargable']
+            form.instance.imagen = form.cleaned_data['imagen']
+            form.instance.imagen_listado = form.cleaned_data['imagen_listado']
+            form.instance.imagenes_galeria = form.cleaned_data['imagenes_galeria']
             curso = form.save( commit = True )
             curso.save()
             return HttpResponseRedirect( '/gestion/cursos' )
@@ -709,7 +729,6 @@ def curso_liquidacion(request, id):
     else:
         return HttpResponseRedirect('/admin/login/?next=%s' % request.path)
 
-##
 
 def mail(request):
     send_mail(
@@ -723,3 +742,4 @@ def mail(request):
         fail_silently = False, 
     )
     return HttpResponse('Hello, mail.')
+

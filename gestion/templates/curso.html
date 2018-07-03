@@ -4,7 +4,7 @@
 {% block content %} 
 <article class="{{clase}}">
    {% if form %}
-       <form method="POST" action="" class="form">
+   <form method="POST" enctype="multipart/form-data" action="" class="form">
            {% csrf_token %}
            {% bootstrap_form form %}
            {% buttons %}

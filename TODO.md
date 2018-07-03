@@ -1,7 +1,8 @@
 # TODO 
 
 ## Revisar 
-- [ ] REVISAR JS MODALIDAD Y FORM FILE UPLOAD
+- [ ] REVISAR JS MODALIDAD 
+- [ ] FORM FILE UPLOAD
 - [x] Arreglar clonar curso
 - [x] Arreglar ver curso
 - [ ] Planillas imprimibles

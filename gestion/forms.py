@@ -53,4 +53,3 @@ class CursoForm( ModelForm ):
     class Meta:
         model = Curso
         fields = '__all__'
-#Form contains a file input, but is missing method=POST and enctype=multipart/form-data on the form.  The file will not be sent.
