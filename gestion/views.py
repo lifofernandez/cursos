@@ -135,7 +135,7 @@ def curso( request, id ):
             request,
             'curso.html',
             {
-                'titulo':'Ver curso: ',
+                'titulo':'Ver curso: '+curso.nombre,
                 'campos': CAMPOS
             }
         )
@@ -195,7 +195,7 @@ def curso_editar(request, id):
                 request,
                 'curso.html', 
                 {
-                    'titulo':'Editar Curso',
+                    'titulo':'Editar Curso: '+ instance.nombre,
                     'form' : form,
                     'clase' : 'editar'
                 }
@@ -221,7 +221,7 @@ def curso_clonar(request, id):
                 request,
                 'curso.html', 
                 {
-                    'titulo':'Editar Curso',
+                    'titulo':'Clonar Curso: '+ original.nombre,
                     'form' : form,
                     'clase' : 'clonar'
                 }
