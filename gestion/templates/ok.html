@@ -7,9 +7,9 @@
             <section class="ok contendio jumbotron text-center">
                 <div class="container">
                     <h1 class="jumbotron-heading">{{ titulo }} </h1>
-                    <p class="lead text-muted">
-    	                {{ bajada }} 
-	    	    </p>
+                    <div class="lead text-muted text-left">
+    	                {{ bajada | safe }} 
+	    	    </div >
                     <p>
                         <a href='/' class="btn btn-primary">Volver al Formulario</a>
                     </p>

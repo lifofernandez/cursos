@@ -20,6 +20,7 @@ from reportlab.pdfgen import canvas
 from django_tables2.config import RequestConfig
 from django_tables2.export.export import TableExport
 
+from .textos import *
 
 
 # FORMULARIOS
@@ -35,25 +36,27 @@ def inscripcion(request):
             asunto += 'ESTUDIANTE: '+ inscripto.nombre + ' ' + inscripto.apellido
             asunto += ']'
 
-            mensaje  = 'Inscripción satisfactoria al curso: ' + inscripto.curso.nombre + '.\n'
-            mensaje += 'Fecha: '+ str(inscripto.inscripcion_fecha) + '\n'
-            mensaje += 'ID: #'+ str(inscripto.id) + '\n'
+            datos_cargados  = '\n--\nDATOS CARGADOS:'
+            datos_cargados += 'Inscripción satisfactoria al curso: ' + inscripto.curso.nombre + '.\n'
+            datos_cargados += 'Fecha: '+ str(inscripto.inscripcion_fecha) + '\n'
+            datos_cargados += 'ID: #'+ str(inscripto.id) + '\n'
 
-            mensaje += '\nDatos del Inscripto:\n'
-            mensaje += 'Nombre y Apellido: '+ inscripto.nombre + ' ' + inscripto.apellido + '\n'
-            mensaje += 'DNI: '+ inscripto.dni + '\n'
-            mensaje += 'Correo Electrónico: '+ inscripto.correo + '\n'
-            mensaje += 'Teléfono: '+ inscripto.telefono+ '\n'
-            mensaje += 'Abona: $'+ str(inscripto.abona)  
+            datos_cargados += '\nDatos del Inscripto:\n'
+            datos_cargados += 'Nombre y Apellido: '+ inscripto.nombre + ' ' + inscripto.apellido + '\n'
+            datos_cargados += 'DNI: '+ inscripto.dni + '\n'
+            datos_cargados += 'Correo Electrónico: '+ inscripto.correo + '\n'
+            datos_cargados += 'Teléfono: '+ inscripto.telefono+ '\n'
+            datos_cargados += 'Abona: $'+ str(inscripto.abona)  
             descuento = 100 - (inscripto.descuento * 100)
             if(descuento):
-                mensaje += ' gracias a un descuento del ' + str(descuento) + '% ' 
-                mensaje += 'sobre el costo total del curso ($'+ str(inscripto.curso.arancel) +')'
-            mensaje += '.\n'
+                datos_cargados += ' gracias a un descuento del ' + str(descuento) + '% ' 
+                datos_cargados += 'sobre el costo total del curso ($'+ str(inscripto.curso.arancel) +')'
+            datos_cargados += '.\n'
 
-            mensaje += '\nAnte cualquier duda contactrse a:\n'
-            mensaje += inscripto.curso.contacto
+            datos_cargados += '\nAnte cualquier duda contactrse a:\n'
+            datos_cargados += inscripto.curso.contacto
 
+            mensaje =  email_inscripto + datos_cargados, 
             send_mail(
                 asunto,
                 mensaje, 
@@ -71,7 +74,7 @@ def inscripcion(request):
                     'ok.html',
                     {
                         'titulo':'¡Inscripcion Satisfactoria!',
-                        'bajada':'En breve nos comunicaremos a través de los datos de contacto provistos.'
+                        'bajada': str(respuesta_inscripto)
                     }
                 )
             )
@@ -112,16 +115,19 @@ def curso( request, id ):
       elif nombre == 'tagged_items':
           continue
       elif tipo == 'FileField':
-          hostname = 'http://www.cursos.atamvirtual.com.ar/'
           archivo  = getattr( curso, nombre )
-          url = hostname + str(archivo)
-          valor =  (
-                  '<a href="' +
+          valor = '' 
+          if archivo:
+              hostname = 'http://www.cursos.atamvirtual.com.ar/'
+              folder = 'media/'
+              url = hostname + folder + str(archivo)
+              valor =  (
+                  '<a href=' +
                   url  +
-                  '">' +
+                  '>' +
                   url +
                   '</a>'
-           )
+              )
       else:
         valor = getattr(curso,nombre)
       #o += '<b>'+nombre+'</b>: <p>'+ str(valor) + '</p>'
@@ -742,16 +748,17 @@ def curso_liquidacion(request, id):
         return HttpResponseRedirect('/admin/login/?next=%s' % request.path)
 
 
-def mail(request):
-    send_mail(
-        asunto,
-        mensaje, 
-        'multimedia.cursos@una.edu.ar',
-        [
-            form.email,
-            'multimedia.cursos@una.edu.ar',
-        ],
-        fail_silently = False, 
-    )
-    return HttpResponse('Hello, mail.')
+#def mail(request):
+#    send_mail(
+#        asunto,
+#        mensaje, 
+#        'multimedia.cursos@una.edu.ar',
+#        [
+#            form.email,
+#            'multimedia.cursos@una.edu.ar',
+#        ],
+#        fail_silently = False, 
+#    )
+#    return HttpResponse('Hello, mail.')
+
 
